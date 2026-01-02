@@ -1,7 +1,7 @@
-import React from 'react'
+import { FC } from 'react'
 import Link from 'next/link'
 import carbon from "@/shared/assents/img/carbon.svg"
-const Leasing = () => {
+const Leasing : FC = () => {
    return (
       <div className="max-w-7xl mx-auto px-2">
          <nav className="text-[14px] text-[#8B959E] py-4">
@@ -117,7 +117,7 @@ const Leasing = () => {
 
 
             <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
-               {[1, 2, 3, 4, 5, 6,].map((item) => (
+               {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
                   <div className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition" key={item}>
                      <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
                         <img src="https://via.placeholder.com/300x180" alt="vehicle" className="object-cover w-full h-full" />
