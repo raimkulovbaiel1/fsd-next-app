@@ -7,7 +7,8 @@ export default function Home() {
     <main className="min-h-screen"> 
     <Header/>
       <Filter />
-      <Features />
+      <Features /> 
+     
     </main>
   );
 }
