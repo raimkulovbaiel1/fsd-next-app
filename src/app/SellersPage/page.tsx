@@ -1,11 +1,12 @@
 import Leasing from "@/app/SellersPage/Sections/Leasing";
-
+import Company from "@/app/SellersPage/Sections/Company";
 const MyComponent = () => {
   return ( 
     <div>
-      <Leasing/>
+      <Leasing/> 
+      <Company/>
     </div>
   )
 };
 
-export default Leasing;
+export default MyComponent;
