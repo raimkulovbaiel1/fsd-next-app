@@ -1,0 +1,34 @@
+{
+  "favorites": [
+    {
+      "id": 1,
+      "title": "Opel COMBO Airco Elct Ramen",
+      "year": 2015,
+      "weight": "2 000 кг",
+      "mileage": "490 574 км",
+      "price": "1 500€",
+      "location": "Garage van Nierop, Netherlands",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 2,
+      "title": "Ford Transit Custom",
+      "year": 2018,
+      "weight": "2 200 кг",
+      "mileage": "150 000 км",
+      "price": "2 100€",
+      "location": "Autohaus Berlin, Germany",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 3,
+      "title": "Mercedes-Benz Sprinter",
+      "year": 2017,
+      "weight": "2 500 кг",
+      "mileage": "200 000 км",
+      "price": "2 800€",
+      "location": "Van Center, France",
+      "image": "https://via.placeholder.com/300x180"
+    }
+  ]
+}
