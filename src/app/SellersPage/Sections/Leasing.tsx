@@ -12,13 +12,11 @@ interface LeasingItem {
    mileage: string;
    price: string;
    location: string;
-   image: string;    
-}  
+   image: string;
+}
+
 interface Filters {
-   price: {
-      min: number;
-      max: number;
-   };
+   price: { min: number; max: number };
    transportTypes: string[];
    manufacturers: string[];
    adTypes: string[];
@@ -27,25 +25,26 @@ interface Filters {
 
 const Leasing: FC = () => {
    const [items, setItems] = useState<LeasingItem[]>([]);
-   const [loading, setLoading] = useState(true); 
+   const [, setLoading] = useState(true);
    const [filters, setFilters] = useState<Filters | null>(null);
 
    useEffect(() => {
-      fetch("http://localhost:4091/Leasing")
+      const apiUrl = process.env.NEXT_PUBLIC_LEASING_API;
+      fetch(apiUrl!)
          .then(res => res.json())
          .then(data => {
-            setItems(data);
+            setItems(data[0].Leasing);
+            setLoading(false);
+         })
+         .catch((err) => {
+            console.error(err);
             setLoading(false);
          });
-
       fetch("http://localhost:4091/filters")
-         .then(res => res.json())
-         .then(data => setFilters(data));
+         .then((res) => res.json())
+         .then((data) => setFilters(data))
+         .catch((err) => console.error(err));
    }, []);
-
-   if (loading) {
-      return <div className="text-center py-10 text-gray-500">Загрузка...</div>;
-   }
 
    return (
       <div className="max-w-7xl mx-auto px-2">
@@ -86,7 +85,6 @@ const Leasing: FC = () => {
                ) : (
                   <form className="space-y-4">
 
-                     {/* Цена */}
                      <div>
                         <div className="font-medium border-b py-2">
                            Цена, €
@@ -95,8 +93,6 @@ const Leasing: FC = () => {
                            {filters.price.min} – {filters.price.max}
                         </div>
                      </div>
-
-                     {/* Тип транспорта */}
                      <div>
                         <div className="font-medium border-b py-2">Тип транспорта</div>
                         {filters.transportTypes.map(t => (
@@ -106,8 +102,6 @@ const Leasing: FC = () => {
                            </label>
                         ))}
                      </div>
-
-                     {/* Производитель */}
                      <div>
                         <div className="font-medium border-b py-2">Производитель</div>
                         {filters.manufacturers.map(m => (
@@ -117,8 +111,6 @@ const Leasing: FC = () => {
                            </label>
                         ))}
                      </div>
-
-                     {/* Тип объявления */}
                      <div>
                         <div className="font-medium border-b py-2">Тип объявления</div>
                         {filters.adTypes.map(a => (
@@ -128,8 +120,6 @@ const Leasing: FC = () => {
                            </label>
                         ))}
                      </div>
-
-                     {/* Страна */}
                      <div>
                         <div className="font-medium border-b py-2">Страна</div>
                         {filters.countries.map(c => (
@@ -139,7 +129,6 @@ const Leasing: FC = () => {
                            </label>
                         ))}
                      </div>
-
                      <button
                         type="submit"
                         className="w-full bg-green-400 hover:bg-green-500 text-white rounded py-2 font-semibold transition mt-4"
@@ -193,3 +182,7 @@ const Leasing: FC = () => {
 };
 
 export default Leasing;
+function setFavorites(data: any) {
+   throw new Error("Function not implemented.");
+}
+
