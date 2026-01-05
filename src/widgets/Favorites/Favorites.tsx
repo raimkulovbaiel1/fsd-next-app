@@ -1,6 +1,6 @@
 "use client";
 
-import carbon from "@/shared/assents/img/carbon.svg";
+import carbon from "@/shared/assets/img/carbon.svg";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -30,6 +30,8 @@ const Favorites = () => {
         setLoading(false);
       })
       .catch((err) => {
+        console.error(err);
+        setLoading(false);
       });
   }, []);
 
@@ -134,4 +136,4 @@ const Favorites = () => {
   );
 };
 
-export default Favorites;
+export { Favorites };

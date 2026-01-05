@@ -1,39 +1,23 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react';
-import { cn } from '@/shared/lib/utils';
+import React from 'react';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
-  children: ReactNode;
+interface FilterInputProps {
+  label: string;
+  placeholder: string;
+  isSelect?: boolean;
+  isAdd?: boolean;
 }
 
-export const Button = ({
-  variant = 'primary',
-  size = 'md',
-  className,
-  children,
-  ...props
-}: ButtonProps) => {
-  const baseStyles = 'font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-
-  const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-blue-500',
-  };
-
-  const sizes = {
-    sm: 'px-10 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
-  };
-
-  return (
-    <button
-      className={cn(baseStyles, variants[variant], sizes[size], className)}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
+export const FilterInput: React.FC<FilterInputProps> = ({ label, placeholder, isSelect, isAdd }) => (
+  <div className="flex flex-col mb-2">
+    <label className="text-[10px] text-gray-400 mb-1 ml-1 truncate">{label}</label>
+    <div className="flex items-center justify-between border border-gray-200 rounded-sm p-2.5 bg-white cursor-pointer h-[44px]">
+      <span className="text-xs text-gray-800 font-medium truncate">{placeholder}</span>
+      {isSelect && (
+        <svg className="w-2.5 h-2.5 text-gray-400 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      )}
+      {isAdd && <span className="text-lg text-gray-300 font-light">+</span>}
+    </div>
+  </div>
+);

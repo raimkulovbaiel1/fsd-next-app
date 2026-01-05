@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
-import carbon from "@/shared/assents/img/carbon.svg";
+import carbon from "@/shared/assets/img/carbon.svg";
 
 interface LeasingItem {
    id: number;
@@ -181,8 +181,4 @@ const Leasing: FC = () => {
    );
 };
 
-export default Leasing;
-function setFavorites(data: any) {
-   throw new Error("Function not implemented.");
-}
-
+export { Leasing };

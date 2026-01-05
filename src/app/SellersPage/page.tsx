@@ -1,12 +1,13 @@
-import Leasing from "@/app/SellersPage/Sections/Leasing";
-import Company from "@/app/SellersPage/Sections/Company";
-const MyComponent = () => {
-  return ( 
+import { Leasing } from "@/widgets/Leasing";
+import { Company } from "@/widgets/Company";
+
+const SellersPage = () => {
+  return (
     <div>
-      <Leasing/> 
+      <Leasing/>
       <Company/>
     </div>
   )
 };
 
-export default MyComponent;
+export default SellersPage;

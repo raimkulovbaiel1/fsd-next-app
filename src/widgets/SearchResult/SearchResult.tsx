@@ -1,7 +1,6 @@
-
 import React from 'react'
 import Link from 'next/link'
-import carbon from "@/shared/assents/img/carbon.svg"
+import carbon from "@/shared/assets/img/carbon.svg"
 
 export const SearchResult = () => {
   return (

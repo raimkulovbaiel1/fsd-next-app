@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import Image from "next/image"; 
 
-import search from '@/shared/assents/icons/search.svg'
-import user from '@/shared/assents/icons/user.svg'
+import search from '@/shared/assets/icons/search.svg'
+import user from '@/shared/assets/icons/user.svg'
 export const Header = () => {
   return (
     <header className="bg-white py-4 px-6 border-b border-gray-100">

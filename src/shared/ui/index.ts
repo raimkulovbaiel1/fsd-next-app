@@ -1,1 +1,2 @@
-export { Button } from './button/filterInput';
+export { FilterInput } from './button/filterInput';
+export { Button } from './button/Button';

@@ -20,4 +20,5 @@ const Company: FC = () => {
     </div>
   )
 }
-export default Company;
+
+export { Company };

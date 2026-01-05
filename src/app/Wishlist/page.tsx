@@ -1,11 +1,11 @@
-import Favorites from "@/app/Wishlist/Sections/Favorites"
+import { Favorites } from "@/widgets/Favorites";
 
-const FavoritesPage  = () => {
+const FavoritesPage = () => {
   return (
-    <div> 
-       <Favorites/>
+    <div>
+      <Favorites />
     </div>
-  )
-}
+  );
+};
 
 export default FavoritesPage;
