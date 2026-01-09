@@ -138,3 +138,4 @@ const Favorites = () => {
 
 export { Favorites };
 
+

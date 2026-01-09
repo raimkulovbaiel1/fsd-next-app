@@ -39,9 +39,11 @@ export const Header = () => {
         </div>
         {/* Правая часть: Профиль и Кнопка */}
         <div className="hidden lg:flex items-center space-x-8">
-          <button className="text-[#00A669] font-semibold hover:opacity-80 transition-opacity">
-            Мой профиль
-          </button>
+          <Link href="/settings">
+            <button className="text-[#00A669] font-semibold hover:opacity-80 transition-opacity">
+              Мой профиль
+            </button>
+          </Link>
 
           <button className="bg-[#F6FBF9] text-[#00A669] px-6 py-3 rounded-md font-bold text-sm uppercase tracking-wide hover:bg-[#e8f5f0] transition-colors">
             Стать продавцом

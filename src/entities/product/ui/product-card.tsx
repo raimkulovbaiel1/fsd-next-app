@@ -48,3 +48,4 @@ export const ProductCard = ({ product, showSeller = false }: ProductCardProps) =
   );
 };
 
+
