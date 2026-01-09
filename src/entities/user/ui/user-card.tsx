@@ -23,3 +23,4 @@ export const UserCard = ({ user, onClick }: UserCardProps) => {
     </div>
   );
 };
+

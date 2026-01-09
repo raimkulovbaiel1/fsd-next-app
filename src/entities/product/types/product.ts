@@ -36,3 +36,4 @@ export interface ProductFilters {
   location?: string;
   condition?: ProductCondition;
 }
+

@@ -11,3 +11,4 @@ export interface UserProfile extends User {
   company?: string;
   location?: string;
 }
+

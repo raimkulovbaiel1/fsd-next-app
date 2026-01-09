@@ -109,3 +109,4 @@ export const SearchResult = () => {
     </div>
   )
 }
+

@@ -137,3 +137,4 @@ const Favorites = () => {
 };
 
 export { Favorites };
+
