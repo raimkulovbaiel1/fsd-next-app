@@ -1,9 +1,22 @@
 import React from 'react';
-import { Trash2, ChevronLeft, ChevronRight, Settings } from 'lucide-react';
-import Link from 'next/link';
+import { Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 
-export const Messages = () => {
-  const messages = [
+interface Message {
+  id: number;
+  user: string;
+  ad: string;
+  time: string;
+  checked?: boolean;
+  badge?: string;
+  active?: boolean;
+}
+
+interface MessagesProps {
+  messages?: Message[];
+}
+
+export const Messages = ({ messages = [] }: MessagesProps) => {
+  const defaultMessages: Message[] = [
     { id: 1, user: "Игорь Игорьевич", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "19:56", checked: true },
     { id: 2, user: "Darrell Steward", ad: "Opel Movano B Pritsche L3H1 3...", time: "ПД, 19:05", badge: "4 новых" },
     { id: 3, user: "Albert Flores", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "СБ, 16:45" },
@@ -11,28 +24,10 @@ export const Messages = () => {
     { id: 5, user: "Cody Fisher", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "19:56", badge: "3 новых", active: true },
   ];
 
+  const displayMessages = messages.length > 0 ? messages : defaultMessages;
+
   return (
-    <div className="max-w-7xl mx-auto p-4 md:p-8 bg-[#f9fafb] min-h-screen">
-      <nav className="flex items-center space-x-2 text-xs text-gray-400 mb-6">
-        <Link href="/">Главная</Link>
-        <ChevronRight size={12} />
-        <Link href="/">Мой кабинет</Link>
-        <ChevronRight size={12} />
-        <span className="text-gray-600">Сообщения</span>
-      </nav>
-
-      <h1 className="text-4xl md:text-5xl font-bold mb-8">Сообщения</h1>
-
-      <div className="flex space-x-8 border-b text-[19px] mt-[30px] border-gray-200 mb-8 overflow-x-auto whitespace-nowrap">
-        <Link href="/Wishlist" className="pb-4 text-gray-500 font-medium">Избранное</Link>
-        <button className="pb-4 border-b-2 border-emerald-500 text-gray-900 font-medium">
-          Сообщения <span className="text-emerald-500">(4 новых)</span>
-        </button>
-        <Link href="/settings" className="pb-4 text-gray-500 font-medium flex items-center">
-          <Settings size={18} className="mr-2" /> Настройки профиля
-        </Link>
-      </div>
-
+    <>
       <div className="bg-[#01bda7] rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -46,7 +41,7 @@ export const Messages = () => {
               </tr>
             </thead>
             <tbody className="text-sm">
-              {messages.map((msg) => (
+              {displayMessages.map((msg) => (
                 <tr key={msg.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${msg.active ? 'bg-emerald-50/40' : ''}`}>
                   <td className="p-4"><input type="checkbox" checked={msg.checked} className="rounded border-gray-300 text-emerald-500" /></td>
                   <td className={`p-4 font-medium ${msg.badge ? 'text-emerald-600' : 'text-gray-900'}`}>{msg.user}</td>
@@ -67,7 +62,7 @@ export const Messages = () => {
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-        <button className="flex items-center  bg-[#EB5757] text-[#EB5757] rounded-lg  transition text-[30px] font-medium">
+        <button className="flex items-center bg-[#EB5757] text-[#EB5757] rounded-lg transition text-[30px] font-medium">
           <Trash2 size={20} />
           <span>Удалить</span>
         </button>
@@ -78,6 +73,6 @@ export const Messages = () => {
           <button className="p-2 border rounded-lg bg-emerald-50 text-[#01bda7]"><ChevronRight size={20}/></button>
         </div>
       </div>
-    </div>
+    </>
   );
 };  

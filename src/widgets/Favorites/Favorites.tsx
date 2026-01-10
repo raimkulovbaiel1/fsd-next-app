@@ -1,7 +1,6 @@
 "use client";
 
 import carbon from "@/shared/assets/img/carbon.svg";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface FavoriteItem {
@@ -16,45 +15,49 @@ interface FavoriteItem {
   image: string;
 }
 
-const Favorites = () => {
+interface FavoritesProps {
+  favorites?: FavoriteItem[];
+  loading?: boolean;
+}
+
+export const Favorites = ({ favorites: externalFavorites, loading: externalLoading }: FavoritesProps) => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (externalFavorites !== undefined) {
+      setFavorites(externalFavorites);
+      setLoading(false);
+      return;
+    }
+
     const apiUrl = process.env.NEXT_PUBLIC_WISHLIST_API;
 
-    fetch(apiUrl!)
-      .then((res) => res.json())
-      .then((data) => {
-        setFavorites(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, []);
+    if (apiUrl) {
+      fetch(apiUrl)
+        .then((res) => res.json())
+        .then((data) => {
+          setFavorites(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [externalFavorites]);
 
-  if (loading) {
+  const isLoading = externalLoading !== undefined ? externalLoading : loading;
+  const displayFavorites = externalFavorites || favorites;
+
+  if (isLoading) {
     return <div className="px-4 text-gray-500">Загрузка избранного...</div>;
   }
 
   return (
-    <div className="px-4">
-      <nav className="flex items-center gap-2 text-sm text-gray-400 mb-4">
-        <Link href="/" className="hover:text-black transition">
-          Главная
-        </Link>
-        <span>/</span>
-        <Link href="/profile" className="hover:text-black transition">
-          Мой кабинет
-        </Link>
-        <span>/</span>
-        <span className="text-black font-medium">Избранное</span>
-      </nav>
-
-      <h2 className="text-[#252525] text-4xl font-bold mb-4">Избранное</h2>
-
+    <>
       <div className="w-full mb-6">
         <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-4 h-10">
           <svg
@@ -78,30 +81,8 @@ const Favorites = () => {
         </div>
       </div>
 
-      <nav className="flex gap-6 border-b border-gray-200 mb-6">
-        <Link
-          href="/favorites"
-          className="pb-3 text-sm font-medium text-black border-b-2 border-black"
-        >
-          Избранное
-        </Link>
-        <Link
-          href="/messages"
-          className="pb-3 text-sm text-gray-500 hover:text-black transition flex items-center gap-1"
-        >
-          Сообщения
-          <span className="text-green-600">()</span>
-        </Link>
-        <Link
-          href="/settings"
-          className="pb-3 text-sm text-gray-500 hover:text-black transition"
-        >
-          Настройки профиля
-        </Link>
-      </nav>
-
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 p-3 md:p-4">
-        {favorites.map((item) => (
+        {displayFavorites.map((item) => (
           <div
             className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition"
             key={item.id}
@@ -132,10 +113,8 @@ const Favorites = () => {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 };
-
-export { Favorites };
 
 
