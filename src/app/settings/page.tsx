@@ -1,11 +1,12 @@
-import {Settings} from "@/widgets/Settings"
+import { Settings } from '@/widgets/Settings'
 
- const  SettingsPage = () => {
+
+ const SettingsPage = () => {
   return (
-    <div>
+    <div> 
       <Settings />
     </div>
-  );
-};
-
+  )
+}
+ 
 export default SettingsPage;
