@@ -36,7 +36,7 @@ export const Messages = () => {
       <div className="bg-[#01bda7] rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="text-[11px] uppercase tracking-wider text-gray-400 border-b border-gray-50">
+            <thead className="text-[14px] uppercase tracking-wider text-gray-400 border-b border-gray-50">
               <tr>
                 <th className="p-4 w-12"><input type="checkbox" className="rounded border-gray-300" /></th>
                 <th className="p-4">Пользователь</th>
@@ -67,8 +67,8 @@ export const Messages = () => {
       </div>
 
       <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-        <button className="flex items-center  bg-[#EB5757] text-[#EB5757] rounded-lg  transition text-sm font-medium">
-          <Trash2 size={16} />
+        <button className="flex items-center  bg-[#EB5757] text-[#EB5757] rounded-lg  transition text-[30px] font-medium">
+          <Trash2 size={20} />
           <span>Удалить</span>
         </button>
 
