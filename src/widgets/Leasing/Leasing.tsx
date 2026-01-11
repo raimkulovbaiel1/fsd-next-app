@@ -1,7 +1,6 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import Link from "next/link";
 import carbon from "@/shared/assets/img/carbon.svg";
 
 interface LeasingItem {
@@ -47,44 +46,17 @@ const Leasing: FC = () => {
    }, []);
 
    return (
-      <div className="max-w-7xl mx-auto px-2">
-         <nav className="text-[14px] text-[#8B959E] py-4">
-            <Link href="/" className="hover:text-green-500">Главная</Link>
-            <span className="mx-2">{'>'}</span>
-            <span className="text-[#252525]">Продавцы</span>
-            <span className="mx-2">{'>'}</span>
-            <span className="text-[#252525]">Лизинг</span>
-         </nav>
-         <h2 className="text-3xl font-bold text-[#252525] py-4">
-            Продавец OTP Leasing
-         </h2>
-         <div className="text-[14px] pb-4 flex gap-4">
-            <Link
-               href="/write-to-seller"
-               className="bg-[#009661] text-white px-4 py-2 rounded hover:opacity-90 transition"
-            >
-               написать продавцу
-            </Link>
+      <>
+         <button className="block lg:hidden w-full bg-[#0096611A] text-[#009661] py-2 rounded font-semibold mb-4">
+            Открыть фильтр
+         </button>
 
-            <Link
-               href="/company"
-               className="text-[#009661] hover:underline self-center"
-            >
-               Про компанию
-            </Link>
-         </div>
-
-         <div className="flex flex-col lg:flex-row gap-6 px-2 py-4 lg:py-8 max-w-7xl mx-auto">
-            <button className="block lg:hidden w-full bg-[#0096611A] text-[#009661] py-2 rounded font-semibold">
-               Открыть фильтр
-            </button>
-
+         <div className="flex flex-col lg:flex-row gap-6">
             <aside className="hidden lg:block w-full lg:w-80 bg-white rounded-xl shadow p-4 h-fit mb-4 lg:mb-0">
                {!filters ? (
                   <div className="text-sm text-gray-400">Загрузка фильтров...</div>
                ) : (
                   <form className="space-y-4">
-
                      <div>
                         <div className="font-medium border-b py-2">
                            Цена, €
@@ -139,7 +111,7 @@ const Leasing: FC = () => {
                )}
             </aside>
 
-            <main className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
+            <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
                {items.map((item) => (
                   <div
                      key={item.id}
@@ -177,7 +149,7 @@ const Leasing: FC = () => {
                ))}
             </main>
          </div>
-      </div>
+      </>
    );
 };
 
