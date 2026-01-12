@@ -78,7 +78,7 @@ export const SearchResult = () => {
           ))}
         </select>
       </div>
-
+       
       {/* Производитель */}
       <div className="mb-5">
         <label className="block font-[16px] text-[#252525] mb-4">
