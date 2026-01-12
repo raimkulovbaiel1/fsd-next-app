@@ -87,5 +87,154 @@
       "Италия",
       "Испания"
     ]
+  },  
+
+ "SearchResult": [
+    {
+      "id": 1, 
+      "name": "Закрытые грузопассажирские автомобили",
+      "title": "Opel COMBO Airco Elct Ramen", 
+      "year": 2015,
+      "weight": 2000,
+      "mileage": 490574,
+      "price": 1500,
+      "currency": "€",
+      "type": "Грузовики",
+      "brand": "Opel",
+      "country": "Netherlands",
+      "gearbox": "Автомат",
+      "adType": "Аукцион",
+      "image": "https://via.placeholder.com/300x180",
+      "seller": "Garage van Nierop"
+    },
+    {
+      "id": 2, 
+       "name": "Закрытые грузопассажирские автомобили",
+      "title": "Mercedes Benz Sprinter",
+      "year": 2018,
+      "weight": 3500,
+      "mileage": 210000,
+      "price": 12000,
+      "currency": "€",
+      "type": "Грузовики",
+      "brand": "Mercedes Benz",
+      "country": "Germany",
+      "gearbox": "Механика",
+      "adType": "Лизинг",
+      "image": "https://via.placeholder.com/300x180",
+      "seller": "AutoHaus Berlin"
+    },
+    {
+      "id": 3, 
+       "name": "Закрытые грузопассажирские автомобили",
+      "title": "Volkswagen Caddy",
+      "year": 2019,
+      "weight": 2100,
+      "mileage": 120000,
+      "price": 2300,
+      "currency": "€",
+      "type": "Легковые",
+      "brand": "Volkswagen",
+      "country": "Germany",
+      "gearbox": "Механика",
+      "adType": "По запросу",
+      "image": "https://via.placeholder.com/300x180",
+      "seller": "AutoHaus Berlin"
+    }, 
+    {
+      "id": 4, 
+       "name": "Закрытые грузопассажирские автомобили",
+      "title": "Ford Transit Custom",
+      "year": 2018,
+      "weight": 2200,
+      "mileage": 150000,
+      "price": 2100,
+      "currency": "€",
+      "type": "Грузовики",
+      "brand": "Ford",
+      "country": "Germany",
+      "gearbox": "Механика",
+      "adType": "Лизинг",
+      "image": "https://via.placeholder.com/300x180",
+      "seller": "AutoHaus Berlin"
+    },
+    {
+      "id": 5, 
+       "name": "Закрытые грузопассажирские автомобили",
+      "title": "Volvo FH16",
+      "year": 2020,
+      "weight": 44000,
+      "mileage": 80000,
+      "price": 152444,
+      "currency": "€",
+      "type": "Грузовики",
+      "brand": "Volvo",
+      "country": "Netherlands",
+      "gearbox": "Автомат",
+      "adType": "Аукцион",
+      "image": "https://via.placeholder.com/300x180",
+      "seller": "TruckWorld NL"
+    },
+    {
+      "id": 6, 
+       "name": "Закрытые грузопассажирские автомобили",
+      "title": "Iveco Daily",
+      "year": 2017,
+      "weight": 3500,
+      "mileage": 180000,
+      "price": 8500,
+      "currency": "€",
+      "type": "Грузовики",
+      "brand": "Iveco",
+      "country": "Italy",
+      "gearbox": "Механика",
+      "adType": "Сдать в аренду",
+      "image": "https://via.placeholder.com/300x180",
+      "seller": "Italia Trucks"
+    } 
+  ],
+
+  "SearchResultFilters": {
+    "price": {
+      "min": 1200,
+      "max": 152444
+    },
+
+    "types": [
+      "Грузовики",
+      "Автобусы"
+    ],
+
+    "brands": [
+      "Volkswagen",
+      "Mercedes Benz",
+      "Volvo",
+      "Iveco",
+      "Van Hool",
+      "Opel", 
+       "Volkswagen",
+      "Mercedes Benz",
+      "Volvo",
+      "Iveco",
+      "Van Hool",
+      "Opel"
+    ],
+
+    "countries": [
+      "France",
+      "Italy"
+    ],
+
+    "gearboxes": [
+      "Автомат",
+      "Механика"
+    ],
+
+    "adTypes": [
+      "Аукцион",
+      "По запросу",
+      "Лизинг",
+      "Сдать в аренду"
+    ]
   }
 }
