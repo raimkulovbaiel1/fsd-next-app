@@ -1,6 +1,8 @@
  'use client';
  import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import carbon from "@/shared/assets/img/carbon.svg";
+
 
 interface Vehicle {
   id: string;
@@ -17,12 +19,14 @@ export const SearchResult = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [filters, setFilters] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+ 
+ 
 
   useEffect(() => {
     // Получаем и товары, и фильтры параллельно
     Promise.all([
-      fetch("http://localhost:4091/SearchResult").then(res => res.json()),
-      fetch("http://localhost:4091/SearchResultFilters").then(res => res.json())
+      fetch("http://localhost:5000/SearchResult").then(res => res.json()),
+      fetch("http://localhost:5000/SearchResultFilters").then(res => res.json())
     ])
       .then(([vehiclesData, filtersData]) => {
         setVehicles(Array.isArray(vehiclesData) ? vehiclesData : []);
@@ -78,7 +82,7 @@ export const SearchResult = () => {
           ))}
         </select>
       </div>
-       
+
       {/* Производитель */}
       <div className="mb-5">
         <label className="block font-[16px] text-[#252525] mb-4">
@@ -222,9 +226,10 @@ export const SearchResult = () => {
       {/* Список машин */}
       <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
         {vehicles.map(vehicle => (
-          <div
-            key={vehicle.id}
-            className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition"
+          <Link 
+            key={vehicle.id} 
+            href={`/Cart/${vehicle.id}`}
+            className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition hover:shadow-lg"
           >
             <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
               <img src={vehicle.image} alt={vehicle.name} className="object-cover w-full h-full" />
@@ -240,10 +245,10 @@ export const SearchResult = () => {
                 {vehicle.location}
               </div>
             </div>
-            <button className="absolute left-1/2 bottom-5 px-1 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-5 px-7 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
               Больше информации
-            </button>
-          </div>
+            </div>
+          </Link>
         ))}
       </main>
     </div>
