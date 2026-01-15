@@ -60,7 +60,7 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
   }, [favorites, search]);
 
   if (isLoading) {
-    return <div className="px-4 text-gray-500">Загрузка избранного...</div>;
+    return <div className="px-4 text-gray-500">Загрузка избранного....</div>;
   }
 
   return (
