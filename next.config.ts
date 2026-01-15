@@ -1,18 +1,8 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+    domains: ['loremflickr.com', 'example.com'], // сюда добавляй хосты твоих картинок
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

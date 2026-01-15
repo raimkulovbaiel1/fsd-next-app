@@ -1,7 +1,7 @@
 "use client";
 
 import carbon from "@/shared/assets/img/carbon.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 
 interface FavoriteItem {
@@ -20,10 +20,10 @@ interface FavoritesProps {
   favorites?: FavoriteItem[];
   loading?: boolean;
 }
-
 export const Favorites = ({ favorites: externalFavorites, loading: externalLoading }: FavoritesProps) => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (externalFavorites !== undefined) {
@@ -33,7 +33,6 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
     }
 
     const apiUrl = process.env.NEXT_PUBLIC_WISHLIST_API;
-
     if (apiUrl) {
       fetch(apiUrl)
         .then((res) => res.json())
@@ -51,7 +50,14 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
   }, [externalFavorites]);
 
   const isLoading = externalLoading !== undefined ? externalLoading : loading;
-  const displayFavorites = externalFavorites || favorites;
+  const filteredFavorites = useMemo(() => {
+    if (!search) return favorites;
+    const q = search.toLowerCase();
+    return favorites.filter(item =>
+      item.name.toLowerCase().includes(q) ||
+      item.location.toLowerCase().includes(q)
+    );
+  }, [favorites, search]);
 
   if (isLoading) {
     return <div className="px-4 text-gray-500">Загрузка избранного...</div>;
@@ -61,29 +67,19 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
     <>
       <div className="w-full mb-6">
         <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-lg px-4 h-10">
-          <svg
-            className="w-5 h-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-4.35-4.35m1.1-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
+          <img src="" alt="logo-search" />
           <input
             type="text"
             placeholder="Поиск по объявлениям"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="flex-1 h-full outline-none text-sm"
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 p-3 md:p-4">
-        {displayFavorites.map((item) => (
+        {filteredFavorites.map((item) => (
           <div
             className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition"
             key={item.id}
