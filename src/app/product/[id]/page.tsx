@@ -75,7 +75,7 @@ export default function ProductPage() {
 
                     <div className="border-t pt-4 space-y-2 text-sm">
                         <div className="flex justify-between">
-                            <span className="text-gray-500">Вес</span>
+                            <span className="text-gray-500">Вес"</span>
                             <span className="font-medium">{item.weight}</span>
                         </div>
                         <div className="flex justify-between">
@@ -88,7 +88,7 @@ export default function ProductPage() {
                         <button className="flex-1 bg-[#009661] text-white py-3 rounded-xl font-semibold hover:opacity-90 transition">
                             Связаться с продавцом
                         </button>
-                        <button className="px-4 py-3 border rounded-xl hover:bg-gray-50 transition">
+                        <button className="px-4 py-2 bg-amber-600 border rounded-xl hover:bg-gray-50 transition">
                             ❤
                         </button>
                     </div>
