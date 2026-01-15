@@ -2,6 +2,7 @@
 
 import carbon from "@/shared/assets/img/carbon.svg";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 interface FavoriteItem {
   title: string | undefined;
@@ -107,9 +108,19 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
                 {item.location}
               </div>
             </div>
-            <button className="absolute left-1/2 bottom-5 text-[14px] px-3 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto">
-              Больше информации
-            </button>
+
+            <Link href={`/product/${item.id}`}>
+              <div
+                className="absolute left-1/2 bottom-5 -translate-x-1/2
+                  px-4 py-1 text-sm
+                  bg-[#13fd841a] text-[#009661]
+                  rounded-lg shadow
+                  opacity-0 group-hover:opacity-100 transition"
+              >
+                Больше информации
+              </div>
+            </Link>
+
           </div>
         ))}
       </div>
