@@ -1,7 +1,8 @@
 import { Filter } from '@/widgets/Filter';
 import { Features } from '@/widgets/features';
 import { TopAdsSection } from '@/widgets/TopAdsSection';
-import RecentlyViewed from '@/shared/components/RecentlyViewed/page';
+import RecentlyViewed from '@/shared/components/RecentlyViewed/page'; 
+import OurSellers from '@/shared/components/OurSellers/OurSellers';
 import Link from 'next/link';
 
 export default function Home() {
@@ -27,7 +28,7 @@ export default function Home() {
       </section>
 
       <RecentlyViewed />
-
+       <OurSellers/>
       <Features />  
     </main>
   );
