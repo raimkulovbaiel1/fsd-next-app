@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['loremflickr.com', 'example.com'], // сюда добавляй хосты твоих картинок
+    domains: ['loremflickr.com', 'example.com','im.mashina.kg'], // сюда добавляй хосты твоих картинок
   },
 };
 
