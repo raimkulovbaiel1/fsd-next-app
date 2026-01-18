@@ -1,5 +1,5 @@
 import { FC } from 'react'
-
+import Link from 'next/link'
 const OurSellers: FC = () => {
     return (
         <section className="max-w-7xl mx-auto px-4 py-12">
@@ -15,20 +15,22 @@ const OurSellers: FC = () => {
                         <br />
                         Безопасность сделки обеспечена
                     </p>
-                    <button
-                        className="
-                       px-6 py-3 mt-7
-                       border border-[#009661]
-                       text-[#009661]
-                         rounded-lg
-                       text-[14px] font-medium
-                       hover:bg-[#009661]
-                       hover:text-white
-                     transition
-                     "
-                    >
-                        Показать всех
-                    </button>
+                    <Link href="/SellersPage">
+                        <button
+                            className="
+                                       px-5 py-3 mt-7
+                                       border border-[#009661]
+                                       text-[#009661]
+                                       rounded-lg
+                                       text-[17px] font-medium
+                                       hover:bg-[#009661]
+                                       hover:text-white
+                                       transition
+                                     "
+                                   >
+                            Показать всех
+                        </button>
+                    </Link>
                 </div>
 
                 <div className="grid grid-cols-2 gap-6 mt-6 p-10 border border-gray-300 rounded-3xl bg-white">
