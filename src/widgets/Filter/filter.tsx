@@ -49,7 +49,7 @@ export const Filter = () => {
     const loadData = async () => {
       try {
         const [filterRes, optionsRes] = await Promise.all([
-          fetch('http://localhost:5000/ Filter'),
+          fetch('http://localhost:5000/Filter'),
           fetch('http://localhost:5000/FilterOptions'),
         ]);
 
