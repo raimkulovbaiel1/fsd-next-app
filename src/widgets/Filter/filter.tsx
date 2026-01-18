@@ -1,67 +1,178 @@
-import { FilterInput } from '@/shared/ui';
+'use client';
 
-import React from 'react';
+import { FilterInput } from '@/shared/ui';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+
+interface FilterItem {
+  id: number;
+  category: string;
+  brand: string;
+  model: string;
+  country: string;
+  year: string;
+  price: string;
+  mileage: string;
+  weight: string;
+  image: string;
+  location: string;
+}
+
+interface FilterOptions {
+  categories: string[];
+  allBrands: string[];
+  models: Record<string, string[]>;
+  countries: string[];
+  years: string[];
+  prices: string[];
+  mileages: string[];
+  weights: string[];
+}
 
 export const Filter = () => {
+  const [data, setData] = useState<FilterItem[]>([]);
+  const [options, setOptions] = useState<FilterOptions | null>(null);
+  const [result, setResult] = useState<any | null>(null);
+
+  const [filters, setFilters] = useState({
+    category: '',
+    brand: '',
+    model: '',
+    country: '',
+    year: '',
+    price: '',
+    mileage: '',
+    weight: '',
+  });
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [filterRes, optionsRes] = await Promise.all([
+          fetch('http://localhost:5000/ Filter'),
+          fetch('http://localhost:5000/FilterOptions'),
+        ]);
+
+        setData(await filterRes.json());
+        setOptions(await optionsRes.json());
+      } catch (e) {
+        console.error('Ошибка загрузки данных', e);
+      }
+    };
+
+    loadData();
+  }, []);
+
+
+  const handleInputChange = (name: string, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === 'brand' ? { model: '' } : {}),
+    }));
+  };
+
+
+  const handleSearch = () => {
+    const filtered = data.filter((item) => (
+      (!filters.category || item.category === filters.category) &&
+      (!filters.brand || item.brand === filters.brand) &&
+      (!filters.model || item.model === filters.model) &&
+      (!filters.country || item.country === filters.country) &&
+      (!filters.year || item.year === filters.year) &&
+      (!filters.price || Number(item.price) <= Number(filters.price)) &&
+      (!filters.mileage || Number(item.mileage) <= Number(filters.mileage)) &&
+      (!filters.weight || Number(item.weight) <= Number(filters.weight))
+    ));
+
+    const first = filtered[0];
+
+    setResult(
+      first
+        ? {
+          ...first,
+          title: `${first.brand} ${first.model}`,
+          totalResults: filtered.length,
+        }
+        : {
+          title: 'Товар не найден',
+          image: 'https://via.placeholder.com/400x300',
+          totalResults: 0,
+        }
+    );
+  };
+
+  if (!options || !options.categories) {
+    return <div className="p-1 text-center font-bold text-[17px] ">Загрузка</div>;
+  }
+
+  const filterInputs = [
+    { label: 'Категория', key: 'category', options: options.categories },
+    { label: 'Марка', key: 'brand', options: options.allBrands },
+    {
+      label: 'Модель',
+      key: 'model',
+      options: options.models?.[filters.brand] ?? [],
+    },
+    { label: 'Страна', key: 'country', options: options.countries },
+    { label: 'Год (с)', key: 'year', options: options.years },
+    { label: 'Цена до (€)', key: 'price', options: options.prices },
+    { label: 'Пробег до', key: 'mileage', options: options.mileages },
+    { label: 'Вес до', key: 'weight', options: options.weights },
+  ];
+
   return (
-    <section className="bg-[#F8F9FA] py-4 px-4 font-sans md:py-8">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
-        <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm flex-1">
-          <div className="grid grid-cols-2 gap-2 mb-6 md:flex md:border-b md:gap-0 md:overflow-x-auto">
-            <button className="bg-[#00A669] text-white px-4 py-3 rounded-md md:rounded-none md:rounded-t-lg font-medium text-sm">
-              Транспорт
-            </button>
-            <button className="px-4 py-3 text-gray-700 bg-white border border-transparent hover:text-black text-sm text-center md:border-none">
-              Строительство
-            </button>
-            <button className="px-4 py-3 text-gray-700 bg-white border border-transparent hover:text-black text-sm text-center md:border-none">
-              Сельское хозяйство
-            </button>
-            <button className="px-4 py-3 text-gray-700 bg-white border border-transparent hover:text-black text-sm text-center md:border-none leading-tight">
-              Погрузочное оборудование
-            </button>
-          </div>
-          <div className="grid grid-cols-2 gap-x-3 gap-y-2">
-            <FilterInput label="Категория" placeholder="Грузовики" isSelect />
-            <FilterInput label="Страна" placeholder="Франция; " isAdd />
-            <FilterInput label="Марка" placeholder="Renault" isSelect />
-            <FilterInput label="Модель" placeholder="Premium 420HP" />
-            <FilterInput label="Год (начиная с)" placeholder="2011" isSelect />
-            <FilterInput label="Цена до (EUR)" placeholder="15000" isSelect />
-            <FilterInput label="Пробег до (km)" placeholder="210000" isSelect />
-            <FilterInput label="Вес до (kg)" placeholder="8000" isSelect />
+    <section className="bg-[#F8F9FA] py-6 px-4">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-[1fr_320px] gap-6">
+
+        {/* ФИЛЬТРЫ */}
+        <div className="bg-white p-6 rounded-lg shadow">
+          <div className="grid grid-cols-2 gap-3">
+            {filterInputs.map(({ label, key, options }) => (
+              <FilterInput
+                key={key}
+                label={label}
+                isSelect
+                options={options}
+                value={filters[key as keyof typeof filters]}
+                onChange={(v) => handleInputChange(key, v)}
+              />
+            ))}
           </div>
 
-          <button className="w-full mt-6 bg-[#00A669] text-white py-4 rounded-md font-bold uppercase tracking-wider hover:bg-[#008f5a] transition-all">
-            ПОИСК (3451)
+          <button
+            onClick={handleSearch}
+            className="w-full mt-6 bg-[#00A669] text-white py-4 rounded font-bold"
+          >
+            ПОИСК ({result?.totalResults ?? 0})
           </button>
         </div>
-        <div className="w-full md:w-80 bg-white rounded-lg shadow-md overflow-hidden relative self-start">
-          <div className="absolute top-4 right-0 bg-[#EE5D50] text-white text-[12px] px-3 py-1.5 rounded-l-sm font-bold z-10 shadow-sm">
-            Предложение дня!
-          </div>
-          <img
-            src="https://via.placeholder.com/400x300"
-            alt="Opel COMBO"
-            className="w-full h-56 object-cover"
-          />
 
-          <div className="p-4">
-            <h3 className="font-bold text-gray-800 text-base leading-tight">
-              Opel COMBO Airco Elct Ramen Stuurbediening
-            </h3>
-            <p className="text-gray-400 text-sm mt-1">Закрытые грузопассажирские автомобили</p>
-            <div className="mt-4 pt-4 border-t flex items-center justify-between bg-gray-50 -mx-4 px-4 py-3">
-              <div className="flex items-center text-gray-500 text-xs">
-                <span className="mr-1">📍</span>
-                <span className="leading-none">Garage van Nierop,<br />Netherlands</span>
+        {/* РЕЗУЛЬТАТ */}
+        {result && (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <img src={result.image} className="h-56 w-full object-cover" />
+            <div className="p-4">
+              <h3 className="font-bold">{result.title}</h3>
+              <p className="text-sm text-gray-400">{result.category}</p>
+              <div className="flex justify-between mt-4">
+                <span className="text-sm">{result.location}</span>
+                <span className="text-green-600 font-bold">{result.price} €</span>
               </div>
-              <div className="text-[#00A669] font-bold text-xl">1 500€</div>
             </div>
+
+            {result.id && (
+              <Link
+                href={`/product/${result.id}`}
+                className="block text-center text-[#00A669] py-3 font-bold"
+              >
+                Подробнее
+              </Link>
+            )}
           </div>
-        </div>
+        )}
+
       </div>
     </section>
   );
 };
-
