@@ -113,11 +113,11 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
       </nav>
       <div className="flex flex-col lg:flex-row gap-6 mb-8">
         <div className="lg:w-full">
-          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-26 aspect-3/4">
+          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-60 aspect-3/4">
             <img
               src={vehicle.image}
               alt={vehicle.name}
-              className="w-10 h-full object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
           <div className="flex justify-start gap-3 mt-4 overflow-x-auto">
