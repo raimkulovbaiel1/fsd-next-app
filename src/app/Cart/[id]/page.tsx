@@ -113,18 +113,18 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
       </nav>
       <div className="flex flex-col lg:flex-row gap-6 mb-8">
         <div className="lg:w-full">
-          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-60 aspect-3/4">
+          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-full lg:h-100  aspect-3/4">
             <img
               src={vehicle.image}
               alt={vehicle.name}
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex justify-start gap-3 mt-4 overflow-x-auto">
+          <div className="flex justify-start mt-4 overflow-x-auto">
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="aspect-video w-10 bg-gray-300 rounded overflow-hidden cursor-pointer hover:opacity-80 transition"
+                className="aspect-video w-20   overflow-hidden cursor-pointer hover:opacity-80 transition"
               >
                 <img
                   src={vehicle.image}
