@@ -10,11 +10,13 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "i18next": "^25.8.0",
     "json-server": "^1.0.0-beta.3",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-i18next": "^16.5.3",
     "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0",
     "tailwind-scrollbar": "^4.0.2"
