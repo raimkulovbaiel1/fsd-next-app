@@ -19,7 +19,7 @@ export const SearchResult = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [filters, setFilters] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
 
   useEffect(() => {
@@ -41,14 +41,36 @@ export const SearchResult = () => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 px-2 py-4 lg:py-8 max-w-7xl mx-auto">
-      <button className="block lg:hidden w-full bg-[#0096611A] text-[#009661] py-2 rounded font-semibold">
+  
+      {/* КНОПКА ОТКРЫТЬ ФИЛЬТР (МОБИЛКА) */}
+      <button
+        onClick={() => setIsFilterOpen(true)}
+        className="block lg:hidden w-full bg-[#0096611A] text-[#009661] py-2 rounded font-semibold"
+      >
         Открыть фильтр
       </button>
 
-      <aside className="hidden lg:block w-full lg:w-80 bg-white rounded-xl shadow p-4 h-fit mb-4 lg:mb-0">
+      <aside  className={`
+          fixed inset-y-0 left-0 z-50 w-full bg-white p-4 overflow-y-auto
+          transition-transform duration-300
+          ${isFilterOpen ? 'translate-x-0' : '-translate-x-full'}
+          lg:static lg:translate-x-0 lg:w-80 lg:rounded-xl lg:shadow lg:h-fit
+        `}> 
+
+
+          {/* HEADER МОБИЛКИ */}
+        <div className="flex justify-between items-center mb-4 lg:hidden">
+          <span className="font-semibold text-lg">Фильтры</span>
+          <button
+            onClick={() => setIsFilterOpen(false)}
+            className="text-[#009661] text-xl font-bold"
+          >
+            ✕
+          </button>
+        </div>
         {filters ? (
           <form>
-            <div className="mb-5">
+            <div className="mb-5  " >
               <label htmlFor="price-range" className="block font-semibold mb-1">
                 ___ Цена, €
               </label>
@@ -58,13 +80,20 @@ export const SearchResult = () => {
                 id="price-range"
                 min={filters.price.min}
                 max={filters.price.max}
-                className="w-full accent-green-400"
+                className="w-full   accent-green-400"
               />
+              <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+                <div className="flex justify-between text-gray-500">
+                  <span>Минимум</span>
+                  <span>Максимум</span>
+                </div>
 
-              <div className="flex justify-between text-sm text-gray-500">
-                <span>{filters.price.min}</span>
-                <span>{filters.price.max}</span>
+                <div className="mt-1 flex justify-between font-semibold text-gray-900">
+                  <span>{filters.price.min}</span>
+                  <span>{filters.price.max}</span>
+                </div>
               </div>
+
             </div>
 
             <div className="mb-5">
@@ -225,9 +254,9 @@ export const SearchResult = () => {
               <img src={vehicle.image} alt={vehicle.name} className="object-cover w-full h-full" />
             </div>
             <div className="p-4 flex flex-col flex-1">
-              <div className="text-[20px] mb-1">{vehicle.name}</div>
-              <div className="text-gray-600 text-sm mb-2">
-                {vehicle.year} • {vehicle.weight} кг • {vehicle.mileage} км
+              <div className="text-[20px] mb-1 border-b">{vehicle.name}</div>
+              <div className="text-gray-600 text-sm mb-2 border-b ">
+                {vehicle.year} | {vehicle.weight} кг | {vehicle.mileage} | км
               </div>
               <div className="text-[#252525] font-bold text-lg mb-2">{vehicle.price}€</div>
               <div className="text-[14px] text-gray-500 mt-auto flex items-center gap-2">
@@ -235,13 +264,18 @@ export const SearchResult = () => {
                 {vehicle.location}
               </div>
             </div>
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-5 px-7 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
+            <div className="absolute left-1/2 text-[13px]  bottom-5 px-3 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
               Больше информации
             </div>
           </Link>
-        ))}
-      </main>
-    </div>
+        ))} 
+         <div className="flex text-center justify-center mt-6 ">
+          <button className="bg-[#009661] text-white px-4 py-2 rounded-lg  transition">
+            Загрузить ещё
+          </button>
+         </div>
+      </main> 
+    </div> 
   );
 };
 
