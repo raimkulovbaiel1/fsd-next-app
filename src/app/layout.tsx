@@ -23,18 +23,30 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+    <html lang="ru">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{
+          backgroundImage: "url('https://m.mashina.kg/bundles/client/default/img/banners/branding-mbankavtokredit-18aug2025.webp')",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-1">
           <Header />
-          {children}
-          <Footer />
         </div>
+        <main className="max-w-7xl mx-auto bg-white/95 backdrop-blur px-4 sm:px-6 lg:px-10 min-h-screen rounded-xl my-6">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );
 }
+
+
