@@ -39,7 +39,7 @@ const Leasing: FC = () => {
             console.error(err);
             setLoading(false);
          });
-      fetch("http://localhost:4091/filters")
+      fetch("http://localhost:5000/filters")
          .then((res) => res.json())
          .then((data) => setFilters(data))
          .catch((err) => console.error(err));
