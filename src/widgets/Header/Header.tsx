@@ -55,7 +55,11 @@ export const Header = () => {
 
         {/* Левая часть: Логотип + Навигация */}
         <div className="flex items-center space-x-12">
-          <div className="text-[#00A669] font-bold text-2xl tracking-tight">NOVO</div>
+        <Link href="/">
+  <div className="text-[#00A669] font-bold text-2xl tracking-tight cursor-pointer">
+    NOVO
+  </div>
+</Link>
 
           <nav>
             <ul className="hidden lg:flex items-center space-x-8 text-[#252525] font-medium">
