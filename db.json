@@ -29,7 +29,7 @@
       "price": "2 800€",
       "location": "France",
       "image": "https://via.placeholder.com/300x180"
-    }, 
+    },
     {
       "id": 4,
       "title": "Renault Kangoo",
@@ -39,7 +39,7 @@
       "price": "1 200€",
       "location": " Germany",
       "image": "https://via.placeholder.com/300x180"
-    }, 
+    },
     {
       "id": 5,
       "title": "Volkswagen Caddy",
@@ -49,7 +49,7 @@
       "price": "2 300€",
       "location": " France",
       "image": "https://via.placeholder.com/300x180"
-    }, 
+    },
     {
       "id": 6,
       "title": "Fiat Ducato",
@@ -60,44 +60,28 @@
       "location": " Italy",
       "image": "https://via.placeholder.com/300x180"
     }
-  ], 
-    "filters": {
+  ],
+  "filters": {
     "price": {
       "min": 0,
       "max": 200000
     },
-    "transportTypes": [
-      "Грузовики",
-      "Легковые",
-      "Спецтехника"
-    ],
-    "manufacturers": [
-      "Mercedes",
-      "Volvo",
-      "MAN",
-      "Scania"
-    ],
-    "adTypes": [
-      "Продажа",
-      "Аренда"
-    ],
-    "countries": [
-      "Германия",
-      "Франция",
-      "Италия",
-      "Испания"
-    ]
-  },  
+    "transportTypes": ["Грузовики", "Легковые", "Спецтехника"],
+    "manufacturers": ["Mercedes", "Volvo", "MAN", "Scania"],
+    "adTypes": ["Продажа", "Аренда"],
+    "countries": ["Германия", "Франция", "Италия", "Испания"]
+  },
 
- "SearchResult": [
+  "SearchResult": [
     {
-      "id": 1, 
+      "id": 1,
       "name": "Закрытые грузопассажирские автомобили",
-      "title": "Opel COMBO Airco Elct Ramen", 
+      "title": "Opel COMBO Airco Elct Ramen",
       "year": 2015,
       "weight": 2000,
       "mileage": 490574,
       "price": 1500,
+      "location": " Netherlands",
       "currency": "€",
       "type": "Грузовики",
       "brand": "Opel",
@@ -108,13 +92,14 @@
       "seller": "Garage van Nierop"
     },
     {
-      "id": 2, 
-       "name": "Закрытые грузопассажирские автомобили",
+      "id": 2,
+      "name": "Закрытые грузопассажирские автомобили",
       "title": "Mercedes Benz Sprinter",
       "year": 2018,
       "weight": 3500,
       "mileage": 210000,
       "price": 12000,
+      "location": " Netherlands",
       "currency": "€",
       "type": "Грузовики",
       "brand": "Mercedes Benz",
@@ -125,13 +110,14 @@
       "seller": "AutoHaus Berlin"
     },
     {
-      "id": 3, 
-       "name": "Закрытые грузопассажирские автомобили",
+      "id": 3,
+      "name": "Закрытые грузопассажирские автомобили",
       "title": "Volkswagen Caddy",
       "year": 2019,
       "weight": 2100,
       "mileage": 120000,
       "price": 2300,
+      "location": " Netherlands",
       "currency": "€",
       "type": "Легковые",
       "brand": "Volkswagen",
@@ -140,15 +126,16 @@
       "adType": "По запросу",
       "image": "https://via.placeholder.com/300x180",
       "seller": "AutoHaus Berlin"
-    }, 
+    },
     {
-      "id": 4, 
-       "name": "Закрытые грузопассажирские автомобили",
+      "id": 4,
+      "name": "Закрытые грузопассажирские автомобили",
       "title": "Ford Transit Custom",
       "year": 2018,
       "weight": 2200,
       "mileage": 150000,
       "price": 2100,
+      "location": " Netherlands",
       "currency": "€",
       "type": "Грузовики",
       "brand": "Ford",
@@ -159,13 +146,14 @@
       "seller": "AutoHaus Berlin"
     },
     {
-      "id": 5, 
-       "name": "Закрытые грузопассажирские автомобили",
+      "id": 5,
+      "name": "Закрытые грузопассажирские автомобили",
       "title": "Volvo FH16",
       "year": 2020,
       "weight": 44000,
       "mileage": 80000,
       "price": 152444,
+      "location": " Netherlands",
       "currency": "€",
       "type": "Грузовики",
       "brand": "Volvo",
@@ -176,13 +164,14 @@
       "seller": "TruckWorld NL"
     },
     {
-      "id": 6, 
-       "name": "Закрытые грузопассажирские автомобили",
+      "id": 6,
+      "name": "Закрытые грузопассажирские автомобили",
       "title": "Iveco Daily",
       "year": 2017,
       "weight": 3500,
       "mileage": 180000,
       "price": 8500,
+      "location": " Netherlands",
       "currency": "€",
       "type": "Грузовики",
       "brand": "Iveco",
@@ -191,7 +180,7 @@
       "adType": "Сдать в аренду",
       "image": "https://via.placeholder.com/300x180",
       "seller": "Italia Trucks"
-    } 
+    }
   ],
 
   "SearchResultFilters": {
@@ -200,10 +189,7 @@
       "max": 152444
     },
 
-    "types": [
-      "Грузовики",
-      "Автобусы"
-    ],
+    "types": ["Грузовики", "Автобусы"],
 
     "brands": [
       "Volkswagen",
@@ -211,8 +197,8 @@
       "Volvo",
       "Iveco",
       "Van Hool",
-      "Opel", 
-       "Volkswagen",
+      "Opel",
+      "Volkswagen",
       "Mercedes Benz",
       "Volvo",
       "Iveco",
@@ -220,15 +206,9 @@
       "Opel"
     ],
 
-    "countries": [
-      "France",
-      "Italy"
-    ],
+    "countries": ["France", "Italy"],
 
-    "gearboxes": [
-      "Автомат",
-      "Механика"
-    ],
+    "gearboxes": ["Автомат", "Механика"],
 
     "adTypes": [
       "Аукцион",
