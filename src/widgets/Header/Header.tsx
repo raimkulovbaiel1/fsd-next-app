@@ -2,7 +2,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
-import i18n from '@/i18n'
+import i18n from '@/i18n' 
+import { useTranslation } from 'react-i18next'
+
 
 import search from '@/shared/assets/icons/search.svg'
 import user from '@/shared/assets/icons/user.svg'
@@ -10,7 +12,10 @@ import user from '@/shared/assets/icons/user.svg'
 export const Header = () => {
   const [currentLang, setCurrentLang] = useState('ru')
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLLIElement>(null)
+  const dropdownRef = useRef<HTMLLIElement>(null) 
+  const { t } = useTranslation()
+
+
 
   useEffect(() => {
     const savedLang = localStorage.getItem('i18nextLng') || 'ru'
@@ -69,7 +74,7 @@ export const Header = () => {
                   <ul className="absolute top-full left-0 mt-2 bg-white border rounded-md shadow-lg w-32 z-50">
                     <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('ru')}>Русский</li>
                     <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('en')}>English</li>
-                    <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('kg')}>Кыргызча</li>
+                    <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('kg')}>Кыргызча</li> 
                   </ul>
                 )}
               </li>
@@ -81,7 +86,7 @@ export const Header = () => {
               </li>
 
               {/* Поиск */}
-              <li className="cursor-pointer hover:text-[#00A669] transition-colors">Поиск</li>
+              <li className="cursor-pointer hover:text-[#00A669] transition-colors">{t('search')}</li>
             </ul>
           </nav>
         </div>
@@ -96,7 +101,7 @@ export const Header = () => {
         <div className="hidden lg:flex items-center space-x-8">
           <Link href="/settings">
             <button className="text-[#00A669] font-semibold hover:opacity-80 transition-opacity">
-              Мой профиль
+              {t('profile')}
             </button>
           </Link>
 
@@ -104,7 +109,7 @@ export const Header = () => {
             href="/SellerRegisterPage"
             className="bg-[#F6FBF9] text-[#00A669] px-6 py-3 rounded-md font-bold text-sm uppercase tracking-wide hover:bg-[#e8f5f0] transition-colors"
           >
-            Стать продавцом
+           {t('becomeSeller')}
           </Link>
         </div>
       </div>

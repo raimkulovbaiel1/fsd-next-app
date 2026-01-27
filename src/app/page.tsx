@@ -3,11 +3,15 @@ import { Features } from '@/widgets/features';
 import { TopAdsSection } from '@/widgets/TopAdsSection';
 import RecentlyViewed from '@/shared/components/RecentlyViewed/page'; 
 import OurSellers from '@/shared/components/OurSellers/OurSellers';
-import Link from 'next/link';
+import Link from 'next/link'; 
+
 
 export default function Home() {
+
+
   return (
-    <main className="min-h-screen"> 
+    <main className="min-h-screen">  
+    
       <Filter /> 
       
       <section className="max-w-7xl mx-auto px-4 py-12">
