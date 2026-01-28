@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
-import i18n from '@/i18n' 
+import i18n from '@/i18n'
 import { useTranslation } from 'react-i18next'
 
 
@@ -12,9 +12,9 @@ import user from '@/shared/assets/icons/user.svg'
 export const Header = () => {
   const [currentLang, setCurrentLang] = useState('ru')
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const dropdownRef = useRef<HTMLLIElement>(null) 
+  const dropdownRef = useRef<HTMLLIElement>(null)
   const { t } = useTranslation()
-
+  const [open, setOpen] = useState(false);
 
 
   useEffect(() => {
@@ -55,11 +55,11 @@ export const Header = () => {
 
         {/* Левая часть: Логотип + Навигация */}
         <div className="flex items-center space-x-12">
-        <Link href="/">
-  <div className="text-[#00A669] font-bold text-2xl tracking-tight cursor-pointer">
-    NOVO
-  </div>
-</Link>
+          <Link href="/">
+            <div className="text-[#00A669] font-bold text-2xl tracking-tight cursor-pointer">
+              NOVO
+            </div>
+          </Link>
 
           <nav>
             <ul className="hidden lg:flex items-center space-x-8 text-[#252525] font-medium">
@@ -78,15 +78,28 @@ export const Header = () => {
                   <ul className="absolute top-full left-0 mt-2 bg-white border rounded-md shadow-lg w-32 z-50">
                     <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('ru')}>Русский</li>
                     <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('en')}>English</li>
-                    <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('kg')}>Кыргызча</li> 
+                    <li className="px-4 py-2 hover:bg-gray-100" onClick={() => changeLang('kg')}>Кыргызча</li>
                   </ul>
                 )}
               </li>
 
               {/* Валюта */}
-              <li className="flex items-center cursor-pointer hover:text-[#00A669] transition-colors">
-                Евро
-                <span className="ml-1 text-xs">▼</span>
+              <li className="relative">
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="flex items-center cursor-pointer hover:text-[#00A669] transition-colors"
+                >
+                  {t('€')}
+                  <span className="ml-1 text-xs">▼</span>
+                </button>
+
+                {open && (
+                  <ul className="absolute right-0 mt-1 w-15 bg-white shadow-lg rounded-lg border z-50">
+                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">EUR</li>
+                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">EUR</li>
+                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">USD</li>
+                  </ul>
+                )}
               </li>
 
               {/* Поиск */}
@@ -103,17 +116,58 @@ export const Header = () => {
 
         {/* Правая часть: Профиль + Стать продавцом */}
         <div className="hidden lg:flex items-center space-x-8">
-          <Link href="/settings">
-            <button className="text-[#00A669] font-semibold hover:opacity-80 transition-opacity">
-              {t('profile')}
+          <div className="relative group">
+            {/* Кнопка профиля */}
+            <button className="text-[#00A669] cursor-pointer font-semibold hover:opacity-80 transition-opacity">
+              Профиль
             </button>
-          </Link>
+
+            {/* Выпадающее меню */}
+            <div  
+            className="
+               absolute -ml-7.5 mt-2 w-38
+               bg-white shadow-lg rounded-xl
+               opacity-0 invisible
+               group-hover:opacity-100 group-hover:visible
+               transition-all duration-200
+               z-50
+             ">
+              <ul className="py-2">
+                <li>
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    👤 Профиль
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/messages"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    💬 Сообщения
+                  </Link>
+                </li>
+
+                <li>
+                  <Link
+                    href="/settings"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    ⚙️ Настройки
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
 
           <Link
             href="/SellerRegisterPage"
             className="bg-[#F6FBF9] text-[#00A669] px-6 py-3 rounded-md font-bold text-sm uppercase tracking-wide hover:bg-[#e8f5f0] transition-colors"
           >
-           {t('becomeSeller')}
+            {t('becomeSeller')}
           </Link>
         </div>
       </div>
