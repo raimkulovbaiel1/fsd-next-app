@@ -5,7 +5,7 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <SellerHeader />
-      <main className="max-w-7xl mx-auto p-4">
+      <main className="max-w-7xl mx-auto p-0">
         {children}
       </main>
     </>
