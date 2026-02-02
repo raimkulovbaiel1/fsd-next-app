@@ -48,7 +48,7 @@ const SellerProfilePage = () => {
           />
         </div>
         <Link
-          href="/add-listing"
+          href="/seller/new-item"
           className="w-full lg:w-auto bg-[#0096611A] text-[#29a669] px-4 py-2 rounded-md font-semibold hover:bg-green-200 transition text-center"
         >
           Добавить объявление
