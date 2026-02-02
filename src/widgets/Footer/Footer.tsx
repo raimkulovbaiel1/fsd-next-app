@@ -41,7 +41,7 @@ const Footer: FC = () => {
                                 .
                             </p>
                             <ul className="space-y-3 text-sm text-white">
-                                <Link href="/SellerRegisterPage" className="cursor-pointer hover:opacity-80">
+                                <Link href="/seller/register" className="cursor-pointer hover:opacity-80">
                                     Стать продавцем
                                 </Link>
                             </ul>
