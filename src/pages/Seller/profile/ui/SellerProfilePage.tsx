@@ -86,7 +86,7 @@ const SellerProfilePage = () => {
               </a>
               <a
                 href={`/delete/${vehicle.id}`}
-                className="flex items-center gap-2 px-4 py-1 bg-[#EB57571A] text-[#EB5757] rounded-lg shadow"
+                className="flex items-center gap-1 px-4 py-1 bg-[#EB57571A] text-[#EB5757] rounded-lg shadow"
               >
                 <img src={delta.src} alt="logo" className="w-4 h-4" />
                 Удалить
