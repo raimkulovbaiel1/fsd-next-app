@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import i18n from '@/i18n'
 import { useTranslation } from 'react-i18next'
-
+import nova from '@/shared/assets/icons/ChatGPT Image 5 февр. 2026 г., 21_50_02.png'
 
 import search from '@/shared/assets/icons/search.svg'
 import user from '@/shared/assets/icons/user.svg'
@@ -56,9 +56,15 @@ export const Header = () => {
         {/* Левая часть: Логотип + Навигация */}
         <div className="flex items-center space-x-12">
           <Link href="/">
-            <div className="text-[#00A669] font-bold text-2xl tracking-tight cursor-pointer">
-              NOVO
+            <div className="flex items-center gap-2 cursor-pointer">
+              <img
+                src={nova.src}
+                alt="NOVO logo"
+                className="w-10 h-10 object-contain rounded-xl"
+              />
             </div>
+
+
           </Link>
 
           <nav>
@@ -123,8 +129,8 @@ export const Header = () => {
             </button>
 
             {/* Выпадающее меню */}
-            <div  
-            className="
+            <div
+              className="
                absolute -ml-7.5 mt-2 w-38
                bg-white shadow-lg rounded-xl
                opacity-0 invisible
