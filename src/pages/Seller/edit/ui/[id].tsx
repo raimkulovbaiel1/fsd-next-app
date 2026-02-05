@@ -16,7 +16,7 @@ export default function EditPage() {
         </Link>
 
         <div className="flex gap-2">
-          <Link
+           <Link
             href={`/seller/EditingProduct/${id}`}
             className="px-3 py-1 text-xs rounded bg-green-100 text-green-700 hover:bg-green-200 transition"
           >
