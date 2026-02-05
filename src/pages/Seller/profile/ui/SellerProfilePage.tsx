@@ -78,21 +78,23 @@ const SellerProfilePage = () => {
             </div>
 
             <div className="absolute left-1/2 bottom-2 transform -translate-x-1/4 flex gap-2 text-[15px] px-3 py-2 text-[#009661] opacity-0 group-hover:opacity-100 transition pointer-events-auto">
-              <a
-                href={`/edit/${vehicle.id}`}
-                className="px-3 py-1 bg-white text-[#009661] rounded-lg shadow"
+
+              <Link
+                href={`/seller/edit/${vehicle.id}`}
+                className="px-3 py-1 bg-white text-[#009661] rounded-lg shadow hover:bg-gray-100"
               >
                 Редактировать
-              </a>
-              <a
-                href={`/delete/${vehicle.id}`}
+              </Link>
+
+              <button
                 className="flex items-center gap-2 px-4 py-1 bg-[#EB57571A] text-[#EB5757] rounded-lg shadow"
               >
                 <img src={delta.src} alt="logo" className="w-4 h-4" />
                 Удалить
-              </a>
+              </button>
 
             </div>
+
           </div>
         ))}
 
