@@ -1,50 +1,18 @@
 'use client';
 
-import { useParams, } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-interface Vehicle {
-  id: string;
-  name: string; 
-  title: string; 
-  brand: string;
-  model: string;
-  year: string;
-  weight: string;
-  mileage: string;
-  price: string; 
-  location: string;
-  image: string;
-}
+
 export default function EditPage() {
-  const params = useParams();
-  const id = params?.id as string | undefined;
-  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!id) return;
-
-    fetch(`http://localhost:5000/profile/${id}`)
-      .then(res => res.json())
-      .then(data => setVehicle(data))
-      .catch(err => console.error(err))
-      .finally(() => setLoading(false));
-  }, [id]);
-
-  if (loading) {
-    return <div className="p-6">Загрузка...</div>;
-  }
-
-  if (!vehicle) {
-    return <div className="p-6">Товар не найден</div>;
-  }
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
 
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white min-h-screen">
 
+      {/* TOP BAR */}
       <div className="flex items-center justify-between mb-4">
-        <Link href="/" className="text-sm text-gray-400 hover:underline">
+        <Link href="/seller/profile" className="text-sm text-gray-400 hover:underline">
           ← Назад
         </Link>
 
@@ -58,19 +26,23 @@ export default function EditPage() {
         </div>
       </div>
 
+      {/* MAIN */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        {/* LEFT */}
         <div className="lg:col-span-2">
           <img
-            src={vehicle.image}
-            alt={vehicle.name}
-            className="rounded-lg w-160.5 h-92.5 object-cover"
+            src="https://im.mashina.kg/tachka/images//6/8/c/68c1531dc157e268707cad27b4df5e88_240x180.jpg"
+            alt="vehicle"
+            className="rounded-lg w-full object-cover"
           />
 
+          {/* thumbnails */}
           <div className="flex gap-3 mt-4">
-            {[1, 2, 4].map((i) => (
+            {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="w-18 h-20 rounded overflow-hidden bg-gray-200"
+                className="w-28 h-20 rounded overflow-hidden bg-gray-200"
               >
                 <img
                   src="/car.jpg"
@@ -86,32 +58,38 @@ export default function EditPage() {
           </div>
         </div>
 
+        {/* RIGHT */}
         <div className="bg-white">
-
-          <h1 className="text-2xl font-bold border-b pb-1 mb-6">
-             {vehicle.name}
+          <h1 className="text-lg font-semibold mb-1">
+            Nissan Eco T100 Paardenvervoer
           </h1>
-          <p className="text-[15px] text-gray-400 mb-4">
+
+          <p className="text-sm text-gray-500 mb-4">
+            / BJ: 1995 ledig gewicht
+          </p>
+
+          <p className="text-xs text-gray-400 mb-4">
             Закрытые грузовые автомобили
           </p>
 
           <div className="grid grid-cols-3 text-sm gap-y-3 mb-6">
             <div>
               <p className="text-gray-400 text-xs">Год выпуска</p>
-              {vehicle.year} Год
+              <p>1996 год</p>
             </div>
             <div>
               <p className="text-gray-400 text-xs">Пробег</p>
-              {vehicle.mileage} км
+              <p>360 000 km</p>
             </div>
             <div>
               <p className="text-gray-400 text-xs">Цена</p>
-              <p className="font-semibold">{vehicle.price} €</p>
+              <p className="font-semibold">3 100 €</p>
             </div>
           </div>
         </div>
       </div>
 
+      {/* SPECS */}
       <div className="mt-10">
         <h2 className="text-lg font-semibold mb-4">
           Обзор транспортного средства
@@ -120,12 +98,12 @@ export default function EditPage() {
         <div className="bg-gray-50 rounded-lg overflow-hidden text-sm">
           {[
             ['Категория', 'Грузовики'],
-            ['Марка', `${vehicle.title}`],
-            ['Модель', `${vehicle.brand} ${vehicle.model}`],
-            ['Год (начиная с)', `${vehicle.year}`],
-            ['Пробег', `${vehicle.mileage} км`],
-            ['Страна', `${vehicle.location}`],
-            ['Вес', `${vehicle.weight} кг`],
+            ['Марка', 'Nissan'],
+            ['Модель', 'Eco T100 Paardenvervoer'],
+            ['Год (начиная с)', '1996'],
+            ['Пробег', '225 650 km'],
+            ['Страна', 'Ukraine'],
+            ['Вес', '15 000kg'],
           ].map(([label, value], i) => (
             <div
               key={i}
@@ -138,6 +116,7 @@ export default function EditPage() {
         </div>
       </div>
 
+      {/* DESCRIPTION */}
       <div className="mt-10 max-w-4xl">
         <h2 className="text-lg font-semibold mb-3">Описание</h2>
 
