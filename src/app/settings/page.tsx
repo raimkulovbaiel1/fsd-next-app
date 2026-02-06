@@ -1,45 +1,54 @@
+'use client';
+
 import { Settings } from '@/widgets/Settings';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+const tabBase =
+  'pb-3 text-sm font-medium leading-5 border-b-2 transition cursor-pointer';
+
+const tabInactive =
+  'border-transparent text-gray-500 hover:text-black';
+
+const tabActive =
+  'border-emerald-600 text-black';
 
 const SettingsPage = () => {
+  const router = useRouter();
+
+  const handleNavigate = (path: string) => {
+    setTimeout(() => {
+      router.push(path);
+    }, 2000);
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
-      <nav className="text-sm text-gray-400 mb-4">
-        <ol className="flex flex-wrap items-center gap-15">
-          <li>
-            <Link href="/" className="hover:text-black">
-              Главная
-            </Link>
-          </li>
-          <span>›</span>
-          <li>
-            <Link href="/cabinet" className="hover:text-black">
-              Мой кабинет
-            </Link>
-          </li>
-          <span>›</span>
-          <li className="text-black font-medium text-[24px]">
-            Настройки профиля
-          </li>
-        </ol>
-      </nav>
 
-      <h1 className="text-3xl sm:text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-6">
         Настройки профиля
       </h1>
 
-      <div className="flex gap-6 border-b mb-8 text-sm">
-        <Link href="/Wishlist" className="pb-3 text-gray-500 hover:text-black">
+      <div className="flex gap-6 border-b mb-8">
+
+        <span
+          onClick={() => handleNavigate('/Wishlist')}
+          className={`${tabBase} ${tabInactive}`}
+        >
           Избранное
-        </Link>
+        </span>
 
-        <Link href="/messages" className="pb-3 text-gray-500 hover:text-black">
-          Сообщения <span className="text-[#009661]">(4 новых)</span>
-        </Link>
+        <span
+          onClick={() => handleNavigate('/messages')}
+          className={`${tabBase} ${tabInactive}`}
+        >
+          Сообщения
+          <span className="ml-1 text-emerald-600">(4 новых)</span>
+        </span>
 
-        <button className="pb-3 border-b-2 border-green-600 text-black font-medium flex items-center gap-2">
+        <span className={`${tabBase} ${tabActive}`}>
           ⚙ Настройки профиля
-        </button>
+        </span>
+
       </div>
 
       <Settings />
