@@ -64,7 +64,7 @@ export default function RecentlyViewed() {
     <section className="max-w-6xl mx-auto px-5 py-1">
       <div className="grid grid-cols-1 lg:grid-cols-[260px_fr] gap-6 items-start">
         <div className="flex flex-col ml-20 justify-between">
-          <h2 className="text-[30px] font-medium leading-tight text-gray-900">
+          <h2 className="text-[30px] font-bold leading-tight text-gray-900">
             Недавно<br />просмотренные
           </h2>
           <div className="flex gap-1 mt-6">
@@ -107,9 +107,9 @@ export default function RecentlyViewed() {
               <SwiperSlide>
                 <div className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
 
-                  <div className="w-44  bg-gray-200 overflow-hidden">
+                  <div className="w-full h-[140px]  bg-gray-200 overflow-hidden">
                     <img
-                      src={vehi.image.src}
+                      src={typeof vehi.image === 'string' ? vehi.image : vehi.image.src}
                       alt={vehi.title}
                       className="w-full h-full object-cover"
                     />

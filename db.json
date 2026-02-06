@@ -669,5 +669,55 @@
       "image": "https://via.placeholder.com/300x180",
       "seller": "Italia Trucks"
     }
+  ], 
+    "recentlyViewed": [
+    {
+      "id": 1,
+      "title": "Opel COMBO Airco Elct Ramen",
+      "price": 1500,
+      "currency": "€",
+      "location": "Netherlands",
+      "image": "/images/vehicles/opel-combo.png"
+    },
+    {
+      "id": 2,
+      "title": "Lider 2020 MODEL NEW FLATBED",
+      "price": 11000,
+      "currency": "€",
+      "location": "Turkey",
+      "image": "/images/vehicles/lider-flatbed.png"
+    },
+    {
+      "id": 3,
+      "title": "Lowbed semi trailers 2020",
+      "price": 58000,
+      "currency": "€",
+      "location": "Turkey",
+      "image": "/images/vehicles/lowbed.png"
+    },
+    {
+      "id": 4,
+      "title": "Mercedes-Benz 313 CDI",
+      "price": 39900,
+      "currency": "€",
+      "location": "Turkey",
+      "image": "/images/vehicles/mercedes-313.png"
+    },
+    {
+      "id": 5,
+      "title": "Mercedes-Benz 313 CDI",
+      "price": 39900,
+      "currency": "€",
+      "location": "Turkey",
+      "image": "/images/vehicles/mercedes-313.png"
+    },
+    {
+      "id": 6,
+      "title": "Mercedes-Benz 313 CDI",
+      "price": 39900,
+      "currency": "€",
+      "location": "Turkey",
+      "image": "/images/vehicles/mercedes-313.png"
+    }
   ]
 }
