@@ -4,75 +4,118 @@ import { Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 interface Message {
   id: number;
   user: string;
-  ad: string;
+  ad?: string;
   time: string;
   checked?: boolean;
   badge?: string;
   active?: boolean;
 }
 
-interface MessagesProps {
-  messages?: Message[];
-}
-
-export const Messages = ({ messages = [] }: MessagesProps) => {
-  const defaultMessages: Message[] = [
-    { id: 1, user: "Игорь Игорьевич", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "19:56", checked: true },
-    { id: 2, user: "Darrell Steward", ad: "Opel Movano B Pritsche L3H1 3...", time: "ПД, 19:05", badge: "4 новых" },
-    { id: 3, user: "Albert Flores", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "СБ, 16:45" },
-    { id: 4, user: "Arlene McCoy", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "ПН, 20:30", badge: "2 новых" },
-    { id: 5, user: "Cody Fisher", ad: "SCHWARZMUELLER 3Achs Stahl...", time: "19:56", badge: "3 новых", active: true },
+export const Messages = () => {
+  const messages: Message[] = [
+    { id: 1, user: "Annette Black", time: "19:56", checked: true, badge: "4" },
+    { id: 2, user: "Kathryn Murphy", time: "19:56" },
+    { id: 3, user: "Bessie Cooper", time: "19:56" },
+    { id: 4, user: "Jane Cooper", time: "19:56", checked: true, badge: "4" },
+    { id: 5, user: "Floyd Miles", time: "19:56", badge: "4" },
+    { id: 6, user: "Arlene McCoy", time: "19:56" },
   ];
-
-  const displayMessages = messages.length > 0 ? messages : defaultMessages;
 
   return (
     <>
-      <div className="bg-[#01bda7] rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="text-[14px] uppercase tracking-wider text-gray-400 border-b border-gray-50">
-              <tr>
-                <th className="p-4 w-12"><input type="checkbox" className="rounded border-gray-300" /></th>
-                <th className="p-4">Пользователь</th>
-                <th className="p-4">Объявления</th>
-                <th className="p-4">Сообщения</th>
-                <th className="p-4">Отправлено</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              {displayMessages.map((msg) => (
-                <tr key={msg.id} className={`border-b border-gray-50 hover:bg-gray-50 transition ${msg.active ? 'bg-emerald-50/40' : ''}`}>
-                  <td className="p-4"><input type="checkbox" checked={msg.checked} className="rounded border-gray-300 text-emerald-500" /></td>
-                  <td className={`p-4 font-medium ${msg.badge ? 'text-emerald-600' : 'text-gray-900'}`}>{msg.user}</td>
-                  <td className="p-4 text-gray-500 truncate max-w-75">{msg.ad}</td>
-                  <td className="p-4">
-                    {msg.badge && (
-                      <span className="bg-emerald-600 text-white text-[10px] px-2 py-1 rounded font-bold uppercase">
-                        {msg.badge}
-                      </span>
-                    )}
-                  </td>
-                  <td className="p-4 text-gray-400">{msg.time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      {/* ================= MOBILE ================= */}
+      <div className="md:hidden bg-white rounded-xl shadow border border-gray-100">
+        <div className="divide-y">
+          {messages.map(msg => (
+            <div
+              key={msg.id}
+              className={`flex items-center justify-between px-4 py-3 ${
+                msg.checked ? 'bg-emerald-50/40' : ''
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={msg.checked}
+                  className="w-5 h-5 rounded border-gray-300 accent-emerald-500"
+                />
+                <span className="font-medium text-gray-900">
+                  {msg.user}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                {msg.badge && (
+                  <span className="bg-emerald-600 text-white text-xs px-2 py-1 rounded font-bold">
+                    {msg.badge}
+                  </span>
+                )}
+                <span className="text-xs text-gray-400">
+                  {msg.time}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-        <button className="flex items-center bg-[#EB5757] text-[#EB5757] rounded-lg transition text-[30px] font-medium">
-          <Trash2 size={20} />
-          <span>Удалить</span>
+      {/* ================= DESKTOP ================= */}
+      <div className="hidden md:block rounded-xl shadow border border-gray-100 overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="text-sm text-gray-400 border-b">
+            <tr>
+              <th className="p-4 w-12">
+                <input type="checkbox" />
+              </th>
+              <th className="p-4">Пользователь</th>
+              <th className="p-4">Сообщения</th>
+              <th className="p-4">Время</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {messages.map(msg => (
+              <tr
+                key={msg.id}
+                className={`border-b hover:bg-gray-50 ${
+                  msg.checked ? 'bg-emerald-50/40' : ''
+                }`}
+              >
+                <td className="p-4">
+                  <input type="checkbox" checked={msg.checked} />
+                </td>
+                <td className="p-4 font-medium">{msg.user}</td>
+                <td className="p-4">
+                  {msg.badge && (
+                    <span className="bg-emerald-600 text-white text-xs px-2 py-1 rounded">
+                      {msg.badge}
+                    </span>
+                  )}
+                </td>
+                <td className="p-4 text-gray-400">{msg.time}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ================= FOOTER ================= */}
+      <div className="flex justify-between items-center mt-5">
+        <button className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 rounded-lg">
+          <Trash2 size={18} />
+          Удалить
         </button>
 
-        <div className="flex items-center space-x-2">
-          <button className="p-3 border rounded-lg bg-[#01bda7] text-[#01bda7]"><ChevronLeft size={20}/></button>
-          <span className="px-4 py-2 bg-white rounded-lg text-sm">1 страница</span>
-          <button className="p-2 border rounded-lg bg-emerald-50 text-[#01bda7]"><ChevronRight size={20}/></button>
+        <div className="flex items-center gap-2">
+          <button className="p-2 bg-emerald-50 cursor-pointer rounded-lg text-emerald-600">
+            <ChevronLeft size={18} />
+          </button>
+          <span className="px-3 text-sm">1</span>
+          <button className="p-2 bg-emerald-50 cursor-pointer rounded-lg text-emerald-600">
+            <ChevronRight size={18} />
+          </button>
         </div>
       </div>
     </>
   );
-};  
+};
