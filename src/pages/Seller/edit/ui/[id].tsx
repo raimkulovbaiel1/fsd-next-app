@@ -1,11 +1,45 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+interface Vehicle {
+  id: string;
+  name: string;
+  title: string;
+  brand: string;
+  model: string;
+  year: string;
+  weight: string;
+  mileage: string;
+  price: string;
+  location: string;
+  image: string;
+}
 
 export default function EditPage() {
   const params = useParams<{ id: string }>();
   const id = params?.id;
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!id) return;
+
+    fetch(`http://localhost:5000/profile/${id}`)
+      .then(res => res.json())
+      .then(data => setVehicle(data))
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  if (loading) {
+    return <div className="p-6">Загрузка...</div>;
+  }
+
+  if (!vehicle) {
+    return <div className="p-6">Товар не найден</div>;
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-4 bg-white min-h-screen">
@@ -16,7 +50,7 @@ export default function EditPage() {
         </Link>
 
         <div className="flex gap-2">
-           <Link
+          <Link
             href={`/seller/EditingProduct/${id}`}
             className="px-3 py-1 text-xs rounded bg-green-100 text-green-700 hover:bg-green-200 transition"
           >
@@ -33,16 +67,16 @@ export default function EditPage() {
 
         <div className="lg:col-span-2">
           <img
-            src="https://im.mashina.kg/tachka/images//6/8/c/68c1531dc157e268707cad27b4df5e88_240x180.jpg"
-            alt="vehicle"
-            className="rounded-lg w-full object-cover"
+            src={vehicle.image}
+            alt={vehicle.name}
+            className="rounded-lg w-160.5 h-92.5 object-cover"
           />
 
           <div className="flex gap-3 mt-4">
-            {[1, 2, 3, 4].map((i) => (
+            {[1, 2, 4].map((i) => (
               <div
                 key={i}
-                className="w-28 h-20 rounded overflow-hidden bg-gray-200"
+                className="w-28 h-18 rounded overflow-hidden bg-gray-200"
               >
                 <img
                   src="/car.jpg"
@@ -59,30 +93,30 @@ export default function EditPage() {
         </div>
 
         <div className="bg-white">
-          <h1 className="text-lg font-semibold mb-1">
-            Nissan Eco T100 Paardenvervoer
+          <h1 className="text-[24px]  border-b font-semibold mb-1">
+            {vehicle.name}
           </h1>
 
-          <p className="text-sm text-gray-500 mb-4">
-            / BJ: 1995 ledig gewicht
-          </p>
+          <p className="text-[27px] text-gray-500 mb-4">
+            {vehicle.brand} {vehicle.model}
+          </p>  
 
           <p className="text-xs text-gray-400 mb-4">
-            Закрытые грузовые автомобили
+            {vehicle.location}
           </p>
 
-          <div className="grid grid-cols-3 text-sm gap-y-3 mb-6">
+          <div className="grid grid-cols-3 border-t text-sm gap-y-3 mb-6">
             <div>
-              <p className="text-gray-400 text-xs">Год выпуска</p>
-              <p>1996 год</p>
+              <p className="text-gray-400  text-xs">Год выпуска</p>
+             {vehicle.year}года
             </div>
             <div>
               <p className="text-gray-400 text-xs">Пробег</p>
-              <p>360 000 km</p>
+             {vehicle.mileage} км
             </div>
             <div>
               <p className="text-gray-400 text-xs">Цена</p>
-              <p className="font-semibold">3 100 €</p>
+              <p className="font-semibold">{vehicle.price} ₽</p>
             </div>
           </div>
         </div>
@@ -95,13 +129,12 @@ export default function EditPage() {
 
         <div className="bg-gray-50 rounded-lg overflow-hidden text-sm">
           {[
-            ['Категория', 'Грузовики'],
-            ['Марка', 'Nissan'],
-            ['Модель', 'Eco T100 Paardenvervoer'],
-            ['Год (начиная с)', '1996'],
-            ['Пробег', '225 650 km'],
-            ['Страна', 'Ukraine'],
-            ['Вес', '15 000kg'],
+            ['Марка', `${vehicle.title}`],
+            ['Модель', `${vehicle.brand} ${vehicle.model}`],
+            ['Год (начиная с)', `${vehicle.year}`],
+            ['Пробег', `${vehicle.mileage} км`],
+            ['Страна', `${vehicle.location}`],
+            ['Вес', `${vehicle.weight} кг`],
           ].map(([label, value], i) => (
             <div
               key={i}
