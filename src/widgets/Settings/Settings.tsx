@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { AccountDetails } from '@/features/seller-settings/ui/AccountDetails';
+import { AccountDetails } from '@/features/settings/ui/AccountDetails';
 
 type OpenType = 'account' | 'contact' | null;
 
@@ -25,8 +25,9 @@ function Accordion({
       >
         <span className="text-sm font-medium">{title}</span>
         <span
-          className={`text-green-600 text-xl transition-transform ${isOpen ? 'rotate-180' : ''
-            }`}
+          className={`text-green-600 text-xl transition-transform ${
+            isOpen ? 'rotate-180' : ''
+          }`}
         >
           ⌄
         </span>
@@ -34,7 +35,7 @@ function Accordion({
 
       {/* CONTENT */}
       {isOpen && (
-        <div className="bg-white rounded-xl mt-4 px-2">
+        <div className="bg-white rounded-xl mt-4 px-4 pb-4">
           {children}
         </div>
       )}
@@ -72,7 +73,7 @@ export const Settings = () => {
           />
         </Accordion>
 
-        {/* ===== CONTACT*/}
+        {/* ===== CONTACT ===== */}
         <Accordion
           title="Изменить контактную информацию"
           isOpen={open === 'contact'}
