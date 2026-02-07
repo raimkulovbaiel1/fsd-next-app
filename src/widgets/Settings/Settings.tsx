@@ -1,20 +1,56 @@
-"use client";
+'use client';
 
-function Accordion({ title }: { title: string }) {
+import { useState } from 'react';
+import { AccountDetails } from '@/features/seller-settings/ui/AccountDetails';
+
+type OpenType = 'account' | 'contact' | null;
+
+function Accordion({
+  title,
+  isOpen,
+  onClick,
+  children,
+}: {
+  title: string;
+  isOpen: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="bg-white rounded-xl border px-4 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition">
-      <span className="text-sm font-medium">{title}</span>
-      <span className="text-green-600 text-xl">⌄</span>
+    <div>
+      {/* HEADER */}
+      <div
+        onClick={onClick}
+        className="bg-white rounded-xl border px-4 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition"
+      >
+        <span className="text-sm font-medium">{title}</span>
+        <span
+          className={`text-green-600 text-xl transition-transform ${isOpen ? 'rotate-180' : ''
+            }`}
+        >
+          ⌄
+        </span>
+      </div>
+
+      {/* CONTENT */}
+      {isOpen && (
+        <div className="bg-white rounded-xl mt-4 px-2">
+          {children}
+        </div>
+      )}
     </div>
   );
 }
 
 export const Settings = () => {
+  const [open, setOpen] = useState<OpenType>('account');
+  const [email, setEmail] = useState('mail@gmail.com');
+
   return (
     <>
       <div className="mb-6 mt-[20px]">
-        <p className="text-base font-medium mt-1.5">
-          Профиль <span className="text-gray-500">mail@gmail.com</span>
+        <p className="text-base font-medium">
+          Профиль <span className="text-gray-500">{email}</span>
         </p>
 
         <button className="text-sm text-[#009661] hover:underline mt-1">
@@ -23,8 +59,30 @@ export const Settings = () => {
       </div>
 
       <div className="space-y-4">
-        <Accordion title="Настройки аккаунта" />
-        <Accordion title="Изменить контактную информацию" />
+
+        {/* ===== ACCOUNT ===== */}
+        <Accordion
+          title="Настройки аккаунта"
+          isOpen={open === 'account'}
+          onClick={() => setOpen(open === 'account' ? null : 'account')}
+        >
+          <AccountDetails
+            email={email}
+            onEmailChange={setEmail}
+          />
+        </Accordion>
+
+        {/* ===== CONTACT*/}
+        <Accordion
+          title="Изменить контактную информацию"
+          isOpen={open === 'contact'}
+          onClick={() => setOpen(open === 'contact' ? null : 'contact')}
+        >
+          <div className="mt-6 text-sm text-gray-500">
+            Контактные данные (в разработке)
+          </div>
+        </Accordion>
+
       </div>
     </>
   );
