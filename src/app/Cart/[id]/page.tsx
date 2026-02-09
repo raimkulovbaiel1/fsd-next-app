@@ -173,7 +173,7 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
               {vehicle.price}
             </div>
             <button className="bg-[#009661] hover:bg-green-700 text-white text-[14px] px-6 py-2 rounded-lg font-semibold">
-              НАПИСАТЬ ПРОДАВЦУ
+              НАПИСАТЬ ПРОДАВЦf
             </button>
           </div>
         </div>
