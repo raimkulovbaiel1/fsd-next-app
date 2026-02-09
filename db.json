@@ -88,7 +88,7 @@
       "country": "Netherlands",
       "gearbox": "Автомат",
       "adType": "Аукцион",
-      "image": "https://im.mashina.kg/tachka/images//0/2/2/022c959c5936c92192a65f619e1298d9_640x480.jpg",
+      "image": "img1",
       "seller": "Garage van Nierop"
     },
     {
@@ -106,7 +106,7 @@
       "country": "Germany",
       "gearbox": "Механика",
       "adType": "Лизинг",
-      "image": "https://via.placeholder.com/300x180",
+      "image": "img2",
       "seller": "AutoHaus Berlin"
     },
     {
@@ -124,7 +124,7 @@
       "country": "Germany",
       "gearbox": "Механика",
       "adType": "По запросу",
-      "image": "https://via.placeholder.com/300x180",
+      "image": "img3",
       "seller": "AutoHaus Berlin"
     },
     {
@@ -142,7 +142,7 @@
       "country": "Germany",
       "gearbox": "Механика",
       "adType": "Лизинг",
-      "image": "https://via.placeholder.com/300x180",
+      "image": "img4",
       "seller": "AutoHaus Berlin"
     },
     {
@@ -160,7 +160,7 @@
       "country": "Netherlands",
       "gearbox": "Автомат",
       "adType": "Аукцион",
-      "image": "https://via.placeholder.com/300x180",
+      "image": "img5",
       "seller": "TruckWorld NL"
     },
     {
@@ -178,7 +178,7 @@
       "country": "Italy",
       "gearbox": "Механика",
       "adType": "Сдать в аренду",
-      "image": "https://via.placeholder.com/300x180",
+      "image": "img6",
       "seller": "Italia Trucks"
     }
   ],
