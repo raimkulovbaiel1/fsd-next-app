@@ -73,24 +73,31 @@
   },
 
   "SearchResult": [
-    {
-      "id": 1,
-      "name": "Закрытые грузопассажирские автомобили",
-      "title": "Opel COMBO Airco Elct Ramen",
-      "year": 2015,
-      "weight": 2000,
-      "mileage": 490574,
-      "price": 1500,
-      "location": " Netherlands",
-      "currency": "€",
-      "type": "Грузовики",
-      "brand": "Opel",
-      "country": "Netherlands",
-      "gearbox": "Автомат",
-      "adType": "Аукцион",
-      "image": "img1",
-      "seller": "Garage van Nierop"
-    },
+ {
+    "id": 1,
+    "name": "Закрытые грузопассажирские автомобили",
+    "title": "Opel COMBO Airco Elct Ramen",
+    "year": 2015,
+    "weight": 2000,
+    "mileage": 490574,
+    "price": 1500,
+    "location": "Netherlands",
+    "currency": "€",
+    "type": "Грузовики",
+    "brand": "Opel",
+    "country": "Netherlands",
+    "gearbox": "Автомат",
+    "adType": "Аукцион",
+    "image": "https://im.mashina.kg/tachka/images//3/c/4/3c4d45c1b6e78cd8075eca2bd1fbdf2e_240x180.jpg",
+    "imagesURL": [
+      "https://im.mashina.kg/tachka/images//3/c/4/3c4d45c1b6e78cd8075eca2bd1fbdf2e_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//9/d/4/9d48045301b971c74c13f2433b3a3a7f_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//e/4/9/e49ce8278a8834c2d88dc25519d06827_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//b/c/7/bc72f2e96fa5de0643909c4acbed09fa_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//6/e/1/6e12bf5ab842a2b0b4101ce4b816df27_240x180.jpg"
+    ],
+    "seller": "Garage van Nierop"
+  },
     {
       "id": 2,
       "name": "Закрытые грузопассажирские автомобили",
@@ -106,7 +113,14 @@
       "country": "Germany",
       "gearbox": "Механика",
       "adType": "Лизинг",
-      "image": "img2",
+      "image": "img2", 
+       "imagesURL": [
+      "https://im.mashina.kg/tachka/images//f/e/a/fea4ae0dff6af09194e7139bf2a3963d_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//d/a/2/da290d22e4aabd2cbc9b9755e4db59f3_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//8/c/1/8c18b6fd73f87fa25c43f65878704357_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//e/6/f/e6f43e762b8632272ff5a8b862d5b118_240x180.jpg",
+      "https://im.mashina.kg/tachka/images//2/7/d/27d52de88c33590f96e21dfc9c1be9e8_240x180.jpg"
+    ],
       "seller": "AutoHaus Berlin"
     },
     {
@@ -124,7 +138,14 @@
       "country": "Germany",
       "gearbox": "Механика",
       "adType": "По запросу",
-      "image": "img3",
+      "image": "img3", 
+       "imagesURL": [
+      "https://im.mashina.kg/tachka/images//6/2/f/62f7f1bebf8fe97332135fea2075558e_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//a/e/e/aee40cbdc04a482333ace8c51f20661e_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//9/2/2/922633b2728603551ef410f2271eacc0_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//3/b/4/3b41c12dbe82f5b991a9d57a6a03a545_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//8/c/9/8c9abf12eae930a767204649ea973368_640x480.jpg"
+    ],
       "seller": "AutoHaus Berlin"
     },
     {
@@ -142,7 +163,14 @@
       "country": "Germany",
       "gearbox": "Механика",
       "adType": "Лизинг",
-      "image": "img4",
+      "image": "img4", 
+       "imagesURL": [
+      "https://im.mashina.kg/tachka/images//3/f/e/3fecb6f35786787c2d4aa74d513b227e_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//4/d/2/4d2cc0e6c759c0b0781b5ab2b2830428_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//9/e/6/9e62a150195b725c72f5b55a9521b97e_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//6/9/d/69d14af52e2652444f6eca5122f74f7a_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//5/2/e/52e2ab2a1c50964ab0d88e11e839272e_640x480.jpg"
+    ],
       "seller": "AutoHaus Berlin"
     },
     {
@@ -160,7 +188,14 @@
       "country": "Netherlands",
       "gearbox": "Автомат",
       "adType": "Аукцион",
-      "image": "img5",
+      "image": "img5", 
+       "imagesURL": [
+      "https://im.mashina.kg/tachka/images//3/b/d/3bdc9b2e98a0222b26e11a5281e1a332_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//9/0/4/9045620c109fd9ebe20516e3c7af8b84_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//7/f/4/7f4cb879580d6fd63ba133de7248a0b9_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//0/c/d/0cd2376f42ed3d64c876f4ea6d9cc57f_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//e/f/5/ef5ea39177178f24612f4ea60da07cc9_640x480.jpg"
+    ],
       "seller": "TruckWorld NL"
     },
     {
@@ -178,7 +213,14 @@
       "country": "Italy",
       "gearbox": "Механика",
       "adType": "Сдать в аренду",
-      "image": "img6",
+      "image": "img6", 
+       "imagesURL": [
+      "https://im.mashina.kg/tachka/images//5/f/9/5f9297eb44ec372263425ca8876d0e3c_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//c/b/b/cbbe11eb9b117ae2588daea8bb7b8e97_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//e/4/9/e4920a7228c9ea2fa6a32b600e2ab4b4_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//0/d/7/0d77ee0428a7acd02f9f01fa8ccf0695_640x480.jpg",
+      "https://im.mashina.kg/tachka/images//c/e/5/ce5c0946c58fe716202458401017853d_640x480.jpg"
+    ],
       "seller": "Italia Trucks"
     }
   ],
