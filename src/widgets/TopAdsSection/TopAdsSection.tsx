@@ -2,7 +2,14 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import carbon from '@/shared/assets/img/carbon.svg'
+import carbon from '@/shared/assets/img/carbon.svg' 
+ import img2 from '@/shared/assets/img/addSections/img2.png' 
+ import img3 from '@/shared/assets/img/addSections/img3.png' 
+ import img4 from '@/shared/assets/img/addSections/img4.png' 
+ import img5 from '@/shared/assets/img/addSections/img5.png' 
+ import img6 from '@/shared/assets/img/addSections/img6.png' 
+ import img7 from '@/shared/assets/img/addSections/img7.png'
+ import img8 from '@/shared/assets/img/addSections/img8.png' 
 interface Ad {
   id: number
   title: string
@@ -21,7 +28,18 @@ export const TopAdsSection = () => {
       .then(data => setAds(data))
       .catch(err => console.error('Ошибка при загрузке topAds:', err))
       .finally(() => setLoading(false))
-  }, [])
+  }, []) 
+
+  const imageMap: Record<string, string> = {
+  img2: img2.src,
+  img3: img3.src,
+  img4: img4.src,
+  img5: img5.src,
+  img6: img6.src,
+  img7: img7.src,
+  img8: img8.src,
+}
+
 
   return (
     <div className="flex-1 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 overflow-auto max-h-[calc(100vh-150px)]">
@@ -33,7 +51,7 @@ export const TopAdsSection = () => {
         >
           <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
             <img
-              src={ad.image}
+              src={imageMap[ad.image] || ad.image}
               alt={ad.title}
               className="object-cover w-full h-full"
             />
