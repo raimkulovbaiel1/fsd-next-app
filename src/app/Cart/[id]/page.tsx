@@ -12,8 +12,8 @@ interface Vehicle {
   price: string;
   location: string;
   image: string;
-  imagesURL?: string[]; 
-  category?: string;  
+  imagesURL?: string[];
+  category?: string;
   brand?: string;
   model?: string;
   country?: string;
@@ -29,6 +29,9 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState<string | null>(null);
+  // Для модалки
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchVehicle = async () => {
@@ -59,6 +62,18 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
 
     if (id) fetchVehicle();
   }, [id]);
+
+
+  // Функции для модалки
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const sendMessage = () => {
+    console.log('Сообщение продавцу:', message);
+    setMessage('');
+    closeModal();
+  };
+
+
 
   if (loading) {
     return (
@@ -141,7 +156,6 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
           </div>
         </div>
 
-        {/* Информация об авто */}
         <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
           <div className="flex justify-between items-start mb-4">
             <h1 className="text-xl font-bold text-gray-800 leading-tight">
@@ -172,12 +186,49 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
             <div className="text-[20px] font-bold text-[#009661] whitespace-nowrap">
               {vehicle.price}
             </div>
-            <button className="bg-[#009661] hover:bg-green-700 text-white text-[14px] px-6 py-2 rounded-lg font-semibold">
-              НАПИСАТЬ ПРОДАВЦf
+            <button
+              onClick={openModal}
+              className="bg-[#009661] hover:bg-green-700 text-white text-[14px] px-6 py-2 rounded-lg font-semibold"
+            >
+              Написать продавцу
             </button>
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/20 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-90 md:w-96 relative
+                  -translate-y-[300px]">
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-lg font-bold mb-4 text-gray-800">
+              Написать продавцу
+            </h2>
+
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Введите сообщение..."
+              className="w-full border border-gray-300 rounded-md p-2 mb-4 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+
+            <button
+              onClick={sendMessage}
+              className="bg-[#009661] hover:bg-green-700 text-white w-full py-2 rounded-md font-semibold"
+            >
+              Отправить
+            </button>
+          </div>
+        </div>
+
+      )}
+
 
       {/* Спецификации */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 max-w-4xl">
