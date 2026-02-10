@@ -272,3 +272,4 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
 };
 
 export default VehicleCard;
+  
