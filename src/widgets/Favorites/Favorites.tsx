@@ -105,7 +105,7 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
               </div>
             </div>
 
-            <Link href={`/product/${item.id}`}>
+            {/*<Link href={`/product/${item.id}`}>
               <div
                 className="absolute left-1/2 bottom-5 -translate-x-1/2
                   px-4 py-1 text-sm
@@ -115,7 +115,7 @@ export const Favorites = ({ favorites: externalFavorites, loading: externalLoadi
               >
                 Больше информации
               </div>
-            </Link>
+            </Link> */}
 
           </div>
         ))}
