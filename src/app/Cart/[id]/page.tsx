@@ -12,6 +12,7 @@ interface Vehicle {
   price: string;
   location: string;
   image: string;
+  imagesURL?: string[];
   category?: string;
   brand?: string;
   model?: string;
@@ -20,33 +21,37 @@ interface Vehicle {
 }
 
 interface VehicleCardProps {
-  params: Promise<{
-    id: string;
-  }>;
+  params: Promise<{ id: string }>;
 }
 
 const VehicleCard = ({ params }: VehicleCardProps) => {
   const { id } = use(params);
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mainImage, setMainImage] = useState<string | null>(null);
+  // Для модалки
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
+        // Получаем конкретное авто
         const response = await fetch(`http://localhost:5000/SearchResult/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setVehicle(data);
-        } else {
-       
+        let data = response.ok ? await response.json() : null;
+
+        // Если авто не найдено по id, ищем в общем массиве
+        if (!data) {
           const allResponse = await fetch('http://localhost:5000/SearchResult');
-          if (allResponse.ok) {
-            const allVehicles = await allResponse.json();
-            const foundVehicle = Array.isArray(allVehicles)
-              ? allVehicles.find((v: Vehicle) => String(v.id) === id)
-              : null;
-            setVehicle(foundVehicle || null);
-          }
+          const allVehicles = await allResponse.json();
+          data = Array.isArray(allVehicles)
+            ? allVehicles.find((v: Vehicle) => String(v.id) === id)
+            : null;
+        }
+
+        if (data) {
+          setVehicle(data);
+          setMainImage(data.images?.[0] || data.image);
         }
       } catch (error) {
         console.error('Ошибка при загрузке данных автомобиля:', error);
@@ -55,10 +60,20 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
       }
     };
 
-    if (id) {
-      fetchVehicle();
-    }
+    if (id) fetchVehicle();
   }, [id]);
+
+
+  // Функции для модалки
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+  const sendMessage = () => {
+    console.log('Сообщение продавцу:', message);
+    setMessage('');
+    closeModal();
+  };
+
+
 
   if (loading) {
     return (
@@ -99,37 +114,42 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
 
   return (
     <div className="max-w-6xl mx-auto p-4 bg-gray-50 min-h-screen">
+      {/* Хлебные крошки */}
       <nav className="flex items-center space-x-2 text-[12px] md:text-sm text-gray-500 mb-1 overflow-x-auto whitespace-nowrap scrollbar-hide py-2">
         {links.map((link, index) => (
           <div key={index} className="flex items-center shrink-0">
             <Link href={link.href} className="hover:text-emerald-600 transition-colors">
               {link.name}
             </Link>
-            {index < links.length - 1 && (
-              <span className="mx-2 text-gray-300">/</span>
-            )}
+            {index < links.length - 1 && <span className="mx-2 text-gray-300">/</span>}
           </div>
         ))}
       </nav>
+
       <div className="flex flex-col lg:flex-row gap-6 mb-8">
+        {/* Галерея */}
         <div className="lg:w-full">
-          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-26 aspect-3/4">
+          {/* Основное фото */}
+          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-full lg:h-100 aspect-3/4">
             <img
-              src={vehicle.image}
+              src={mainImage || vehicle.image}
               alt={vehicle.name}
-              className="w-10 h-full object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
-          <div className="flex justify-start gap-3 mt-4 overflow-x-auto">
-            {[1, 2, 3, 4].map((i) => (
+
+          {/* Миниатюры */}
+          <div className="flex justify-start mt-4 overflow-x-auto gap-2">
+            {(vehicle.imagesURL || [vehicle.image]).map((img, i) => (
               <div
                 key={i}
-                className="aspect-video w-10 bg-gray-300 rounded overflow-hidden cursor-pointer hover:opacity-80 transition"
+                className="aspect-video w-20 overflow-hidden cursor-pointer hover:opacity-80 transition"
+                onClick={() => setMainImage(img)}
               >
                 <img
-                  src={vehicle.image}
+                  src={img}
                   alt={`${vehicle.name} thumbnail ${i}`}
-                  className="w-15 h-10 object-cover"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))}
@@ -159,67 +179,90 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
               <p>{vehicle.price}</p>
             </div>
           </div>
-          <Link href="/" className="text-[#009661] text-sm  hover:underline">
+          <Link href="/" className="text-[#009661] text-sm hover:underline">
             Смотреть все позиции продавца
           </Link>
           <div className="hidden lg:flex items-center gap-8 pt-4">
             <div className="text-[20px] font-bold text-[#009661] whitespace-nowrap">
               {vehicle.price}
             </div>
-            <button className="bg-[#009661] hover:bg-green-700 text-white text-[14px] px-6 py-2 rounded-lg font-semibold">
-              НАПИСАТЬ ПРОДАВЦf
+            <button
+              onClick={openModal}
+              className="bg-[#009661] hover:bg-green-700 text-white text-[14px] px-6 py-2 rounded-lg font-semibold"
+            >
+              Написать продавцу
             </button>
           </div>
         </div>
       </div>
 
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/20 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-90 md:w-96 relative
+                  -translate-y-[300px]">
+            <button
+              onClick={closeModal}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-lg font-bold mb-4 text-gray-800">
+              Написать продавцу
+            </h2>
+
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Введите сообщение..."
+              className="w-full border border-gray-300 rounded-md p-2 mb-4 text-sm resize-none h-24 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+
+            <button
+              onClick={sendMessage}
+              className="bg-[#009661] hover:bg-green-700 text-white w-full py-2 rounded-md font-semibold"
+            >
+              Отправить
+            </button>
+          </div>
+        </div>
+
+      )}
+
+
+      {/* Спецификации */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 max-w-4xl">
         <h2 className="text-xl font-bold mb-6 text-gray-800">Обзор транспортного средства</h2>
-
         <div className="flex flex-col overflow-hidden rounded-lg">
           {specs.map((spec, index) => (
             <div
               key={index}
-              className={`grid grid-cols-2 py-4 px-6 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'
-                }`}
+              className={`grid grid-cols-2 py-4 px-6 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
             >
-              {/* Левая колонка: Название (светлее) */}
-              <span className="text-gray-400 font-normal">
-                {spec.label}
-              </span>
-
-              {/* Правая колонка: Значение (темнее и всегда с одной линии) */}
-              <span className="text-gray-800 font-medium">
-                {spec.value}
-              </span>
+              <span className="text-gray-400 font-normal">{spec.label}</span>
+              <span className="text-gray-800 font-medium">{spec.value}</span>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Описание */}
       <div className="mt-10">
-        <h3 className="text-[20px] mt-[20px] text-[#252525] mb-4">
-          Описание
-        </h3>
-
-        <div className="bgrounded-lg border border-gray-200 bg-gray-50 p-4 max-w-full lg:max-w-180">
+        <h3 className="text-[20px] mt-[20px] text-[#252525] mb-4">Описание</h3>
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 max-w-full lg:max-w-180">
           <div className="text-[15px] text-[#868686] leading-[1.6] space-y-4">
             <p>
               Nissan Eco T100 Paardenvervoer — надёжный грузовой автомобиль,
               предназначенный для перевозки грузов и специального оборудования.
             </p>
-
-            <h4 className="text-[17px] font-semibold text-[#252525]">
-              Ну и еще пример текста
-            </h4>
-
+            <h4 className="text-[17px] font-semibold text-[#252525]">Пример текста</h4>
             <p>
               Предварительные выводы неутешительны: перспективное планирование
               в значительной степени обусловливает важность укрепления
               моральных ценностей.
             </p>
           </div>
-          <Link href="/" className="text-[#009661] text-sm  hover:underline">
+          <Link href="/" className="text-[#009661] text-sm hover:underline">
             Показать больше
           </Link>
         </div>
@@ -228,4 +271,4 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   );
 };
 
-export default VehicleCard; 
+export default VehicleCard;
