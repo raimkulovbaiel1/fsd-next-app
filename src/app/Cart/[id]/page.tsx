@@ -29,7 +29,6 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState<string | null>(null);
-  // Для модалки
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [message, setMessage] = useState('');
 
