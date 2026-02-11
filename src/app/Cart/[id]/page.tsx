@@ -29,7 +29,6 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   const [vehicle, setVehicle] = useState<Vehicle | null>(null);
   const [loading, setLoading] = useState(true);
   const [mainImage, setMainImage] = useState<string | null>(null);
-  // Для модалки
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -68,10 +67,30 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const sendMessage = () => {
-    console.log('Сообщение продавцу:', message);
+    if (!message.trim() || !vehicle) return;
+
+    const newMessage = {
+      id: Date.now(),
+      vehicleId: vehicle.id,
+      vehicleName: vehicle.name,
+      time: new Date().toLocaleTimeString().slice(0, 5),
+      text: message,
+      checked: false,
+    };
+
+    const oldMessages = JSON.parse(
+      localStorage.getItem('messages') || '[]'
+    );
+
+    localStorage.setItem(
+      'messages',
+      JSON.stringify([newMessage, ...oldMessages])
+    );
+
     setMessage('');
     closeModal();
   };
+
 
 
 
@@ -272,4 +291,3 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
 };
 
 export default VehicleCard;
-  
