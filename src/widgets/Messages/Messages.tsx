@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export interface Message {
   id: number;
@@ -15,6 +16,7 @@ export interface Message {
 }
 
 export const Messages = () => {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
 
   // 🔄 INIT
@@ -33,7 +35,7 @@ export const Messages = () => {
         vehicleId: '1',
         vehicleName: 'Opel Movano B Pritsche L3H1',
         text: 'Новое сообщение',
-        time: '19:56',
+        time: new Date().toLocaleTimeString().slice(0, 5),
         user: 'Darrell Steward',
         unreadCount: 1,
         checked: false,
@@ -58,13 +60,17 @@ export const Messages = () => {
     localStorage.setItem('messages', JSON.stringify(updated));
   };
 
-  // ✅ открыть сообщение → unread = 0
-  const openMessage = (id: number) => {
+  // ✅ открыть сообщение + переход
+  const openMessage = (vehicleId: string, messageId: number) => {
     const updated = messages.map(m =>
-      m.id === id ? { ...m, unreadCount: 0 } : m
+      m.id === messageId ? { ...m, unreadCount: 0 } : m
     );
+
     setMessages(updated);
     localStorage.setItem('messages', JSON.stringify(updated));
+
+    // 🚀 переход в диалог
+    router.push(`/dialogue/${vehicleId}`);
   };
 
   // 🗑 удалить выбранные
@@ -81,9 +87,9 @@ export const Messages = () => {
           <tr>
             <th className="p-4 w-12"></th>
             <th className="p-4">Пользователь</th>
-            <th className="p-4">Объявления</th>
-            <th className="p-4">Сообщения</th>
-            <th className="p-4 text-right">Отправлено</th>
+            <th className="p-4">Объявление</th>
+            <th className="p-4">Сообщение</th>
+            <th className="p-4 text-right">Время</th>
           </tr>
         </thead>
 
@@ -91,9 +97,11 @@ export const Messages = () => {
           {messages.map(msg => (
             <tr
               key={msg.id}
-              onClick={() => openMessage(msg.id)}
+              onClick={() => openMessage(msg.vehicleId, msg.id)}
               className={`border-b cursor-pointer transition
-                ${msg.unreadCount > 0 ? 'bg-green-50 hover:bg-green-100' : 'hover:bg-gray-50'}
+                ${msg.unreadCount > 0 
+                  ? 'bg-green-50 hover:bg-green-100' 
+                  : 'hover:bg-gray-50'}
               `}
             >
               <td className="p-4">
@@ -119,8 +127,8 @@ export const Messages = () => {
                   <span className="truncate max-w-sm">{msg.text}</span>
 
                   {msg.unreadCount > 0 && (
-                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded">
-                      {msg.unreadCount} новых
+                    <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">
+                      {msg.unreadCount}
                     </span>
                   )}
                 </div>
@@ -141,10 +149,12 @@ export const Messages = () => {
           className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100"
         >
           <Trash2 size={18} />
-          Удалить
+          Удалить выбранные
         </button>
 
-        <span className="text-sm text-gray-500">1 страница</span>
+        <span className="text-sm text-gray-500">
+          {messages.length} сообщений
+        </span>
       </div>
     </div>
   );
