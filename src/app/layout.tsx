@@ -40,7 +40,7 @@ export default function RootLayout({
         <div className="max-w-9xl mx-auto px-0 sm:px-6 lg:px-0">
           <Header />
         </div>
-        <main className="max-w-9xl mx-auto bg-white/95 backdrop-blur px-4 sm:px-6 lg:px-10 min-h-screen  ">
+        <main className="max-w-9xl mx-auto bg-white/95 backdrop-blur px-0 sm:px-6 lg:px-10 min-h-screen  ">
           {children}
         </main>
         <Footer />
