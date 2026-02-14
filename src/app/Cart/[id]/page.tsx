@@ -36,7 +36,8 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
     const fetchVehicle = async () => {
       try {
         // Получаем конкретное авто
-        const response = await fetch(`http://localhost:5000/SearchResult/${id}`);
+        const response = await fetch(`http://localhost:5000/SearchResult/${id}`); 
+        const topAdsResponse = await fetch(`http://localhost:5000/topAds/${id}`); 
         let data = response.ok ? await response.json() : null;
 
         // Если авто не найдено по id, ищем в общем массиве
@@ -67,10 +68,30 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const sendMessage = () => {
-    console.log('Сообщение продавцу:', message);
+    if (!message.trim() || !vehicle) return;
+
+    const newMessage = {
+      id: Date.now(),
+      vehicleId: vehicle.id,
+      vehicleName: vehicle.name,
+      time: new Date().toLocaleTimeString().slice(0, 5),
+      text: message,
+      checked: false,
+    };
+
+    const oldMessages = JSON.parse(
+      localStorage.getItem('messages') || '[]'
+    );
+
+    localStorage.setItem(
+      'messages',
+      JSON.stringify([newMessage, ...oldMessages])
+    );
+
     setMessage('');
     closeModal();
   };
+
 
 
 
