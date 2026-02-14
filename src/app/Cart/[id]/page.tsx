@@ -36,7 +36,8 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
     const fetchVehicle = async () => {
       try {
         // Получаем конкретное авто
-        const response = await fetch(`http://localhost:5000/SearchResult/${id}`);
+        const response = await fetch(`http://localhost:5000/SearchResult/${id}`); 
+        const topAdsResponse = await fetch(`http://localhost:5000/topAds/${id}`); 
         let data = response.ok ? await response.json() : null;
 
         // Если авто не найдено по id, ищем в общем массиве
