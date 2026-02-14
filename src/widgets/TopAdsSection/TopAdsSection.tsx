@@ -57,7 +57,7 @@ export const TopAdsSection = () => {
             />
           </div>
           <div className="p-4 flex flex-col flex-1">
-            <div className="text-[16px] font-medium text-[#252525] mb-1">{ad.title}</div>
+            <div className="text-[14px] font-medium text-[#252525] mb-1">{ad.title}</div>
             <div className="text-[#009661] text-[20px] font-bold mb-2">{ad.price}</div>
             <div className="text-[12px] text-gray-500 mt-auto flex items-center gap-2">
               <img src={carbon.src} alt="carbon" className="w-5 h-5 inline-block" />
