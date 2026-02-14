@@ -199,7 +199,7 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
               <p>{vehicle.price}</p>
             </div>
           </div>
-          <Link href="/" className="text-[#009661] text-sm hover:underline">
+          <Link href="/SellersPage" className="text-[#009661] text-sm hover:underline">
             Смотреть все позиции продавца
           </Link>
           <div className="hidden lg:flex items-center gap-8 pt-4">
