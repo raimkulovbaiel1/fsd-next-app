@@ -8,6 +8,7 @@ import nova from '@/shared/assets/icons/ChatGPT Image 5 февр. 2026 г., 21_5
 
 import search from '@/shared/assets/icons/search.svg'
 import user from '@/shared/assets/icons/user.svg'
+import prodi from '@/shared/assets/icons/icons8-продавец-64.png'
 
 export const Header = () => {
   const [currentLang, setCurrentLang] = useState('ru')
@@ -116,8 +117,23 @@ export const Header = () => {
 
         {/* Мобильные иконки */}
         <div className="flex gap-3 lg:hidden">
-          <Image src={search} alt="search" width={24} height={24} />
-          <Image src={user} alt="user" width={24} height={24} />
+          <Link href="/seller/register">
+            <Image
+              src={prodi}
+              alt="search"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+            />
+          </Link>
+          <Link href="/settings">
+            <Image
+              src={user}
+              alt="user"
+              className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 cursor-pointer"
+            />
+          </Link>
+
         </div>
 
         {/* Правая часть: Профиль + Стать продавцом */}
