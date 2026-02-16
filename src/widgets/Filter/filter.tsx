@@ -3,7 +3,7 @@
 import { FilterInput } from '@/shared/ui';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-
+import filter from '@/shared/assets/icons/filter.svg'
 interface FilterItem {
   id: number;
   category: string;
@@ -155,10 +155,22 @@ export const Filter = () => {
             <div className="p-4">
               <h3 className="font-bold">{result.title}</h3>
               <p className="text-sm text-gray-400">{result.category}</p>
-              <div className="flex justify-between mt-4">
-                <span className="text-sm">{result.location}</span>
-                <span className="text-green-600 font-bold">{result.price} €</span>
+              <div className="flex justify-between mt-4 bg-[#f3f4f5] rounded-lg p-3">
+                <span className="flex items-center gap-2 text-sm">
+                  <img
+                    src={filter.src}
+                    alt="logo"
+                    className="w-4 h-4 object-contain"
+                  />
+                  {result.location}
+                </span>
+
+                <span className="text-green-600 text-lg font-normal ">
+                  {result.price} €
+                </span>
               </div>
+
+
             </div>
 
             {result.id && (
