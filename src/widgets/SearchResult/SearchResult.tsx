@@ -18,24 +18,41 @@ interface Vehicle {
   price: string;
   location: string;
   image: string;
+  transportType?: string;
+  brand?: string;
+  gearbox?: string;
+  adType?: string;
 }
 
 export const SearchResult = () => {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [filters, setFilters] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [visibleCount, setVisibleCount] = useState(5); 
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(5);
 
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
+
+  const [selectedFilters, setSelectedFilters] = useState({
+    transportType: "",
+    brands: [] as string[],
+    country: "",
+    gearbox: "",
+    adTypes: [] as string[],
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState(selectedFilters);
 
   const imageMap: { [key: string]: string } = {
-    "img1": img.src,
-    "img2": img2.src,
-    "img3": img3.src,
-    "img4": img4.src,
-    "img5": img5.src,
-    "img6": img6.src,
+    img1: img.src,
+    img2: img2.src,
+    img3: img3.src,
+    img4: img4.src,
+    img5: img5.src,
+    img6: img6.src,
   };
+
   useEffect(() => {
     Promise.all([
       fetch("http://localhost:5000/SearchResult").then(res => res.json()),
@@ -44,19 +61,31 @@ export const SearchResult = () => {
       .then(([vehiclesData, filtersData]) => {
         setVehicles(Array.isArray(vehiclesData) ? vehiclesData : []);
         setFilters(filtersData || null);
+
+        if (filtersData?.price) {
+          setMinPrice(filtersData.price.min);
+          setMaxPrice(filtersData.price.max);
+        }
       })
       .catch(err => console.error("Ошибка при загрузке данных:", err))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) {
-    return <div className="text-center py-10">Загрузка...</div>;
-  }
+  if (loading) return <div className="text-center py-10">Загрузка...</div>;
+
+  const filteredVehicles = vehicles.filter(vehicle => {
+    const price = Number(vehicle.price);
+    if (price < minPrice || price > maxPrice) return false;
+    if (appliedFilters.transportType && vehicle.transportType !== appliedFilters.transportType) return false;
+    if (appliedFilters.brands.length > 0 && !appliedFilters.brands.includes(vehicle.brand || "")) return false;
+    if (appliedFilters.country && vehicle.location !== appliedFilters.country) return false;
+    if (appliedFilters.gearbox && vehicle.gearbox !== appliedFilters.gearbox) return false;
+    if (appliedFilters.adTypes.length > 0 && !appliedFilters.adTypes.includes(vehicle.adType || "")) return false;
+    return true;
+  });
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 px-2 py-4 lg:py-8 max-w-7xl mx-auto">
-
-      {/* КНОПКА ОТКРЫТЬ ФИЛЬТР (МОБИЛКА) */}
       <button
         onClick={() => setIsFilterOpen(true)}
         className="block lg:hidden w-full bg-[#0096611A] text-[#009661] py-2 rounded font-semibold"
@@ -64,204 +93,125 @@ export const SearchResult = () => {
         Открыть фильтр
       </button>
 
-      <aside className={`
-          fixed inset-y-0 left-0 z-50 w-full bg-white p-4 overflow-y-auto
-          transition-transform duration-300
-          ${isFilterOpen ? 'translate-x-0' : '-translate-x-full'}
-          lg:static lg:translate-x-0 lg:w-80 lg:rounded-xl lg:shadow lg:h-fit
-        `}>
+      <aside className={`fixed inset-y-0 left-0 z-50 w-full bg-white p-4 overflow-y-auto
+        transition-transform duration-300
+        ${isFilterOpen ? 'translate-x-0' : '-translate-x-full'}
+        lg:static lg:translate-x-0 lg:w-80 lg:rounded-xl lg:shadow lg:h-fit`}>
 
-
-        {/* HEADER МОБИЛКИ */}
         <div className="flex justify-between items-center mb-4 lg:hidden">
           <span className="font-semibold text-lg">Фильтры</span>
-          <button
-            onClick={() => setIsFilterOpen(false)}
-            className="text-[#009661] text-xl font-bold"
-          >
-            ✕
-          </button>
+          <button onClick={() => setIsFilterOpen(false)} className="text-[#009661] text-xl font-bold">✕</button>
         </div>
+
         {filters ? (
           <form>
-            <div className="mb-5  " >
-              <label htmlFor="price-range" className="block font-semibold mb-1">
-                ___ Цена, €
-              </label>
-
-              <input
-                type="range"
-                id="price-range"
-                min={filters.price.min}
-                max={filters.price.max}
-                className="w-full   accent-green-400"
-              />
-              <div className="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
-                <div className="flex justify-between text-gray-500">
-                  <span>Минимум</span>
-                  <span>Максимум</span>
-                </div>
-
-                <div className="mt-1 flex justify-between font-semibold text-gray-900">
-                  <span>{filters.price.min}</span>
-                  <span>{filters.price.max}</span>
-                </div>
+            <label className="block font-semibold mb-2">Цена, €</label>
+            <div className="flex justify-between gap-2 mb-4">
+              <div className="flex items-center w-1/2 border rounded px-2 py-1 border-[#009661]">
+                <span className="mr-1">от</span>
+                <input
+                  type="number"
+                  min={filters.price.min}
+                  max={filters.price.max}
+                  value={minPrice}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setMinPrice(val > maxPrice ? maxPrice : val);
+                  }}
+                  className="w-full outline-none text-[#009661]"
+                  placeholder="Минимум"
+                />
               </div>
 
-            </div>
-
-            <div className="mb-5">
-              <label className="block font-[16px] text-[#252525] mb-2">
-                - Тип транспорта
-              </label>
-
-              <select className="w-full border text-[#8B959E] text-[14px] rounded px-2 py-1">
-                {filters.transportTypes?.map((type: string) => (
-                  <option key={type}>{type}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mb-5">
-              <label className="block font-[16px] text-[#252525] mb-4">
-                — Производитель
-              </label>
-
-              <div className="space-y-2 text-[14px] max-h-40 overflow-y-auto pr-2">
-                {filters.brands?.map((brand: string) => (
-                  <label
-                    key={brand}
-                    className="flex items-center gap-3 cursor-pointer select-none"
-                  >
-                    <input type="checkbox" className="peer sr-only" />
-
-                    <span
-                      className="
-                  w-5 h-5
-                  border-2 border-[#9CA3AF]
-                  rounded-md
-                  flex items-center justify-center
-                  transition
-                  peer-checked:border-[#009661]
-                  peer-checked:bg-[#009661]
-                "
-                    >
-                      <svg
-                        className="
-                    w-3 h-3
-                    text-white
-                    opacity-0
-                    peer-checked:opacity-100
-                    transition
-                  "
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414l3.222 3.222 6.657-6.657a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-
-                    <span className="text-[#8B959E] peer-checked:text-[#009661] transition">
-                      {brand}
-                    </span>
-                  </label>
-                ))}
+              <div className="flex items-center w-1/2 border rounded px-2 py-1 border-[#009661]">
+                <span className="mr-1">до</span>
+                <input
+                  type="number"
+                  min={filters.price.min}
+                  max={filters.price.max}
+                  value={maxPrice}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    setMaxPrice(val < minPrice ? minPrice : val);
+                  }}
+                  className="w-full outline-none text-[#009661]"
+                  placeholder="Максимум"
+                />
               </div>
             </div>
 
-            <div className="mb-5">
-              <label className="block font-[16px] text-[#252525] mb-2">
-                - Страна местонахождения
-              </label>
+            <select
+              value={selectedFilters.transportType}
+              className="w-full border mt-2 text-[14px] rounded px-2 py-1 mb-4"
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, transportType: e.target.value }))}
+            >
+              <option value="">Тип транспорта</option>
+              {filters.types?.map((type: string) => <option key={type} value={type}>{type}</option>)}
+            </select>
 
-              <select className="w-full border text-[14px] rounded px-2 py-2">
-                {filters.countries?.map((country: string) => (
-                  <option key={country}>{country}</option>
-                ))}
-              </select>
+            <div className="space-y-2 text-[14px] max-h-40 overflow-y-auto pr-2 mb-4">
+              {filters.brands?.map((brand: string) => (
+                <label key={brand} className="block">
+                  <input
+                    type="checkbox"
+                    value={brand}
+                    onChange={(e) => {
+                      if (e.target.checked) setSelectedFilters(prev => ({ ...prev, brands: [...prev.brands, brand] }));
+                      else setSelectedFilters(prev => ({ ...prev, brands: prev.brands.filter(b => b !== brand) }));
+                    }}
+                  />{" "}{brand}
+                </label>
+              ))}
             </div>
 
-            <div className="mb-5">
-              <label className="block font-[16px] text-[#252525] mb-2">
-                - Тип коробки передач
-              </label>
+            <select
+              className="w-full border text-[14px] rounded px-2 py-2 mb-4"
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, country: e.target.value }))}
+            >
+              <option value="">Страна местонахождения</option>
+              {filters.countries?.map((country: string) => <option key={country} value={country}>{country}</option>)}
+            </select>
 
-              <select className="w-full border text-[14px] rounded px-2 py-2">
-                {filters.gearboxes?.map((gearbox: string) => (
-                  <option key={gearbox}>{gearbox}</option>
-                ))}
-              </select>
-            </div>
+            <select
+              className="w-full border text-[14px] rounded px-2 py-2 mb-4"
+              onChange={(e) => setSelectedFilters(prev => ({ ...prev, gearbox: e.target.value }))}
+            >
+              <option value="">Коробка передач</option>
+              {filters.gearboxes?.map((gearbox: string) => <option key={gearbox} value={gearbox}>{gearbox}</option>)}
+            </select>
 
             <div className="mb-6">
-              <label className="block font-[16px] text-[#252525] mb-4">
-                - Тип объявления
-              </label>
-
-              <div className="space-y-2 text-[14px]">
-                {filters.adTypes?.map((adType: string) => (
-                  <label
-                    key={adType}
-                    className="flex items-center gap-3 cursor-pointer select-none"
-                  >
-                    <input type="checkbox" className="peer sr-only" />
-
-                    <span
-                      className="
-                  w-5 h-5
-                  border-2 border-[#9CA3AF]
-                  rounded-md
-                  flex items-center justify-center
-                  transition
-                  peer-checked:border-[#009661]
-                  peer-checked:bg-[#009661]
-                "
-                    >
-                      <svg
-                        className="
-                    w-3 h-3
-                    text-white
-                    opacity-0
-                    peer-checked:opacity-100
-                    transition
-                  "
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414l3.222 3.222 6.657-6.657a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </span>
-
-                    <span className="text-[#8B959E] peer-checked:text-[#009661] transition">
-                      {adType}
-                    </span>
-                  </label>
-                ))}
-              </div>
+              {filters.adTypes?.map((adType: string) => (
+                <label key={adType} className="block">
+                  <input
+                    type="checkbox"
+                    value={adType}
+                    onChange={(e) => {
+                      if (e.target.checked) setSelectedFilters(prev => ({ ...prev, adTypes: [...prev.adTypes, adType] }));
+                      else setSelectedFilters(prev => ({ ...prev, adTypes: prev.adTypes.filter(t => t !== adType) }));
+                    }}
+                  />{" "}{adType}
+                </label>
+              ))}
             </div>
 
-            {/* Кнопка */}
-            <button className="w-full bg-[#009661] text-white py-2 rounded font-semibold">
-              Применить фильтры
+            <button
+              type="button"
+              onClick={() => {
+                setAppliedFilters(selectedFilters);
+                setVisibleCount(5);
+                setIsFilterOpen(false);
+              }}
+              className="w-full bg-[#009661] text-white py-2 rounded font-semibold"
+            >
+              Применить
             </button>
           </form>
-        ) : (
-          <div>Фильтры недоступны</div>
-        )}
+        ) : <div>Фильтры недоступны</div>}
       </aside>
 
-      {/* Список машин */}
       <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
-        {vehicles.slice(0, visibleCount).map(vehicle => (
-
+        {filteredVehicles.slice(0, visibleCount).map(vehicle => (
           <Link
             key={vehicle.id}
             href={`/Cart/${vehicle.id}`}
@@ -272,21 +222,19 @@ export const SearchResult = () => {
             </div>
             <div className="p-4 flex flex-col flex-1">
               <div className="text-[20px] mb-1 border-b">{vehicle.name}</div>
-              <div className="text-gray-600 text-sm mb-2 border-b ">
-                {vehicle.year} | {vehicle.weight} кг | {vehicle.mileage} | км
-              </div>
+              <div className="text-gray-600 text-sm mb-2 border-b">{vehicle.year} | {vehicle.weight} кг | {vehicle.mileage} | км</div>
               <div className="text-[#252525] font-bold text-lg mb-2">{vehicle.price}€</div>
               <div className="text-[14px] text-gray-500 mt-auto flex items-center gap-2">
-                <img src={carbon.src} alt="carbon" className="w-5 h-5 inline-block" />
-                {vehicle.location}
+                <img src={carbon.src} alt="carbon" className="w-5 h-5 inline-block" />{vehicle.location}
               </div>
             </div>
-            <div className="absolute left-1/2 text-[13px]  bottom-5 px-3 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
+            <div className="absolute left-1/2 text-[13px] bottom-5 px-3 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
               Больше информации
             </div>
           </Link>
         ))}
-        {visibleCount < vehicles.length && (
+
+        {visibleCount < filteredVehicles.length && (
           <div className="flex justify-center mt-6 col-span-full">
             <button
               onClick={() => setVisibleCount(prev => prev + 4)}
@@ -296,10 +244,7 @@ export const SearchResult = () => {
             </button>
           </div>
         )}
-
       </main>
     </div>
   );
 };
-
-
