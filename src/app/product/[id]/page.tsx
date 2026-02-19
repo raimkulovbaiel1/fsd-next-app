@@ -16,7 +16,8 @@ interface FavoriteItem {
 }
 
 export default function ProductPage() {
-    const { id } = useParams();
+    const params = useParams();
+    const id = params?.id;
     const [item, setItem] = useState<FavoriteItem | null>(null);
     const [loading, setLoading] = useState(true);
 
