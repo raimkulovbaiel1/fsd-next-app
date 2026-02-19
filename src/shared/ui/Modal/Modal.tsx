@@ -34,9 +34,9 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
       />
 
       <div className="relative z-10 w-full max-w-lg rounded-xl bg-white p-5 shadow-xl">
-        {(title || onClose) && (
+        {title && (
           <div className="mb-4 flex items-start justify-between gap-3">
-            {title ? <h2 className="text-lg font-semibold text-gray-900">{title}</h2> : <div />}
+            <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
             <button
               className="rounded-md px-2 py-1 text-gray-600 hover:bg-gray-100"
               onClick={onClose}
