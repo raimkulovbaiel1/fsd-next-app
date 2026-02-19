@@ -1,2 +1,3 @@
-export { default as edit } from './ui/[id]'; 
-    
+import EditPage from './ui/[id]';
+
+export default EditPage;
