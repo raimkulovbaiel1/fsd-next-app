@@ -178,7 +178,7 @@ export const Filter = () => {
                 href={`/product/${result.id}`}
                 className="block text-center text-[#00A669] py-3 font-bold"
               >
-                Подробнее
+                Подробнееo
               </Link>
             )}
           </div>
