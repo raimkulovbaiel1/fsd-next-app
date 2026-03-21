@@ -1,48 +1,44 @@
-'use client';
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import carbon from "@/shared/assets/img/carbon.svg";
 import { FiSearch } from "react-icons/fi";
 import delta from "@/shared/assets/icons/delta.svg";
-
-interface Vehicle {
-  id: string;
-  name: string;
-  year: string;
-  weight: string;
-  mileage: string;
-  price: string;
-  location: string;
-  image: string;
-}
+import { useProfileStore } from "@/shared/store/pages/Profile";
 
 const SellerProfilePage = () => {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
+
+  const { vehicles, loading, error, fetchVehicles, removeVehicle } =
+    useProfileStore();
 
   useEffect(() => {
-    fetch("http://localhost:5000/profile")
-      .then(res => res.json())
-      .then(data => {
-        setVehicles(Array.isArray(data) ? data : []);
-      })
-      .catch(err => console.error("Ошибка при загрузке данных:", err))
-      .finally(() => setLoading(false));
-  }, []);
+    fetchVehicles();
+  }, [fetchVehicles]);
 
-  const filteredVehicles = vehicles.filter(vehicle =>
-    vehicle.name.toLowerCase().includes(search.toLowerCase()) ||
-    vehicle.location.toLowerCase().includes(search.toLowerCase()) ||
-    vehicle.year.toString().includes(search)
-  );
+  const filteredVehicles = useMemo(() => {
+    return vehicles.filter((vehicle) => {
+      const value = search.toLowerCase();
+
+      return (
+        vehicle.name.toLowerCase().includes(value) ||
+        vehicle.location.toLowerCase().includes(value) ||
+        vehicle.year.toLowerCase().includes(value)
+      );
+    });
+  }, [vehicles, search]);
 
   if (loading) {
-    return <div className="text-center py-10">Загрузка...</div>;
+    return <div className="text-center py-10">Загрузка......</div>;
   }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-1 py-6 flex flex-col gap-4">
-
       <div className="flex flex-col lg:flex-row items-center gap-2 px-4 py-3 rounded shadow-md">
         <div className="relative w-full lg:flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
@@ -64,7 +60,7 @@ const SellerProfilePage = () => {
       </div>
 
       <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-5 items-start">
-        {filteredVehicles.map(vehicle => (
+        {filteredVehicles.map((vehicle) => (
           <div
             key={vehicle.id}
             className="bg-white shadow flex flex-col overflow-hidden group transition hover:shadow-lg rounded-xl"
@@ -115,6 +111,7 @@ const SellerProfilePage = () => {
                   </Link>
 
                   <button
+                    onClick={() => removeVehicle(vehicle.id)}
                     className="flex items-center gap-2 px-4 py-1 bg-[#EB57571A] text-[#EB5757] rounded-lg shadow hover:bg-[#EB575733]"
                   >
                     <img src={delta.src} alt="delete" className="w-4 h-4" />
