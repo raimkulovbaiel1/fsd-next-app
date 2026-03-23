@@ -761,5 +761,50 @@
       "location": "Turkey",
       "image": "/images/vehicles/mercedes-313.png"
     }
+  ], 
+  
+   "SellerNewitemPage": [
+    {
+      "name": "category",
+      "label": "Категория",
+      "placeholder": "Легковые автомобили"
+    },
+    {
+      "name": "yearFrom",
+      "label": "Год (начиная с)",
+      "type": "number",
+      "placeholder": "2015"
+    },
+    {
+      "name": "brand",
+      "label": "Марка",
+      "placeholder": "Toyota"
+    },
+    {
+      "name": "mileage",
+      "label": "Пробег",
+      "placeholder": "120 000 км"
+    },
+    {
+      "name": "model",
+      "label": "Модель",
+      "placeholder": "Camry XV70"
+    },
+    {
+      "name": "country",
+      "label": "Страна",
+      "placeholder": "Япония"
+    },
+    {
+      "name": "price",
+      "label": "Цена",
+      "placeholder": "1 850 000 ₸"
+    },
+    {
+      "name": "weight",
+      "label": "Вес",
+      "placeholder": "—"
+    }
   ]
+  
 }

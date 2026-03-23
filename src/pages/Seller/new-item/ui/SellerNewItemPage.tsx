@@ -1,7 +1,87 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { ItemMediaUpload } from '@/features/item-media-upload/ui/ItemMediaUpload'
+import React, { useEffect, useRef, useState } from 'react';
+import { z } from 'zod';
+import { useForm, FieldErrors, UseFormRegister } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ItemMediaUpload } from '@/features/item-media-upload/ui/ItemMediaUpload';
+
+const schema = z.object({
+  category: z.string().min(1, 'Введите категорию'),
+  yearFrom: z.string().min(1, 'Введите год'),
+  brand: z.string().min(1, 'Введите марку'),
+  mileage: z.string().min(1, 'Введите пробег'),
+  model: z.string().min(1, 'Введите модель'),
+  country: z.string().min(1, 'Введите страну'),
+  price: z.string().min(1, 'Введите цену'),
+  weight: z.string().optional(),
+  description: z.string().min(1, 'Введите описание'),
+});
+
+type SellerFormValues = z.infer<typeof schema>;
+type FieldName = keyof SellerFormValues;
+
+interface FormFieldProps {
+  name: FieldName;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  register: UseFormRegister<SellerFormValues>;
+  errors: FieldErrors<SellerFormValues>;
+}
+
+interface FieldConfig {
+  name: Exclude<FieldName, 'description'>;
+  label: string;
+  type?: string;
+  placeholder?: string;
+}
+
+const FormField = ({
+  name,
+  label,
+  type = 'text',
+  placeholder,
+  register,
+  errors,
+}: FormFieldProps) => {
+  return (
+    <div>
+      <label
+        htmlFor={name}
+        className="block text-sm font-medium text-gray-700"
+      >
+        {label}
+      </label>
+
+      <input
+        {...register(name)}
+        id={name}
+        type={type}
+        placeholder={placeholder}
+        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500"
+      />
+
+      {errors[name] && (
+        <p className="mt-1 text-sm text-red-500">
+          {errors[name]?.message as string}
+        </p>
+      )}
+    </div>
+  );
+};
+
+const defaultValues: SellerFormValues = {
+  category: '',
+  yearFrom: '',
+  brand: '',
+  mileage: '',
+  model: '',
+  country: '',
+  price: '',
+  weight: '',
+  description: '',
+};
 
 const SellerNewItemPage = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -9,6 +89,37 @@ const SellerNewItemPage = () => {
 
   const [images, setImages] = useState<File[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [fields, setFields] = useState<FieldConfig[]>([]);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<SellerFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues,
+  });
+
+  useEffect(() => {
+    const fetchFields = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/SellerNewitemPage');
+
+        if (!res.ok) {
+          throw new Error('Ошибка загрузки полей');
+        }
+
+        const data: FieldConfig[] = await res.json();
+        setFields(data);
+      } catch (error) {
+        console.error('Ошибка загрузки полей:', error);
+      }
+    };
+
+    fetchFields();
+  }, []);
 
   const handlePickImage = (index: number) => {
     setActiveIndex(index);
@@ -17,9 +128,10 @@ const SellerNewItemPage = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (!file || activeIndex === null) return;
 
-    setImages(prev => {
+    setImages((prev) => {
       const copy = [...prev];
       copy[activeIndex] = file;
       return copy;
@@ -33,6 +145,17 @@ const SellerNewItemPage = () => {
     document.execCommand(command, false, value);
   };
 
+  const onSubmit = async (data: SellerFormValues) => {
+    const descriptionHtml = editorRef.current?.innerHTML || '';
+
+    const newItem = {
+      ...data,
+      description: descriptionHtml,
+      images: images.map((file) => file.name),
+      createdAt: new Date().toISOString(),
+    };
+  };
+
   return (
     <div className="min-h-screen px-4 py-6 lg:px-8">
       <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-lg">
@@ -42,20 +165,104 @@ const SellerNewItemPage = () => {
           </h1>
         </div>
 
-        <form className="divide-y">
-           <div className="px-6 py-6 sm:px-8"> <h2 className="mb-5 text-lg font-semibold text-gray-800"> Обзор транспортного средства </h2> <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2"> {/* Категория */} <div> <label htmlFor="category" className="block text-sm font-medium text-gray-700" > Категория </label> <input type="text" id="category" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="Легковые автомобили" /> </div> {/* Год начиная с */} <div> <label htmlFor="yearFrom" className="block text-sm font-medium text-gray-700" > Год (начиная с) </label> <input type="number" id="yearFrom" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="2015" /> </div> {/* Марка */} <div> <label htmlFor="brand" className="block text-sm font-medium text-gray-700" > Марка </label> <input type="text" id="brand" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="Toyota" /> </div> {/* Пробег */} <div> <label htmlFor="mileage" className="block text-sm font-medium text-gray-700" > Пробег </label> <input type="text" id="mileage" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="120 000 км" /> </div> {/* Модель */} <div> <label htmlFor="model" className="block text-sm font-medium text-gray-700" > Модель </label> <input type="text" id="model" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="Camry XV70" /> </div> {/* Страна */} <div> <label htmlFor="country" className="block text-sm font-medium text-gray-700" > Страна </label> <input type="text" id="country" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="Япония" /> </div> {/* Цена */} <div> <label htmlFor="price" className="block text-sm font-medium text-gray-700" > Цена </label> <input type="text" id="price" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="1 850 000 ₸" /> </div> {/* Вес (если нужно) */} <div> <label htmlFor="weight" className="block text-sm font-medium text-gray-700" > Вес </label> <input type="text" id="weight" className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500" placeholder="—" /> </div> </div> </div>
-              <ItemMediaUpload />
+        <form onSubmit={handleSubmit(onSubmit)} className="divide-y">
+          <div className="px-6 py-6 sm:px-8">
+            <h2 className="mb-5 text-lg font-semibold text-gray-800">
+              Обзор транспортного средства
+            </h2>
+
+            <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
+              {fields.map((field) => (
+                <FormField
+                  key={field.name}
+                  name={field.name}
+                  label={field.label}
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  register={register}
+                  errors={errors}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="px-6 py-6">
+            <ItemMediaUpload />
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            <button
+              type="button"
+              onClick={() => handlePickImage(0)}
+              className="mt-4 rounded-lg border px-4 py-2 text-sm"
+            >
+              Выбрать изображение
+            </button>
+
+            {images.length > 0 && (
+              <div className="mt-3 text-sm text-gray-600">
+                {images.map((file, index) => (
+                  <p key={`${file.name}-${index}`}>{file.name}</p>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="px-6 py-6">
             <h2 className="mb-4 text-lg font-semibold">Описание</h2>
 
-            <div className="flex gap-3 border rounded-t-lg bg-gray-50 px-3 py-2">
-              <button type="button" onMouseDown={e => e.preventDefault()} onClick={() => exec('bold')} className="font-bold">B</button>
-              <button type="button" onMouseDown={e => e.preventDefault()} onClick={() => exec('italic')} className="italic">I</button>
-              <button type="button" onMouseDown={e => e.preventDefault()} onClick={() => exec('underline')} className="underline">U</button>
-              <button type="button" onMouseDown={e => e.preventDefault()} onClick={() => exec('justifyLeft')}>≡</button>
-              <button type="button" onMouseDown={e => e.preventDefault()} onClick={() => exec('justifyCenter')}>≣</button>
-              <button type="button" onMouseDown={e => e.preventDefault()} onClick={() => exec('justifyRight')}>≡</button>
+            <div className="flex gap-3 rounded-t-lg border bg-gray-50 px-3 py-2">
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => exec('bold')}
+                className="font-bold"
+              >
+                B
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => exec('italic')}
+                className="italic"
+              >
+                I
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => exec('underline')}
+                className="underline"
+              >
+                U
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => exec('justifyLeft')}
+              >
+                ≡
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => exec('justifyCenter')}
+              >
+                ≣
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => exec('justifyRight')}
+              >
+                ≡
+              </button>
             </div>
 
             <div
@@ -64,20 +271,31 @@ const SellerNewItemPage = () => {
               suppressContentEditableWarning
               className="min-h-[160px] w-full rounded-b-lg border border-t-0 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500"
               data-placeholder="Опишите объявление..."
+              onInput={(e) =>
+                setValue('description', e.currentTarget.innerHTML, {
+                  shouldValidate: true,
+                })
+              }
             />
+
+            {errors.description && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.description.message}
+              </p>
+            )}
           </div>
 
           <div className="flex justify-end px-6 py-4">
             <button
               type="submit"
-              className="rounded-lg bg-teal-600 px-6 py-2 text-white hover:bg-teal-700"
+              disabled={isSubmitting}
+              className="rounded-lg bg-teal-600 px-6 py-2 text-white hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Создать объявление
+              {isSubmitting ? 'Сохранение...' : 'Создать объявление'}
             </button>
           </div>
         </form>
       </div>
-
     </div>
   );
 };
