@@ -1,5 +1,6 @@
-'use client';
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import carbon from "@/shared/assets/img/carbon.svg";
@@ -9,46 +10,37 @@ import img3 from "@/shared/assets/img/searchResult/img3.png";
 import img4 from "@/shared/assets/img/searchResult/img4.png";
 import img5 from "@/shared/assets/img/searchResult/img5.png";
 import img6 from "@/shared/assets/img/searchResult/img6.png";
-
-interface Vehicle {
-  id: string;
-  name: string;
-  year: string;
-  weight: string;
-  mileage: string;
-  price: string;
-  location: string;
-  image: string;
-  transportType?: string;
-  brand?: string;
-  gearbox?: string;
-  adType?: string;
-}
+import { useSearchStore } from "@/shared/store/widgets/SearchResult";
 
 export const SearchResult = () => {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [filters, setFilters] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(5);
   const searchParams = useSearchParams();
   const search = (searchParams?.get("search") ?? "").toLowerCase().trim();
 
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(5);
 
 
-
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
-
-  const [selectedFilters, setSelectedFilters] = useState({
-    transportType: "",
-    brands: [] as string[],
-    country: "",
-    gearbox: "",
-    adTypes: [] as string[],
-  });
-
-  const [appliedFilters, setAppliedFilters] = useState(selectedFilters);
+  const {
+    vehicles,
+    filters,
+    loading,
+    error,
+    minPrice,
+    maxPrice,
+    selectedFilters,
+    appliedFilters,
+    fetchAll,
+    setMinPrice,
+    setMaxPrice,
+    setTransportType,
+    setCountry,
+    setGearbox,
+    toggleBrand,
+    toggleAdType,
+    applyFilters,
+    resetFilters,
+    getFilteredVehicles, 
+  } = useSearchStore();
 
   const imageMap: { [key: string]: string } = {
     img1: img.src,
@@ -60,45 +52,18 @@ export const SearchResult = () => {
   };
 
   useEffect(() => {
-    Promise.all([
-      fetch("http://localhost:5000/SearchResult").then(res => res.json()),
-      fetch("http://localhost:5000/SearchResultFilters").then(res => res.json())
-    ])
-      .then(([vehiclesData, filtersData]) => {
-        setVehicles(Array.isArray(vehiclesData) ? vehiclesData : []);
-        setFilters(filtersData || null);
+    fetchAll();
+  }, [fetchAll]);
 
-        if (filtersData?.price) {
-          setMinPrice(filtersData.price.min);
-          setMaxPrice(filtersData.price.max);
-        }
-      })
-      .catch(err => console.error("Ошибка при загрузке данных:", err))
-      .finally(() => setLoading(false));
-  }, []);
+  const filteredVehicles = getFilteredVehicles(search);
 
-  if (loading) return <div className="text-center py-10">Загрузка...</div>;
+  if (loading) {
+    return <div className="text-center py-10">Загрузка...</div>;
+  }
 
-  const filteredVehicles = vehicles.filter(vehicle => {
-    const price = Number(vehicle.price);
-    if (price < minPrice || price > maxPrice) return false;
-    if (appliedFilters.transportType && vehicle.transportType !== appliedFilters.transportType) return false;
-    if (appliedFilters.brands.length > 0 && !appliedFilters.brands.includes(vehicle.brand || "")) return false;
-    if (appliedFilters.country && vehicle.location !== appliedFilters.country) return false;
-    if (appliedFilters.gearbox && vehicle.gearbox !== appliedFilters.gearbox) return false;
-    if (appliedFilters.adTypes.length > 0 && !appliedFilters.adTypes.includes(vehicle.adType || "")) return false;
-
-    if (search) {
-      const matchesSearch =
-        vehicle.name?.toLowerCase().includes(search) ||
-        vehicle.brand?.toLowerCase().includes(search) ||
-        vehicle.transportType?.toLowerCase().includes(search) ||
-        vehicle.location?.toLowerCase().includes(search);
-
-      if (!matchesSearch) return false;
-    }
-    return true;
-  });
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 px-2 py-4 lg:py-8 max-w-7xl mx-auto">
@@ -109,19 +74,26 @@ export const SearchResult = () => {
         Открыть фильтр
       </button>
 
-      <aside className={`fixed inset-y-0 left-0 z-50 w-full bg-white p-4 overflow-y-auto
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-full bg-white p-4 overflow-y-auto
         transition-transform duration-300
-        ${isFilterOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:static lg:translate-x-0 lg:w-80 lg:rounded-xl lg:shadow lg:h-fit`}>
-
+        ${isFilterOpen ? "translate-x-0" : "-translate-x-full"}
+        lg:static lg:translate-x-0 lg:w-80 lg:rounded-xl lg:shadow lg:h-fit`}
+      >
         <div className="flex justify-between items-center mb-4 lg:hidden">
           <span className="font-semibold text-lg">Фильтры</span>
-          <button onClick={() => setIsFilterOpen(false)} className="text-[#009661] text-xl font-bold">✕</button>
+          <button
+            onClick={() => setIsFilterOpen(false)}
+            className="text-[#009661] text-xl font-bold"
+          >
+            ✕
+          </button>
         </div>
 
         {filters ? (
           <form>
             <label className="block font-semibold mb-2">Цена, €</label>
+
             <div className="flex justify-between gap-2 mb-4">
               <div className="flex items-center w-1/2 border rounded px-2 py-1 border-[#009661]">
                 <span className="mr-1">от</span>
@@ -130,10 +102,7 @@ export const SearchResult = () => {
                   min={filters.price.min}
                   max={filters.price.max}
                   value={minPrice}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setMinPrice(val > maxPrice ? maxPrice : val);
-                  }}
+                  onChange={(e) => setMinPrice(Number(e.target.value))}
                   className="w-full outline-none text-[#009661]"
                   placeholder="Минимум"
                 />
@@ -146,10 +115,7 @@ export const SearchResult = () => {
                   min={filters.price.min}
                   max={filters.price.max}
                   value={maxPrice}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setMaxPrice(val < minPrice ? minPrice : val);
-                  }}
+                  onChange={(e) => setMaxPrice(Number(e.target.value))}
                   className="w-full outline-none text-[#009661]"
                   placeholder="Максимум"
                 />
@@ -159,110 +125,158 @@ export const SearchResult = () => {
             <select
               value={selectedFilters.transportType}
               className="w-full border mt-2 text-[14px] rounded px-2 py-1 mb-4"
-              onChange={(e) => setSelectedFilters(prev => ({ ...prev, transportType: e.target.value }))}
+              onChange={(e) => setTransportType(e.target.value)}
             >
               <option value="">Тип транспорта</option>
-              {filters.types?.map((type: string) => <option key={type} value={type}>{type}</option>)}
+              {filters.types?.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
             </select>
 
             <div className="space-y-2 text-[14px] max-h-40 overflow-y-auto pr-2 mb-4">
-              {filters.brands?.map((brand: string) => (
+              {filters.brands?.map((brand) => (
                 <label key={brand} className="block">
                   <input
                     type="checkbox"
-                    value={brand}
-                    onChange={(e) => {
-                      if (e.target.checked) setSelectedFilters(prev => ({ ...prev, brands: [...prev.brands, brand] }));
-                      else setSelectedFilters(prev => ({ ...prev, brands: prev.brands.filter(b => b !== brand) }));
-                    }}
-                  />{" "}{brand}
+                    checked={selectedFilters.brands.includes(brand)}
+                    onChange={(e) => toggleBrand(brand, e.target.checked)}
+                  />{" "}
+                  {brand}
                 </label>
               ))}
             </div>
 
             <select
+              value={selectedFilters.country}
               className="w-full border text-[14px] rounded px-2 py-2 mb-4"
-              onChange={(e) => setSelectedFilters(prev => ({ ...prev, country: e.target.value }))}
+              onChange={(e) => setCountry(e.target.value)}
             >
               <option value="">Страна местонахождения</option>
-              {filters.countries?.map((country: string) => <option key={country} value={country}>{country}</option>)}
+              {filters.countries?.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
             </select>
 
             <select
+              value={selectedFilters.gearbox}
               className="w-full border text-[14px] rounded px-2 py-2 mb-4"
-              onChange={(e) => setSelectedFilters(prev => ({ ...prev, gearbox: e.target.value }))}
+              onChange={(e) => setGearbox(e.target.value)}
             >
               <option value="">Коробка передач</option>
-              {filters.gearboxes?.map((gearbox: string) => <option key={gearbox} value={gearbox}>{gearbox}</option>)}
+              {filters.gearboxes?.map((gearbox) => (
+                <option key={gearbox} value={gearbox}>
+                  {gearbox}
+                </option>
+              ))}
             </select>
 
             <div className="mb-6">
-              {filters.adTypes?.map((adType: string) => (
+              {filters.adTypes?.map((adType) => (
                 <label key={adType} className="block">
                   <input
                     type="checkbox"
-                    value={adType}
-                    onChange={(e) => {
-                      if (e.target.checked) setSelectedFilters(prev => ({ ...prev, adTypes: [...prev.adTypes, adType] }));
-                      else setSelectedFilters(prev => ({ ...prev, adTypes: prev.adTypes.filter(t => t !== adType) }));
-                    }}
-                  />{" "}{adType}
+                    checked={selectedFilters.adTypes.includes(adType)}
+                    onChange={(e) => toggleAdType(adType, e.target.checked)}
+                  />{" "}
+                  {adType}
                 </label>
               ))}
             </div>
 
-            <button
-              type="button"
-              onClick={() => {
-                setAppliedFilters(selectedFilters);
-                setVisibleCount(5);
-                setIsFilterOpen(false);
-              }}
-              className="w-full bg-[#009661] text-white py-2 rounded font-semibold"
-            >
-              Применить
-            </button>
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  applyFilters();
+                  setVisibleCount(5);
+                  setIsFilterOpen(false);
+                }}
+                className="w-full bg-[#009661] text-white py-2 rounded font-semibold"
+              >
+                Применить
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  resetFilters();
+                  setVisibleCount(5);
+                }}
+                className="w-full border border-[#009661] text-[#009661] py-2 rounded font-semibold"
+              >
+                Сбросить
+              </button>
+            </div>
           </form>
-        ) : <div>Фильтры недоступны</div>}
+        ) : (
+          <div>Фильтры недоступны</div>
+        )}
       </aside>
 
-      <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
-        {filteredVehicles.slice(0, visibleCount).map(vehicle => (
-          <Link
-            key={vehicle.id}
-            href={`/Cart/${vehicle.id}`}
-            className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition hover:shadow-lg"
-          >
-            <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
-              <img src={imageMap[vehicle.image] || vehicle.image} alt={vehicle.name} className="object-cover w-full h-full" />
-            </div>
-            <div className="p-4 flex flex-col flex-1">
-              <div className="text-[20px] mb-1 border-b">{vehicle.name}</div>
-              <div className="text-gray-600 text-sm mb-2 border-b">{vehicle.year} | {vehicle.weight} кг | {vehicle.mileage} | км</div>
-              <div className="text-[#252525] font-bold text-lg mb-2">{vehicle.price}€</div>
-              <div className="text-[14px] text-gray-500 mt-auto flex items-center gap-2">
-                <img src={carbon.src} alt="carbon" className="w-5 h-5 inline-block" />{vehicle.location}
+      <main className="flex-1">
+        <div className="mb-4 text-lg font-semibold">
+          Результаты поиска: {search || "все товары"} ({filteredVehicles.length})
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
+          {filteredVehicles.slice(0, visibleCount).map((vehicle) => (
+            <Link
+              key={vehicle.id}
+              href={`/Cart/${vehicle.id}`}
+              className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition hover:shadow-lg"
+            >
+              <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
+                <img
+                  src={imageMap[vehicle.image] || vehicle.image}
+                  alt={vehicle.name}
+                  className="object-cover w-full h-full"
+                />
               </div>
-            </div>
-            <div className="absolute left-1/2 text-[13px] bottom-5 px-3 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
-              Больше информации
-            </div>
-          </Link>
-        ))}
+
+              <div className="p-4 flex flex-col flex-1">
+                <div className="text-[20px] mb-1 border-b">{vehicle.name}</div>
+                <div className="text-gray-600 text-sm mb-2 border-b">
+                  {vehicle.year} | {vehicle.weight} кг | {vehicle.mileage} | км
+                </div>
+                <div className="text-[#252525] font-bold text-lg mb-2">
+                  {vehicle.price}€
+                </div>
+                <div className="text-[14px] text-gray-500 mt-auto flex items-center gap-2">
+                  <img
+                    src={carbon.src}
+                    alt="carbon"
+                    className="w-5 h-5 inline-block"
+                  />
+                  {vehicle.location}
+                </div>
+              </div>
+
+              <div className="absolute left-1/2 text-[13px] bottom-5 px-3 py-1 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
+                Больше информации
+              </div>
+            </Link>
+          ))}
+        </div>
 
         {visibleCount < filteredVehicles.length && (
-          <div className="flex justify-center mt-6 col-span-full">
+          <div className="flex justify-center mt-6">
             <button
-              onClick={() => setVisibleCount(prev => prev + 4)}
+              onClick={() => setVisibleCount((prev) => prev + 4)}
               className="bg-[#009661] text-white px-6 py-2 rounded-lg transition hover:bg-[#007f52]"
             >
               Загрузить ещё
             </button>
           </div>
         )}
+
         {filteredVehicles.length === 0 && (
           <div className="text-center py-10 text-gray-500">
-            Ничего не найдено по запросу: <span className="font-semibold">{search}</span>
+            Ничего не найдено по запросу:{""}
+            <span className="font-semibold">{search}</span>
           </div>
         )}
       </main>
