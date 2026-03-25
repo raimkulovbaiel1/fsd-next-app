@@ -4,6 +4,8 @@ import { TopAdsSection } from '@/widgets/TopAdsSection';
 import RecentlyViewed from '@/shared/components/RecentlyViewed/page'; 
 import OurSellers from '@/shared/components/OurSellers/OurSellers';
 import Link from 'next/link'; 
+import { Suspense } from "react";
+import { SearchResult } from "@/widgets/SearchResult"; 
 
 
 export default function Home() {
@@ -19,7 +21,8 @@ export default function Home() {
         
         <div className="flex flex-col lg:flex-row gap-6 px-2 py-4 lg:py-8">
           <TopAdsSection />
-        </div>
+        </div> 
+        
         
         <div className="flex justify-center mt-6">
           <Link
