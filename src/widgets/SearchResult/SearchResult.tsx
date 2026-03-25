@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import carbon from "@/shared/assets/img/carbon.svg";
 import img from "@/shared/assets/img/searchResult/img1.png";
 import img2 from "@/shared/assets/img/searchResult/img2.png";
@@ -30,6 +31,11 @@ export const SearchResult = () => {
   const [loading, setLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(5);
+  const searchParams = useSearchParams();
+  const search = (searchParams?.get("search") ?? "").toLowerCase().trim();
+
+
+
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
@@ -81,6 +87,16 @@ export const SearchResult = () => {
     if (appliedFilters.country && vehicle.location !== appliedFilters.country) return false;
     if (appliedFilters.gearbox && vehicle.gearbox !== appliedFilters.gearbox) return false;
     if (appliedFilters.adTypes.length > 0 && !appliedFilters.adTypes.includes(vehicle.adType || "")) return false;
+
+    if (search) {
+      const matchesSearch =
+        vehicle.name?.toLowerCase().includes(search) ||
+        vehicle.brand?.toLowerCase().includes(search) ||
+        vehicle.transportType?.toLowerCase().includes(search) ||
+        vehicle.location?.toLowerCase().includes(search);
+
+      if (!matchesSearch) return false;
+    }
     return true;
   });
 
@@ -242,6 +258,11 @@ export const SearchResult = () => {
             >
               Загрузить ещё
             </button>
+          </div>
+        )}
+        {filteredVehicles.length === 0 && (
+          <div className="text-center py-10 text-gray-500">
+            Ничего не найдено по запросу: <span className="font-semibold">{search}</span>
           </div>
         )}
       </main>

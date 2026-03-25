@@ -110,7 +110,22 @@ export const Header = () => {
               </li>
 
               {/* Поиск */}
-              <li className="cursor-pointer hover:text-[#00A669] transition-colors">{t('search')}</li>
+              <li className="flex items-center gap-2 cursor-pointer hover:text-[#00A669] transition-colors">
+                {t("search")}
+                <input
+                  type="text"
+                  placeholder="Поиск..."
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      const value = (e.target as HTMLInputElement).value.trim();
+                      if (!value) return;
+
+                      window.location.href = `/searchResult?search=${encodeURIComponent(value)}`;
+                    }
+                  }}
+                  className="border border-gray-400 px-2 py-1 rounded-md outline-none text-black"
+                />
+              </li>
             </ul>
           </nav>
         </div>
