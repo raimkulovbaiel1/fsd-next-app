@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react'; 
 import { useRouter } from 'next/navigation';
 
 export interface Message {
@@ -92,7 +92,6 @@ export const Messages = () => {
             <th className="p-4 text-right">Время</th>
           </tr>
         </thead>
-
         <tbody>
           {messages.map(msg => (
             <tr

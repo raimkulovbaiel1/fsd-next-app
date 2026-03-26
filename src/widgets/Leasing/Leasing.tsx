@@ -1,7 +1,8 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import carbon from "@/shared/assets/img/carbon.svg";
+import carbon from "@/shared/assets/img/carbon.svg"; 
+import Link from 'next/link';
 
 interface LeasingItem {
    id: number;
@@ -133,7 +134,8 @@ const Leasing: FC = () => {
             </aside>
 
             <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-5">
-               {items.map((item) => (
+               {items.map((item) => ( 
+                  <Link key={item.id} href={`/product/${item.id}`}>
                   <div
                      key={item.id}
                      className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition"
@@ -166,7 +168,8 @@ const Leasing: FC = () => {
                      <div className="absolute left-[32vh] text-[13px]  bottom-5 px-3 py-2 bg-[#4689661A] text-[#009661] rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition pointer-events-none">
                         Больше информации
                      </div>
-                  </div>
+                  </div> 
+                  </Link>
                ))}
             </main>
          </div>

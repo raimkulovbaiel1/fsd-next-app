@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { AccountDetails } from '@/features/settings/ui/AccountDetails';
+import { AccountDetails } from '@/features/settings/ui/AccountDetails'; 
+
 
 type OpenType = 'account' | 'contact' | null;
 
