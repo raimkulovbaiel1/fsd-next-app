@@ -1,5 +1,6 @@
 import { SearchResult } from '@/widgets/SearchResult';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 export default function SearchResultPage() {
   return (
@@ -11,7 +12,9 @@ export default function SearchResultPage() {
         <span className="mx-2">{'>'}</span>
         <span className="text-[#252525]">Транспортные средства</span>
       </nav>
-      <SearchResult />
+      <Suspense fallback={<div className="py-10 text-center">Загрузка...</div>}>
+        <SearchResult />
+      </Suspense>
     </div>
   );
 }
