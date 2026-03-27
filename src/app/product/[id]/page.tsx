@@ -4,66 +4,49 @@ import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Heart } from "lucide-react";
-
-interface ProductItem {
-  id: number;
-  name: string;
-  year: number;
-  weight: string;
-  mileage: string;
-  price: string;
-  location: string;
-  image: string;
-  imagesURL?: string[];
-  category?: string;
-  brand?: string;
-  model?: string;
-  country?: string;
-  description?: string;
-  sellerName?: string;
-}
+import { useProductStore } from "@/shared/store/app/useProductStore";
 
 export default function ProductPage() {
   const params = useParams();
   const id = params?.id as string;
 
-  const [item, setItem] = useState<ProductItem | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { product: item, loading, error, fetchProductById, clearProduct } =
+    useProductStore();
+
   const [mainImage, setMainImage] = useState("");
 
   useEffect(() => {
     if (!id) return;
 
-    fetch(process.env.NEXT_PUBLIC_WISHLIST_API!)
-      .then((res) => res.json())
-      .then((data: ProductItem[]) => {
-        const found = data.find((el) => String(el.id) === id) || null;
-        setItem(found);
+    fetchProductById(id);
 
-        if (found) {
-          setMainImage(found.imagesURL?.[0] || found.image);
-        }
-
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [id]);
+    return () => {
+      clearProduct();
+    };
+  }, [id, fetchProductById, clearProduct]);
 
   const gallery = useMemo(() => {
     if (!item) return [];
+
     return item.imagesURL && item.imagesURL.length > 0
       ? item.imagesURL
       : [item.image, item.image, item.image, item.image];
   }, [item]);
 
+  const currentImage = useMemo(() => {
+    return mainImage || item?.imagesURL?.[0] || item?.image || "";
+  }, [mainImage, item]);
+
   if (loading) {
     return <div className="p-10 text-center">Загрузка...</div>;
   }
 
-  if (!item) {
+  if (error || !item) {
     return (
       <div className="p-10 text-center">
-        <h2 className="text-xl font-semibold mb-4">Товар не найден</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          {error || "Товар не найден"}
+        </h2>
         <Link href="/" className="text-[#009661] underline">
           Вернуться назад
         </Link>
@@ -103,7 +86,7 @@ export default function ProductPage() {
         <div className="flex-1">
           <div className="bg-white rounded-lg overflow-hidden">
             <img
-              src={mainImage || item.image}
+              src={currentImage}
               alt={item.name}
               className="w-full h-[260px] sm:h-[360px] md:h-[420px] object-cover"
             />
