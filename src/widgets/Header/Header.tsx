@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import i18n from '@/i18n'
 import { useTranslation } from 'react-i18next'
-import nova from '@/shared/assets/icons/ChatGPT Image 5 февр. 2026 г., 21_50_02.png'
+import nova from '@/shared/assets/icons/logoDrive.webp'
 
 import search from '@/shared/assets/icons/search.svg'
 import user from '@/shared/assets/icons/user.svg'
