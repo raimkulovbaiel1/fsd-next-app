@@ -1,24 +1,9 @@
-'use client';
-import React, { useEffect, useState, use } from 'react';
-import { Heart } from 'lucide-react';
-import Link from 'next/link';
+"use client";
 
-interface Vehicle {
-  id: string;
-  name: string;
-  year: string;
-  weight: string;
-  mileage: string;
-  price: string;
-  location: string;
-  image: string;
-  imagesURL?: string[];
-  category?: string;
-  brand?: string;
-  model?: string;
-  country?: string;
-  description?: string;
-}
+import React, { useEffect, useMemo, useState, use } from "react";
+import { Heart } from "lucide-react";
+import Link from "next/link";
+import { useVehicleStore } from "@/shared/store/app/usecart";
 
 interface VehicleCardProps {
   params: Promise<{ id: string }>;
@@ -26,74 +11,71 @@ interface VehicleCardProps {
 
 const VehicleCard = ({ params }: VehicleCardProps) => {
   const { id } = use(params);
-  const [vehicle, setVehicle] = useState<Vehicle | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [mainImage, setMainImage] = useState<string | null>(null);
+
+  const {
+    vehicle,
+    topAd,
+    loading,
+    error,
+    fetchVehicleById,
+    fetchTopAdById,
+    clearVehicle,
+  } = useVehicleStore();
+
+  const [mainImage, setMainImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const fetchVehicle = async () => {
-      try {
-        // Получаем конкретное авто
-        const response = await fetch(`http://localhost:5000/SearchResult/${id}`); 
-        const topAdsResponse = await fetch(`http://localhost:5000/topAds/${id}`); 
-        let data = response.ok ? await response.json() : null;
+    if (!id) return;
 
-        // Если авто не найдено по id, ищем в общем массиве
-        if (!data) {
-          const allResponse = await fetch('http://localhost:5000/SearchResult');
-          const allVehicles = await allResponse.json();
-          data = Array.isArray(allVehicles)
-            ? allVehicles.find((v: Vehicle) => String(v.id) === id)
-            : null;
-        }
+    fetchVehicleById(id);
+    fetchTopAdById(id);
 
-        if (data) {
-          setVehicle(data);
-          setMainImage(data.images?.[0] || data.image);
-        }
-      } catch (error) {
-        console.error('Ошибка при загрузке данных автомобиля:', error);
-      } finally {
-        setLoading(false);
-      }
+    return () => {
+      clearVehicle();
     };
+  }, [id, fetchVehicleById, fetchTopAdById, clearVehicle]);
 
-    if (id) fetchVehicle();
-  }, [id]);
+  const currentData = vehicle || topAd;
 
+  const gallery = useMemo(() => {
+    if (!currentData) return [];
+    return currentData.imagesURL && currentData.imagesURL.length > 0
+      ? currentData.imagesURL
+      : [currentData.image];
+  }, [currentData]);
 
-  // Функции для модалки
+  const currentImage = useMemo(() => {
+    if (!currentData) return "";
+    return mainImage || currentData.imagesURL?.[0] || currentData.image;
+  }, [mainImage, currentData]);
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
   const sendMessage = () => {
-    if (!message.trim() || !vehicle) return;
+    if (!message.trim() || !currentData) return;
 
     const newMessage = {
       id: Date.now(),
-      vehicleId: vehicle.id,
-      vehicleName: vehicle.name,
+      vehicleId: currentData.id,
+      vehicleName: currentData.name,
       time: new Date().toLocaleTimeString().slice(0, 5),
       text: message,
       checked: false,
     };
 
-    const oldMessages = JSON.parse(
-      localStorage.getItem('messages') || '[]'
-    );
+    const oldMessages = JSON.parse(localStorage.getItem("messages") || "[]");
 
     localStorage.setItem(
-      'messages',
+      "messages",
       JSON.stringify([newMessage, ...oldMessages])
     );
 
-    setMessage('');
+    setMessage("");
     closeModal();
   };
-
-
-
 
   if (loading) {
     return (
@@ -103,11 +85,13 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
     );
   }
 
-  if (!vehicle) {
+  if (error || !currentData) {
     return (
       <div className="max-w-6xl mx-auto p-4 bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="text-center py-10">
-          <h2 className="text-xl font-bold mb-4">Автомобиль не найден</h2>
+          <h2 className="text-xl font-bold mb-4">
+            {error || "Автомобиль не найден"}
+          </h2>
           <Link href="/searchResult" className="text-[#009661] hover:underline">
             Вернуться к списку
           </Link>
@@ -117,61 +101,56 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   }
 
   const specs = [
-    { label: "Категория", value: vehicle.category || "Не указано" },
-    { label: "Марка", value: vehicle.brand || "Не указано" },
-    { label: "Модель", value: vehicle.model || vehicle.name },
-    { label: "Год", value: vehicle.year },
-    { label: "Пробег", value: `${vehicle.mileage} км` },
-    { label: "Страна", value: vehicle.country || vehicle.location },
-    { label: "Вес", value: `${vehicle.weight} кг` },
-  ];
-
-  const links = [
-    { name: 'Главная', href: '/' },
-    { name: 'Транспортные средства', href: '/searchResult' },
-    { name: vehicle.name, href: `/Cart/${vehicle.id}` },
+    { label: "Категория", value: currentData.category || "Не указано" },
+    { label: "Марка", value: currentData.brand || "Не указано" },
+    { label: "Модель", value: currentData.model || currentData.name },
+    { label: "Год", value: currentData.year },
+    { label: "Пробег", value: `${currentData.mileage} км` },
+    { label: "Страна", value: currentData.country || currentData.location },
+    { label: "Вес", value: `${currentData.weight} кг` },
   ];
 
   return (
     <div className="max-w-6xl mx-auto p-4 bg-gray-50 min-h-screen">
-      {/* Хлебные крошки */}
       <nav className="flex items-center space-x-2 text-[12px] md:text-sm text-gray-500 mb-1 overflow-x-auto whitespace-nowrap scrollbar-hide py-2">
-        {links.map((link, index) => (
-          <div key={index} className="flex items-center shrink-0">
-            <Link href={link.href} className="hover:text-emerald-600 transition-colors">
-              {link.name}
-            </Link>
-            {index < links.length - 1 && <span className="mx-2 text-gray-300">/</span>}
-          </div>
-        ))}
+        <Link href="/" className="hover:text-emerald-600 transition-colors">
+          Главная
+        </Link>
+        <span className="mx-2 text-gray-300">/</span>
+        <Link
+          href="/searchResult"
+          className="hover:text-emerald-600 transition-colors"
+        >
+          Транспортные средства
+        </Link>
+        <span className="mx-2 text-gray-300">/</span>
+        <span>{currentData.name}</span>
       </nav>
 
       <div className="flex flex-col lg:flex-row gap-6 mb-8">
-        {/* Галерея */}
         <div className="lg:w-full">
-          {/* Основное фото */}
-          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-full lg:h-100 aspect-3/4">
+          <div className="rounded-lg overflow-hidden bg-gray-200 w-64 sm:w-80 lg:w-full lg:h-[420px] aspect-[3/4]">
             <img
-              src={mainImage || vehicle.image}
-              alt={vehicle.name}
+              src={currentImage}
+              alt={currentData.name}
               className="w-full h-full object-cover"
             />
           </div>
 
-          {/* Миниатюры */}
           <div className="flex justify-start mt-4 overflow-x-auto gap-2">
-            {(vehicle.imagesURL || [vehicle.image]).map((img, i) => (
-              <div
+            {gallery.map((img, i) => (
+              <button
                 key={i}
+                type="button"
                 className="aspect-video w-20 overflow-hidden cursor-pointer hover:opacity-80 transition"
                 onClick={() => setMainImage(img)}
               >
                 <img
                   src={img}
-                  alt={`${vehicle.name} thumbnail ${i}`}
+                  alt={`${currentData.name} thumbnail ${i + 1}`}
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -179,32 +158,40 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
         <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit">
           <div className="flex justify-between items-start mb-4">
             <h1 className="text-xl font-bold text-gray-800 leading-tight">
-              {vehicle.name}
+              {currentData.name}
             </h1>
             <Heart className="text-emerald-500 cursor-pointer" />
           </div>
 
-          <p className="text-gray-400 text-sm mb-6">{vehicle.category || "Транспортное средство"}</p>
+          <p className="text-gray-400 text-sm mb-6">
+            {currentData.category || "Транспортное средство"}
+          </p>
+
           <div className="flex justify-between border-t border-b py-4 text-[14px]">
             <div>
               <p className="text-gray-400">Год выпуска</p>
-              <p>{vehicle.year}</p>
+              <p>{currentData.year}</p>
             </div>
             <div>
               <p className="text-gray-400">Пробег</p>
-              <p>{vehicle.mileage} км</p>
+              <p>{currentData.mileage} км</p>
             </div>
             <div>
               <p className="text-gray-400">Цена брутто</p>
-              <p>{vehicle.price}</p>
+              <p>{currentData.price}</p>
             </div>
           </div>
-          <Link href="/SellersPage" className="text-[#009661] text-sm hover:underline">
+
+          <Link
+            href="/SellersPage"
+            className="text-[#009661] text-sm hover:underline"
+          >
             Смотреть все позиции продавца
           </Link>
+
           <div className="hidden lg:flex items-center gap-8 pt-4">
             <div className="text-[20px] font-bold text-[#009661] whitespace-nowrap">
-              {vehicle.price}
+              {currentData.price}
             </div>
             <button
               onClick={openModal}
@@ -218,8 +205,7 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/20 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-xl shadow-lg p-6 w-90 md:w-96 relative
-                  -translate-y-[300px]">
+          <div className="bg-white rounded-xl shadow-lg p-6 w-90 md:w-96 relative">
             <button
               onClick={closeModal}
               className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold"
@@ -246,18 +232,20 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
             </button>
           </div>
         </div>
-
       )}
 
-
-      {/* Спецификации */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 max-w-4xl">
-        <h2 className="text-xl font-bold mb-6 text-gray-800">Обзор транспортного средства</h2>
+        <h2 className="text-xl font-bold mb-6 text-gray-800">
+          Обзор транспортного средства
+        </h2>
+
         <div className="flex flex-col overflow-hidden rounded-lg">
           {specs.map((spec, index) => (
             <div
               key={index}
-              className={`grid grid-cols-2 py-4 px-6 ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
+              className={`grid grid-cols-2 py-4 px-6 ${
+                index % 2 === 0 ? "bg-gray-50" : "bg-white"
+              }`}
             >
               <span className="text-gray-400 font-normal">{spec.label}</span>
               <span className="text-gray-800 font-medium">{spec.value}</span>
@@ -266,22 +254,16 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
         </div>
       </div>
 
-      {/* Описание */}
       <div className="mt-10">
         <h3 className="text-[20px] mt-[20px] text-[#252525] mb-4">Описание</h3>
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 max-w-full lg:max-w-180">
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 max-w-full lg:max-w-[720px]">
           <div className="text-[15px] text-[#868686] leading-[1.6] space-y-4">
             <p>
-              Nissan Eco T100 Paardenvervoer — надёжный грузовой автомобиль,
-              предназначенный для перевозки грузов и специального оборудования.
-            </p>
-            <h4 className="text-[17px] font-semibold text-[#252525]">Пример текста</h4>
-            <p>
-              Предварительные выводы неутешительны: перспективное планирование
-              в значительной степени обусловливает важность укрепления
-              моральных ценностей.
+              {currentData.description ||
+                "Nissan Eco T100 Paardenvervoer — надёжный грузовой автомобиль, предназначенный для перевозки грузов и специального оборудования."}
             </p>
           </div>
+
           <Link href="/" className="text-[#009661] text-sm hover:underline">
             Показать больше
           </Link>
