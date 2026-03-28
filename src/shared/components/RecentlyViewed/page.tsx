@@ -7,7 +7,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import Image1 from '@/shared/assets/img/CartDetail/img.png'
+const Image1 = '/shared/assets/img/CartDetail/img.webp';
 import { StaticImageData } from 'next/image';
 
 type Vehi = {
@@ -25,7 +25,7 @@ const vehi: Vehi[] = [
     image: Image1,
   },
   {
-    title: 'Lider 2020 MODEL NEW FLATBED',
+    title: 'Lider 2020 MODEL NEW',
     price: '11 000€',
     location: 'Turkey',
     image: Image1,
@@ -84,9 +84,8 @@ export default function RecentlyViewed() {
         </div>
         <div className="w-full">
           <Swiper
-            modules={[Navigation, Pagination]}
+            modules={[Navigation]}
             spaceBetween={16}
-            pagination={{ clickable: true }}
             onBeforeInit={(swiper) => {
               // @ts-ignore
               swiper.params.navigation.prevEl = prevRef.current;
