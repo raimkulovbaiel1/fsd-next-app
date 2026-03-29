@@ -56,7 +56,7 @@ export const LoginForm: FC = () => {
       <p className="mt-6 sm:mt-7 text-center text-[14px] text-[#252525]">
         Нет аккаунта?{" "}
         <Link
-          href="/register"
+          href="/Register"
           className="font-medium uppercase text-[#009661] transition hover:underline"
         >
           РЕГИСТРАЦИЯ
