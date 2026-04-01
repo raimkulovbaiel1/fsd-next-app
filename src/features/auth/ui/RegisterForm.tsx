@@ -7,17 +7,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Имя минимум 2 символа"),
-  surname: z.string().min(2, "Фамилия минимум 2 символа"),
-  email: z.string().email("Введите корректный email"),
-  password: z.string().min(6, "Минимум 6 символов"),
-  termsAccepted: z.literal(true, {
-    message: "Примите условия",
-  }),
-});
+import { 
+registerSchema, 
+registerDefaultValues,
+type RegisterFormData,
+} from "@/features/model/registerschema";
 
-type RegisterFormData = z.infer<typeof registerSchema>;
 
 export const RegisterForm: FC = () => {
   const router = useRouter();
