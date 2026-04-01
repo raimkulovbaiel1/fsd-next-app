@@ -132,7 +132,7 @@ export const Header = () => {
 
         {/* Мобильные иконки */}
         <div className="flex gap-3 lg:hidden">
-          <Link href="/seller/register">
+          <Link href="/login?redirect=/seller/register">
             <Image
               src={prodi}
               alt="search"
@@ -201,7 +201,7 @@ export const Header = () => {
           </div>
 
           <Link
-            href="/seller/register"
+             href="/login?redirect=/seller/register"
             className="bg-[#F6FBF9] text-[#00A669] px-6 py-3 rounded-md font-bold text-sm uppercase tracking-wide hover:bg-[#e8f5f0] transition-colors"
           >
             {t('becomeSeller')}

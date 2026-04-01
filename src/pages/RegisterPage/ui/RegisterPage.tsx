@@ -3,8 +3,8 @@ import { RegisterForm } from "@/features/auth/ui/RegisterForm";
 
 export const RegisterPage: FC = () => {
   return (
-    <main className="min-h-screen bg-[#f3f3f3] flex items-center justify-center px-4 py-10">
-      <section className="w-full max-w-[430px]">
+    <main className="min-h-screen bg-[#f3f3f3] flex items-center justify-center px-4 py-14">
+      <section className="w-full max-w-107.5">
         <div className="bg-[#f8f8f8] rounded-md px-5 py-8 sm:px-8 sm:py-10 shadow-sm">
           <h1 className="text-center text-[#252525] text-[30px] sm:text-[40px] font-semibold leading-tight mb-3">
             Регистрация
