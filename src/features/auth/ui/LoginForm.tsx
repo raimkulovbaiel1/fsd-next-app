@@ -112,7 +112,7 @@ export const LoginForm: FC = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mx-auto mt-3 sm:mt-4 h-[46px] sm:h-[48px] min-w-[150px] sm:min-w-[170px] rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52] disabled:opacity-50"
+          className="mx-auto mt-3 sm:mt-4 h-11.5 sm:h-12 min-w-37.5 sm:min-w-42.5 rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52] disabled:opacity-50"
         >
           {isSubmitting ? "Загрузка..." : "Продолжить"}
         </button>
