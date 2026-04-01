@@ -3,23 +3,14 @@
 import { FC } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Введите e-mail")
-    .email("Введите корректный e-mail"),
-  password: z
-    .string()
-    .min(1, "Введите пароль")
-    .min(6, "Пароль должен содержать минимум 6 символов"),
-  rememberMe: z.boolean().optional(),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import {
+  loginSchema,
+  loginDefaultValues,
+  type LoginFormData,
+} from "@/features/model/schema";
 
 export const LoginForm: FC = () => {
   const router = useRouter();
@@ -33,26 +24,24 @@ export const LoginForm: FC = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: true,
-    },
+    defaultValues: loginDefaultValues,
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log("Login data:", data);
+    try {
+      console.log("Login data:", data);
 
-    // тут можешь сделать запрос на API
-    // например:
-    // const res = await fetch("/api/login", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(data),
-    // });
+      // тут можешь сделать запрос на API
+      // const res = await fetch("/api/login", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(data),
+      // });
 
-    // если логин успешный
-    router.push(redirect);
+      router.push(redirect);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   };
 
   return (
@@ -73,7 +62,11 @@ export const LoginForm: FC = () => {
             type="email"
             placeholder="google@gmail.com"
             {...register("email")}
-            className="h-11 sm:h-12 w-full border border-[#d9d9d9] bg-white px-3 text-[14px] outline-none transition focus:border-[#009661]"
+            className={`h-11 sm:h-12 w-full border bg-white px-3 text-[14px] outline-none transition ${
+              errors.email
+                ? "border-red-500"
+                : "border-[#d9d9d9] focus:border-[#009661]"
+            }`}
           />
           {errors.email && (
             <p className="text-[13px] text-red-500">{errors.email.message}</p>
@@ -91,7 +84,11 @@ export const LoginForm: FC = () => {
             id="password"
             type="password"
             {...register("password")}
-            className="h-11 sm:h-12 w-full border border-[#d9d9d9] bg-white px-3 text-[14px] outline-none transition focus:border-[#009661]"
+            className={`h-11 sm:h-12 w-full border bg-white px-3 text-[14px] outline-none transition ${
+              errors.password
+                ? "border-red-500"
+                : "border-[#d9d9d9] focus:border-[#009661]"
+            }`}
           />
           {errors.password && (
             <p className="text-[13px] text-red-500">
@@ -112,7 +109,7 @@ export const LoginForm: FC = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mx-auto mt-3 sm:mt-4 h-11.5 sm:h-12 min-w-37.5 sm:min-w-42.5 rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52] disabled:opacity-50"
+          className="mx-auto mt-3 sm:mt-4 h-[46px] sm:h-[48px] min-w-[150px] sm:min-w-[170px] rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52] disabled:opacity-50"
         >
           {isSubmitting ? "Загрузка..." : "Продолжить"}
         </button>
