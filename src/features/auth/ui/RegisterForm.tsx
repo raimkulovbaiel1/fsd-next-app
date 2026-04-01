@@ -63,11 +63,11 @@ export const RegisterForm: FC = () => {
           />
         </div>
 
-        <label className="flex items-start gap-2 text-[11px] sm:text-[12px] text-[#9a9a9a] leading-[1.5] select-none">
+        <label className="flex items-start gap-2 text-[11px] sm:text-[12px] text-[#9a9a9a] leading-normal select-none">
           <input
             type="checkbox"
             defaultChecked
-            className="mt-[2px] h-4 w-4 shrink-0 accent-[#009661] cursor-pointer"
+            className="mt-0.5 h-4 w-4 shrink-0 accent-[#009661] cursor-pointer"
           />
           <span>
             Авторизуясь, Вы принимаете{" "}
@@ -84,7 +84,7 @@ export const RegisterForm: FC = () => {
 
         <button
           type="submit"
-          className="mx-auto mt-3 h-[46px] sm:h-[48px] min-w-[150px] sm:min-w-[170px] rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52]"
+          className="mx-auto mt-3 h-11.5 sm:h-12 min-w-37.5 sm:min-w-42.5 rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52]"
         >
           Продолжить
         </button>
