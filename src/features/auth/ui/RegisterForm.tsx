@@ -70,9 +70,23 @@ export const RegisterForm: FC = () => {
           {errors.password && <p className=" text-[13px] text-red-500">{errors.password.message}</p>}
         </div>
 
-        <label className="flex gap-2 text-[12px] text-[#9a9a9a]">
-          <input type="checkbox" {...register("termsAccepted")} />
-          Принять условия
+        <label className="flex items-start gap-2 text-[11px] sm:text-[12px] text-[#9a9a9a] leading-normal select-none">
+          <input
+            type="checkbox"
+            defaultChecked
+            className="mt-0.5 h-4 w-4 shrink-0 accent-[#009661] cursor-pointer"
+          />
+          <span>
+            Авторизуясь, Вы принимаете{" "}
+            <span className="text-[#009661]">
+              Условия использования
+            </span>{" "}
+            и{" "}
+            <span className="text-[#009661]">
+              Заявление о конфиденциальности
+            </span>{" "}
+            NOVO
+          </span>
         </label>
         {errors.termsAccepted && (
           <p className=" text-[13px] text-red-500">{errors.termsAccepted.message}</p>
@@ -80,8 +94,7 @@ export const RegisterForm: FC = () => {
 
         <button
           type="submit"
-          disabled={isSubmitting}
-          className="bg-[#009661] text-white h-11"
+          className="mx-auto mt-3 h-11.5 sm:h-12 min-w-37.5 sm:min-w-42.5 rounded bg-[#009661] px-6 text-[13px] sm:text-[14px] font-semibold uppercase text-white transition hover:bg-[#007f52]"
         >
           {isSubmitting ? "Загрузка..." : "Продолжить"}
         </button>
