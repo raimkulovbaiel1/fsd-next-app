@@ -1,28 +1,12 @@
 import React from "react";
-<<<<<<< HEAD
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-=======
->>>>>>> seller-settings
+import { AccountDetailsschema, type FormData } from "@/features/model/AccountDetailsProps";
 
 interface AccountDetailsProps {
   email: string;
   onEmailChange: (value: string) => void;
 }
-
-<<<<<<< HEAD
-
-const schema = z.object({
-  email: z.string().email("Введите корректный email"),
-  password: z
-    .string()
-    .min(6, "Минимум 6 символов")
-    .optional()
-    .or(z.literal("")),
-});
-
-type FormData = z.infer<typeof schema>;
 
 export const AccountDetails: React.FC<AccountDetailsProps> = ({
   email,
@@ -34,11 +18,8 @@ export const AccountDetails: React.FC<AccountDetailsProps> = ({
     formState: { errors },
     reset,
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      email,
-      password: "",
-    },
+    resolver: zodResolver(AccountDetailsschema),
+    defaultValues: {},
   });
 
   const onSubmit = (data: FormData) => {
@@ -52,27 +33,17 @@ export const AccountDetails: React.FC<AccountDetailsProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8 border-t pt-6">
-=======
-export const AccountDetails: React.FC<AccountDetailsProps> = ({ email, onEmailChange }) => {
-  return (
-    <div className="mt-8 border-t pt-6">
->>>>>>> seller-settings
       <h2 className="text-xl font-semibold mb-4">Настройки акаунта</h2>
 
       <div className="text-sm text-gray-600 mb-1">Ваш E-mail адрес:</div>
       <div className="mb-6 text-green-700">{email}</div>
 
       <div className="grid md:grid-cols-2 gap-10">
-<<<<<<< HEAD
-=======
-        {/* Изменить E-mail */}
->>>>>>> seller-settings
         <div>
           <div className="font-medium mb-2">Изменить E-mail адрес</div>
           <div className="text-sm text-gray-600 mb-2">
             Введите новый E-mail адрес
           </div>
-<<<<<<< HEAD
 
           <input
             {...register("email")}
@@ -134,20 +105,3 @@ export const AccountDetails: React.FC<AccountDetailsProps> = ({ email, onEmailCh
     </form>
   );
 };
-=======
-          <input
-            type="email"
-            className="w-full border rounded-lg px-4 py-2 mb-4"
-            value={email}
-            onChange={(e) => onEmailChange(e.target.value)}
-            placeholder="google@gmail.com"
-          />
-          <button className="px-8 py-2 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition">
-            СОХРАНИТЬ
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
->>>>>>> seller-settings
