@@ -1,33 +1,26 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { z } from 'zod';
 import { useForm, FieldErrors, UseFormRegister } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ItemMediaUpload } from '@/features/item-media-upload/ui/ItemMediaUpload';
 
-const schema = z.object({
-  category: z.string().min(1, 'Введите категорию'),
-  yearFrom: z.string().min(1, 'Введите год'),
-  brand: z.string().min(1, 'Введите марку'),
-  mileage: z.string().min(1, 'Введите пробег'),
-  model: z.string().min(1, 'Введите модель'),
-  country: z.string().min(1, 'Введите страну'),
-  price: z.string().min(1, 'Введите цену'),
-  weight: z.string().optional(),
-  description: z.string().min(1, 'Введите описание'),
-});
+import {
+  SellerNewItemSchema,
+  defaultValues,
+  type SellerFormInput,
+  type SellerFormValues,
+} from '@/features/model/SellerNewItemPage';
 
-type SellerFormValues = z.infer<typeof schema>;
-type FieldName = keyof SellerFormValues;
+type FieldName = keyof SellerFormInput;
 
 interface FormFieldProps {
   name: FieldName;
   label: string;
   type?: string;
   placeholder?: string;
-  register: UseFormRegister<SellerFormValues>;
-  errors: FieldErrors<SellerFormValues>;
+  register: UseFormRegister<SellerFormInput>;
+  errors: FieldErrors<SellerFormInput>;
 }
 
 interface FieldConfig {
@@ -62,25 +55,13 @@ const FormField = ({
         className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm shadow-sm focus:border-teal-500 focus:ring-teal-500"
       />
 
-      {errors[name] && (
+      {errors[name]?.message && (
         <p className="mt-1 text-sm text-red-500">
           {errors[name]?.message as string}
         </p>
       )}
     </div>
   );
-};
-
-const defaultValues: SellerFormValues = {
-  category: '',
-  yearFrom: '',
-  brand: '',
-  mileage: '',
-  model: '',
-  country: '',
-  price: '',
-  weight: '',
-  description: '',
 };
 
 const SellerNewItemPage = () => {
@@ -97,8 +78,8 @@ const SellerNewItemPage = () => {
     setValue,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<SellerFormValues>({
-    resolver: zodResolver(schema),
+  } = useForm<SellerFormInput>({
+    resolver: zodResolver(SellerNewItemSchema),
     defaultValues,
   });
 
@@ -145,22 +126,33 @@ const SellerNewItemPage = () => {
     document.execCommand(command, false, value);
   };
 
-  const onSubmit = async (data: SellerFormValues) => {
-    const descriptionHtml = editorRef.current?.innerHTML || '';
+  const onSubmit = async (data: SellerFormInput) => {
+    const parsed: SellerFormValues = SellerNewItemSchema.parse({
+      ...data,
+      description: editorRef.current?.innerHTML || '',
+    });
 
     const newItem = {
-      ...data,
-      description: descriptionHtml,
+      ...parsed,
       images: images.map((file) => file.name),
       createdAt: new Date().toISOString(),
     };
+
+    console.log('Новое объявление:', newItem);
+
+    reset();
+    setImages([]);
+
+    if (editorRef.current) {
+      editorRef.current.innerHTML = '';
+    }
   };
 
   return (
     <div className="min-h-screen px-4 py-6 lg:px-8">
       <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-lg">
         <div className="border-b px-6 py-5">
-          <h1 className="text-xl font-bold text-right">
+          <h1 className="text-right text-xl font-bold">
             Создание нового объявления
           </h1>
         </div>
