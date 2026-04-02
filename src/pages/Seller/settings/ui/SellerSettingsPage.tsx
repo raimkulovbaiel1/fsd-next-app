@@ -1,6 +1,10 @@
 'use client';
 import { useState } from 'react';
+<<<<<<< HEAD
 import iconsc from '@/shared/assets/icons/search.svg';
+=======
+import iconsc from '@/shared/assets/icons/right.svg';
+>>>>>>> seller-settings
 import { AccountDetails } from '@/features/seller-settings/ui/AccountDetails';
 import { ContactDetails } from '@/features/seller-settings/ui/ContactDetails';
 import { CompanyDetails } from '@/features/seller-settings/ui/CompanyDetails';
@@ -78,9 +82,13 @@ const SellerSettingsPage = () => {
         {openedBlock === 'company' && <CompanyDetails />}
       </section>
 
+<<<<<<< HEAD
       <button className="w-full bg-green-600 text-white py-3 rounded-xl font-medium hover:bg-green-700 transition mt-4">
         Сохранить изменения
       </button>
+=======
+     
+>>>>>>> seller-settings
     </div>
   );
 };
