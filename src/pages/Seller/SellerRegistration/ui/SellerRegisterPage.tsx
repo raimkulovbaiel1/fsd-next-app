@@ -1,45 +1,27 @@
 "use client";
 
-import React from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const schema = z.object({
-  companyName: z.string().min(2, "Введите название компании"),
-  email: z.string().email("Введите правильный email"),
-  password: z.string().min(6, "Пароль должен быть минимум 6 символов"),
-  country: z.string().min(2, "Введите страну"),
-  city: z.string().min(2, "Введите город"),
-  address: z.string().min(2, "Введите адрес"),
-  phone: z.string().min(6, "Введите номер телефона"),
-  inn: z.string().min(3, "Введите ИНН / БИН"),
-});
-
-type FormData = z.infer<typeof schema>;
-
+import {
+  SellerRegisterSchema,
+  defaultValues,
+  type SellerRegisterFormData,
+} from "@/features/model/SellerRegisterPage";
 const SellerRegisterPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      companyName: "",
-      email: "",
-      password: "",
-      country: "",
-      city: "",
-      address: "",
-      phone: "",
-      inn: "",
-    },
+  } = useForm<SellerRegisterFormData>({
+    resolver: zodResolver(SellerRegisterSchema),
+    defaultValues,
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: SellerRegisterFormData) => {
     console.log("Данные формы:", data);
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
