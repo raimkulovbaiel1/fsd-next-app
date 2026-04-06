@@ -22,3 +22,5 @@ export const RegisterPage: FC = () => {
     </main>
   );
 };
+
+export default RegisterPage;
