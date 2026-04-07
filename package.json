@@ -27,6 +27,7 @@
     "swiper": "^12.0.3",
     "tailwind-merge": "^3.4.0",
     "tailwind-scrollbar": "^4.0.2",
+    "unit-test": "^0.0.9",
     "zod": "^4.3.6",
     "zustand": "^5.0.12"
   },
@@ -34,6 +35,7 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -44,6 +46,6 @@
     "jsdom": "^28.1.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.2"
   }
 }

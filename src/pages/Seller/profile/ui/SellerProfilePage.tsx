@@ -84,11 +84,12 @@ const SellerProfilePage = () => {
           href="/seller/new-item"
           className="w-full lg:w-auto bg-[#0096611A] text-[#29a669] px-4 py-2 rounded-md font-semibold hover:bg-green-200 transition text-center"
         >
-          Добавить объявлениеz
+          Добавить объявление
         </Link>
       </div>
 
-      <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-5 items-start">
+      <div data-testid="vehicleList"  
+       className="flex-1 grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-3 gap-5 items-start">
         {filteredVehicles.map((vehicle) => (
           <div
             key={vehicle.id}
@@ -109,7 +110,8 @@ const SellerProfilePage = () => {
                 {vehicle.year} | {vehicle.weight} кг | {vehicle.mileage} км
               </div>
 
-              <div className="text-[#252525] font-bold text-lg mb-2">
+              <div data-testid="price" 
+               className="text-[#252525] font-bold text-lg mb-2">
                 {vehicle.price}€
               </div>
 
@@ -120,14 +122,14 @@ const SellerProfilePage = () => {
 
               <div className="overflow-hidden opacity-0 max-h-0 group-hover:max-h-16 group-hover:opacity-100 transition-all duration-300 mt-3 border-t pt-3">
                 <div className="flex gap-2">
-                  <Link
+                  <Link data-test="linkRefact"
                     href={`/seller/edit/${vehicle.id}`}
                     className="px-3 py-1 bg-[#0096611A] text-[#009661] rounded-lg shadow hover:bg-green-100"
                   >
                     Редактировать
                   </Link>
 
-                  <button
+                  <button data-testid="deleteButton"
                     type="button"
                     onClick={() => removeVehicle(vehicle.id)}
                     className="flex items-center gap-2 px-4 py-1 bg-[#EB57571A] text-[#EB5757] rounded-lg shadow hover:bg-[#EB575733]"
