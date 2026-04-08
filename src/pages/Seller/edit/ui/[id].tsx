@@ -49,7 +49,8 @@ export default function EditPage() {
           ← Назад
         </Link>
 
-        <div className="flex gap-2">
+        <div data-testid="actions"
+          className="flex gap-2">
           <Link
             href={`/seller/EditingProduct/${id}`}
             className="px-3 py-1 text-xs rounded bg-green-100 text-green-700 hover:bg-green-200 transition"
@@ -72,13 +73,14 @@ export default function EditPage() {
             className="rounded-lg w-160.5 h-92.5 object-cover"
           />
 
-          <div className="flex gap-3 mt-4">
+          <div data-testid="preview-container" className="flex gap-3 mt-4">
             {[1, 2, 4].map((i) => (
               <div
                 key={i}
                 className="w-28 h-18 rounded overflow-hidden bg-gray-200"
               >
                 <img
+                  data-testid="preview-image"
                   src="/car.jpg"
                   className="w-full h-full object-cover"
                   alt=""
@@ -86,7 +88,10 @@ export default function EditPage() {
               </div>
             ))}
 
-            <div className="w-28 h-20 rounded bg-gray-800 text-white text-xs flex items-center justify-center">
+            <div
+              data-testid="more-photos"
+              className="w-28 h-20 rounded bg-gray-800 text-white text-xs flex items-center justify-center"
+            >
               Больше фото
             </div>
           </div>
@@ -99,7 +104,7 @@ export default function EditPage() {
 
           <p className="text-[27px] text-gray-500 mb-4">
             {vehicle.brand} {vehicle.model}
-          </p>  
+          </p>
 
           <p className="text-xs text-gray-400 mb-4">
             {vehicle.location}
@@ -108,11 +113,11 @@ export default function EditPage() {
           <div className="grid grid-cols-3 border-t text-sm gap-y-3 mb-6">
             <div>
               <p className="text-gray-400  text-xs">Год выпуска</p>
-             {vehicle.year}года
+              {vehicle.year}года
             </div>
             <div>
               <p className="text-gray-400 text-xs">Пробег</p>
-             {vehicle.mileage} км
+              {vehicle.mileage} км
             </div>
             <div>
               <p className="text-gray-400 text-xs">Цена</p>
@@ -127,7 +132,8 @@ export default function EditPage() {
           Обзор транспортного средства
         </h2>
 
-        <div className="bg-gray-50 rounded-lg overflow-hidden text-sm">
+        <div data-testid="details"
+          className="bg-gray-50 rounded-lg overflow-hidden text-sm">
           {[
             ['Марка', `${vehicle.title}`],
             ['Модель', `${vehicle.brand} ${vehicle.model}`],
@@ -136,7 +142,7 @@ export default function EditPage() {
             ['Страна', `${vehicle.location}`],
             ['Вес', `${vehicle.weight} кг`],
           ].map(([label, value], i) => (
-            <div
+            <div data-testid="detail-item"
               key={i}
               className="grid grid-cols-2 px-4 py-3 border-b last:border-none"
             >
@@ -149,7 +155,8 @@ export default function EditPage() {
 
       {/* DESCRIPTION */}
       <div className="mt-10 max-w-4xl">
-        <h2 className="text-lg font-semibold mb-3">Описание</h2>
+        <h2 data-testid="description-title"
+         className="text-lg font-semibold mb-3">Описание</h2>
 
         <div className="text-sm text-gray-600 space-y-4">
           <p>
