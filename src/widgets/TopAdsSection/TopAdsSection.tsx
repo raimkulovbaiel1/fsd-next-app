@@ -54,11 +54,13 @@ export const TopAdsSection = () => {
           </div>
 
           <div className="p-4 flex flex-col flex-1">
-            <div className="text-[14px] font-medium text-[#252525] mb-1">
+            <div data-testid="title"
+             className="text-[14px] font-medium text-[#252525] mb-1">
               {ad.title}
             </div>
 
-            <div className="text-[#009661] text-[20px] font-bold mb-2">
+            <div  data-testid="price"
+             className="text-[#009661] text-[20px] font-bold mb-2">
               {ad.price}
             </div>
 
@@ -70,11 +72,10 @@ export const TopAdsSection = () => {
               />
 
               <span>
-                {ad.location.split(', ').map((part, i, arr) => (
+                {(ad.location ?? "").split(", ").map((part, i, arr) => (
                   <React.Fragment key={i}>
                     {part}
-                    {i < arr.length - 1 ? ', ' : ''}
-                    {i === 0 && arr.length > 1 && <br />}
+                    {i < arr.length - 1 && <br />}
                   </React.Fragment>
                 ))}
               </span>
