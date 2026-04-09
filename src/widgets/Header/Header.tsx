@@ -91,7 +91,8 @@ export const Header = () => {
               </li>
 
               {/* Валюта */}
-              <li className="relative">
+              <li data-testid="currency-dropdown"
+                className="relative">
                 <button
                   onClick={() => setOpen(!open)}
                   className="flex items-center cursor-pointer hover:text-[#00A669] transition-colors"
@@ -153,7 +154,8 @@ export const Header = () => {
 
         {/* Правая часть: Профиль + Стать продавцом */}
         <div className="hidden lg:flex items-center space-x-8">
-          <div className="relative group">
+          <div data-testid="profile-dropdown"
+            className="relative group">
             {/* Кнопка профиля */}
             <button className="text-[#00A669] cursor-pointer font-semibold hover:opacity-80 transition-opacity">
               Профиль
@@ -169,7 +171,8 @@ export const Header = () => {
                transition-all duration-200
                z-50
              ">
-              <ul className="py-2">
+              <ul data-testid="profile-menu"
+                className="py-2">
                 <li>
                   <Link
                     href="/profile"
@@ -188,7 +191,7 @@ export const Header = () => {
                   </Link>
                 </li>
 
-                <li>
+                <li data-testid="settings-link">
                   <Link
                     href="/settings"
                     className="block px-4 py-2 hover:bg-gray-100"
@@ -201,7 +204,7 @@ export const Header = () => {
           </div>
 
           <Link
-             href="/login?redirect=/seller/register"
+            href="/login?redirect=/seller/register"
             className="bg-[#F6FBF9] text-[#00A669] px-6 py-3 rounded-md font-bold text-sm uppercase tracking-wide hover:bg-[#e8f5f0] transition-colors"
           >
             {t('becomeSeller')}
