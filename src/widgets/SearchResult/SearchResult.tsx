@@ -39,7 +39,7 @@ export const SearchResult = () => {
     toggleAdType,
     applyFilters,
     resetFilters,
-    getFilteredVehicles, 
+    getFilteredVehicles,
   } = useSearchStore();
 
   const imageMap: { [key: string]: string } = {
@@ -97,7 +97,7 @@ export const SearchResult = () => {
             <div className="flex justify-between gap-2 mb-4">
               <div className="flex items-center w-1/2 border rounded px-2 py-1 border-[#009661]">
                 <span className="mr-1">от</span>
-                <input
+                <input data-testid="min-price-input"
                   type="number"
                   min={filters.price.min}
                   max={filters.price.max}
@@ -110,7 +110,7 @@ export const SearchResult = () => {
 
               <div className="flex items-center w-1/2 border rounded px-2 py-1 border-[#009661]">
                 <span className="mr-1">до</span>
-                <input
+                <input data-testid="max-price-input"
                   type="number"
                   min={filters.price.min}
                   max={filters.price.max}
@@ -122,7 +122,7 @@ export const SearchResult = () => {
               </div>
             </div>
 
-            <select
+            <select data-testid="transport-type-select"
               value={selectedFilters.transportType}
               className="w-full border mt-2 text-[14px] rounded px-2 py-1 mb-4"
               onChange={(e) => setTransportType(e.target.value)}
@@ -148,7 +148,7 @@ export const SearchResult = () => {
               ))}
             </div>
 
-            <select
+            <select data-testid="country-select"
               value={selectedFilters.country}
               className="w-full border text-[14px] rounded px-2 py-2 mb-4"
               onChange={(e) => setCountry(e.target.value)}
@@ -188,7 +188,7 @@ export const SearchResult = () => {
             </div>
 
             <div className="flex flex-col gap-3">
-              <button
+              <button data-testid="apply-filters-button"
                 type="button"
                 onClick={() => {
                   applyFilters();
@@ -200,7 +200,7 @@ export const SearchResult = () => {
                 Применить
               </button>
 
-              <button
+              <button data-testid="reset-filters-button"
                 type="button"
                 onClick={() => {
                   resetFilters();
