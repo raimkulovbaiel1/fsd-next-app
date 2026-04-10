@@ -1,152 +1,291 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import { SearchResult } from "@/widgets/SearchResult/SearchResult";
-//import userEvent from "@testing-library/user-event";
+import { useSearchStore } from "@/shared/store/widgets/SearchResult";
 
-const fetchAllMock = vi.fn();
-const setMinPriceMock = vi.fn();
-const setMaxPriceMock = vi.fn();
-const setTransportTypeMock = vi.fn();
-const setCountryMock = vi.fn();
-const setGearboxMock = vi.fn();
-const toggleBrandMock = vi.fn();
-const toggleAdTypeMock = vi.fn();
-const applyFiltersMock = vi.fn();
-const resetFiltersMock = vi.fn();
+describe("useSearchStore", () => {
+  beforeEach(() => {
+    useSearchStore.setState({
+      vehicles: [],
+      filters: null,
+      loading: false,
+      error: null,
+      minPrice: 0,
+      maxPrice: 0,
+      selectedFilters: {
+        transportType: "",
+        brands: [],
+        country: "",
+        gearbox: "",
+        adTypes: [],
+      },
+      appliedFilters: {
+        transportType: "",
+        brands: [],
+        country: "",
+        gearbox: "",
+        adTypes: [],
+      },
+    });
 
-vi.mock("next/navigation", () => ({
-    useSearchParams: () => ({
-        get: (key: string) => {
-            if (key === "search") return "bmw";
-            return null;
-        },
-    }),
-}));
+    vi.restoreAllMocks();
+  });
 
-vi.mock("next/link", () => ({
-    default: ({ children, href }: any) => <a href={href}>{children}</a>,
-}));
-
-vi.mock("@/shared/store/widgets/SearchResult", () => ({
-    useSearchStore: () => ({
-        vehicles: [
+  it("успешно загружает данные через fetchAll", async () => {
+    vi.stubGlobal("fetch", vi.fn((url) => {
+      if (url === "http://localhost:5000/SearchResult") {
+        return Promise.resolve({
+          ok: true,
+          json: async () => [
             {
-                id: 1,
-                name: "BMW Truck",
-                year: "2020",
-                weight: "5000",
-                mileage: "100000",
-                price: "25000",
-                location: "Germany",
-                image: "img1",
+              id: "1",
+              name: "BMW X5",
+              year: "2020",
+              weight: "2000",
+              mileage: "100000",
+              price: "1500",
+              location: "Bishkek",
+              image: "/bmw.jpg",
+              transportType: "SUV",
+              brand: "BMW",
+              gearbox: "Автомат",
+              adType: "Продажа",
             },
-        ],
-        filters: {
-            price: { min: 0, max: 100000 },
-            types: ["Грузовик"],
-            brands: ["BMW", "Volvo"],
-            countries: ["Germany", "Turkey"],
+          ],
+        });
+      }
+
+      if (url === "http://localhost:5000/SearchResultFilters") {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            price: { min: 1000, max: 5000 },
+            types: ["SUV", "Sedan"],
+            brands: ["BMW", "Audi"],
+            countries: ["Bishkek", "Osh"],
             gearboxes: ["Автомат", "Механика"],
-            adTypes: ["Продажа", "Лизинг"],
+            adTypes: ["Продажа", "Аренда"],
+          }),
+        });
+      }
+
+      return Promise.reject(new Error("Unknown url"));
+    }));
+
+    await useSearchStore.getState().fetchAll();
+
+    const state = useSearchStore.getState();
+
+    expect(state.vehicles).toHaveLength(1);
+    expect(state.filters).not.toBeNull();
+    expect(state.minPrice).toBe(1000);
+    expect(state.maxPrice).toBe(5000);
+    expect(state.loading).toBe(false);
+    expect(state.error).toBeNull();
+  });
+
+  it("ставит ошибку если fetchAll упал", async () => {
+    vi.stubGlobal("fetch", vi.fn(() =>
+      Promise.resolve({
+        ok: false,
+        json: async () => ({}),
+      })
+    ));
+
+    await useSearchStore.getState().fetchAll();
+
+    const state = useSearchStore.getState();
+
+    expect(state.error).toBe("Не удалось загрузить данные");
+    expect(state.loading).toBe(false);
+  });
+
+  it("setMinPrice не дает поставить значение больше maxPrice", () => {
+    useSearchStore.setState({ minPrice: 0, maxPrice: 5000 });
+
+    useSearchStore.getState().setMinPrice(7000);
+
+    expect(useSearchStore.getState().minPrice).toBe(5000);
+  });
+
+  it("setMaxPrice не дает поставить значение меньше minPrice", () => {
+    useSearchStore.setState({ minPrice: 3000, maxPrice: 5000 });
+
+    useSearchStore.getState().setMaxPrice(1000);
+
+    expect(useSearchStore.getState().maxPrice).toBe(3000);
+  });
+
+  it("toggleBrand добавляет и удаляет бренд", () => {
+    useSearchStore.getState().toggleBrand("BMW", true);
+    expect(useSearchStore.getState().selectedFilters.brands).toContain("BMW");
+
+    useSearchStore.getState().toggleBrand("BMW", false);
+    expect(useSearchStore.getState().selectedFilters.brands).not.toContain("BMW");
+  });
+
+  it("toggleAdType добавляет и удаляет тип объявления", () => {
+    useSearchStore.getState().toggleAdType("Продажа", true);
+    expect(useSearchStore.getState().selectedFilters.adTypes).toContain("Продажа");
+
+    useSearchStore.getState().toggleAdType("Продажа", false);
+    expect(useSearchStore.getState().selectedFilters.adTypes).not.toContain("Продажа");
+  });
+
+  it("applyFilters копирует selectedFilters в appliedFilters", () => {
+    useSearchStore.getState().setTransportType("SUV");
+    useSearchStore.getState().setCountry("Bishkek");
+    useSearchStore.getState().applyFilters();
+
+    const state = useSearchStore.getState();
+
+    expect(state.appliedFilters.transportType).toBe("SUV");
+    expect(state.appliedFilters.country).toBe("Bishkek");
+  });
+
+  it("resetFilters сбрасывает фильтры и цену", () => {
+    useSearchStore.setState({
+      filters: {
+        price: { min: 1000, max: 5000 },
+        types: [],
+        brands: [],
+        countries: [],
+        gearboxes: [],
+        adTypes: [],
+      },
+      minPrice: 2000,
+      maxPrice: 3000,
+      selectedFilters: {
+        transportType: "SUV",
+        brands: ["BMW"],
+        country: "Bishkek",
+        gearbox: "Автомат",
+        adTypes: ["Продажа"],
+      },
+      appliedFilters: {
+        transportType: "SUV",
+        brands: ["BMW"],
+        country: "Bishkek",
+        gearbox: "Автомат",
+        adTypes: ["Продажа"],
+      },
+    });
+
+    useSearchStore.getState().resetFilters();
+
+    const state = useSearchStore.getState();
+
+    expect(state.minPrice).toBe(1000);
+    expect(state.maxPrice).toBe(5000);
+    expect(state.selectedFilters).toEqual({
+      transportType: "",
+      brands: [],
+      country: "",
+      gearbox: "",
+      adTypes: [],
+    });
+    expect(state.appliedFilters).toEqual({
+      transportType: "",
+      brands: [],
+      country: "",
+      gearbox: "",
+      adTypes: [],
+    });
+  });
+
+  it("getFilteredVehicles фильтрует по поиску", () => {
+    useSearchStore.setState({
+      vehicles: [
+        {
+          id: "1",
+          name: "BMW X5",
+          year: "2020",
+          weight: "2000",
+          mileage: "100000",
+          price: "1500",
+          location: "Bishkek",
+          image: "/bmw.jpg",
+          transportType: "SUV",
+          brand: "BMW",
+          gearbox: "Автомат",
+          adType: "Продажа",
         },
-        loading: false,
-        error: null,
-        minPrice: 0,
-        maxPrice: 100000,
-        selectedFilters: {
-            transportType: "",
-            brands: [],
-            country: "",
-            gearbox: "",
-            adTypes: [],
+        {
+          id: "2",
+          name: "Audi A6",
+          year: "2019",
+          weight: "1800",
+          mileage: "90000",
+          price: "2500",
+          location: "Osh",
+          image: "/audi.jpg",
+          transportType: "Sedan",
+          brand: "Audi",
+          gearbox: "Механика",
+          adType: "Аренда",
         },
-        appliedFilters: {},
-        fetchAll: fetchAllMock,
-        setMinPrice: setMinPriceMock,
-        setMaxPrice: setMaxPriceMock,
-        setTransportType: setTransportTypeMock,
-        setCountry: setCountryMock,
-        setGearbox: setGearboxMock,
-        toggleBrand: toggleBrandMock,
-        toggleAdType: toggleAdTypeMock,
-        applyFilters: applyFiltersMock,
-        resetFilters: resetFiltersMock,
-        getFilteredVehicles: vi.fn(() => [
-            {
-                id: 1,
-                name: "BMW Truck",
-                year: "2020",
-                weight: "5000",
-                mileage: "100000",
-                price: "25000",
-                location: "Germany",
-                image: "img1",
-            },
-        ]),
-    }),
-}));
-
-describe("SearchResult", () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
+      ],
+      minPrice: 1000,
+      maxPrice: 3000,
+      appliedFilters: {
+        transportType: "",
+        brands: [],
+        country: "",
+        gearbox: "",
+        adTypes: [],
+      },
     });
 
-    it("рендерит SearchResult", () => {
-        render(<SearchResult />);
-        expect(screen.getByTestId("min-price-input")).toBeInTheDocument();
-        expect(screen.getByTestId("max-price-input")).toBeInTheDocument();
-        expect(screen.getByTestId("transport-type-select")).toBeInTheDocument();
-        expect(screen.getByTestId("country-select")).toBeInTheDocument();
+    const result = useSearchStore.getState().getFilteredVehicles("bmw");
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe("BMW X5");
+  });
+
+  it("getFilteredVehicles фильтрует по brand и transportType", () => {
+    useSearchStore.setState({
+      vehicles: [
+        {
+          id: "1",
+          name: "BMW X5",
+          year: "2020",
+          weight: "2000",
+          mileage: "100000",
+          price: "1500",
+          location: "Bishkek",
+          image: "/bmw.jpg",
+          transportType: "SUV",
+          brand: "BMW",
+          gearbox: "Автомат",
+          adType: "Продажа",
+        },
+        {
+          id: "2",
+          name: "Audi A6",
+          year: "2019",
+          weight: "1800",
+          mileage: "90000",
+          price: "2500",
+          location: "Osh",
+          image: "/audi.jpg",
+          transportType: "Sedan",
+          brand: "Audi",
+          gearbox: "Механика",
+          adType: "Аренда",
+        },
+      ],
+      minPrice: 1000,
+      maxPrice: 3000,
+      appliedFilters: {
+        transportType: "SUV",
+        brands: ["BMW"],
+        country: "",
+        gearbox: "",
+        adTypes: [],
+      },
     });
 
-    it("показывает правильные атрибуты min/max/value", () => {
-        render(<SearchResult />);
+    const result = useSearchStore.getState().getFilteredVehicles("");
 
-        const input = screen.getByTestId("min-price-input");
-        expect(input).toHaveAttribute("min", "0");
-        expect(input).toHaveAttribute("max", "100000");
-        expect(input).toHaveValue(0);
-    });
-
-    it("вызывает fetchAll при монтировании", () => {
-        render(<SearchResult />);
-        expect(fetchAllMock).toHaveBeenCalled();
-    });
-
-    it("рендерит карточку товара", () => {
-        render(<SearchResult />);
-        expect(screen.getByText("BMW Truck")).toBeInTheDocument();
-    });
-
-    it('при нажати на кнопку "Применить" вызывает applyFilters', () => {
-        render(<SearchResult />);
-        const applyButton = screen.getByTestId("apply-filters-button");
-        applyButton.click();
-        expect(applyFiltersMock).toHaveBeenCalled();
-        expect(applyButton).toHaveTextContent("Применить");
-
-    });
-
-    it('при нажати на кнопку "Сбросить" вызывает resetFilters', () => {
-        render(<SearchResult />);
-        const resetButton = screen.getByTestId("reset-filters-button");
-        resetButton.click();
-        expect(resetFiltersMock).toHaveBeenCalled();
-        expect(resetButton).toHaveTextContent("Сбросить");
-    });
-    it("рендерит select типа транспорта", () => {
-        render(<SearchResult />);
-        expect(screen.getByTestId("transport-type-select")).toBeInTheDocument();
-    });
-
-    it("показывает дефолтный option", () => {
-        render(<SearchResult />);
-        expect(screen.getByRole("option", { name: "Тип транспорта" })).toBeInTheDocument();
-    });
-
-  
-
-
-
+    expect(result).toHaveLength(1);
+    expect(result[0].brand).toBe("BMW");
+  });
 });

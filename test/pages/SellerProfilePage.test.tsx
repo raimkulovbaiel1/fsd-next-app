@@ -1,49 +1,77 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SellerProfilePage from "@/pages/Seller/profile";
+
+const fetchVehiclesMock = vi.fn();
+const removeVehicleMock = vi.fn();
+
+const mockStoreState = {
+  vehicles: [
+    {
+      id: "1",
+      name: "BMW X5",
+      year: "2020",
+      weight: "2000",
+      mileage: "100000",
+      price: "1500",
+      location: "Bishkek",
+      image: "/test.jpg",
+    },
+    {
+      id: "2",
+      name: "Volvo FH",
+      year: "2019",
+      weight: "8000",
+      mileage: "90000",
+      price: "2300",
+      location: "Berlin",
+      image: "/test2.jpg",
+    },
+  ],
+  loading: false,
+  error: null as string | null,
+  fetchVehicles: fetchVehiclesMock,
+  removeVehicle: removeVehicleMock,
+};
+
+vi.mock("@/shared/store/pages/Profile", () => ({
+  useProfileStore: () => mockStoreState,
+}));
 
 describe("SellerProfilePage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: async () => [],
-      })
-    );
+    mockStoreState.vehicles = [
+      {
+        id: "1",
+        name: "BMW X5",
+        year: "2020",
+        weight: "2000",
+        mileage: "100000",
+        price: "1500",
+        location: "Bishkek",
+        image: "/test.jpg",
+      },
+      {
+        id: "2",
+        name: "Volvo FH",
+        year: "2019",
+        weight: "8000",
+        mileage: "90000",
+        price: "2300",
+        location: "Berlin",
+        image: "/test2.jpg",
+      },
+    ];
+    mockStoreState.loading = false;
+    mockStoreState.error = null;
   });
 
-  vi.mock("@/shared/store/pages/Profile", () => ({
-    useProfileStore: () => ({
-      vehicles: [
-        {
-          id: "1",
-          name: "BMW X5",
-          year: "2020",
-          weight: "2000",
-          mileage: "100000",
-          price: "1500",
-          location: "Bishkek",
-          image: "/test.jpg",
-        },
-      ],
-      loading: false,
-      error: null,
-      fetchVehicles: vi.fn(),
-      removeVehicle: vi.fn(),
-    }),
-  }));
-
-  it("should render the seller profile section", async () => {
+  it("calls fetchVehicles on mount", () => {
     render(<SellerProfilePage />);
-    const sellerProfileSection = await screen.findByPlaceholderText(
-      "Поиск объявления..."
-    );
-    expect(sellerProfileSection).toBeInTheDocument();
+    expect(fetchVehiclesMock).toHaveBeenCalledTimes(1);
   });
-
 
   it('показывает ссылку "Добавить объявление"', async () => {
     render(<SellerProfilePage />);
@@ -58,38 +86,43 @@ describe("SellerProfilePage", () => {
 
 
 
-  it("проверка price", async () => {
+  it("показывает цену в евро", async () => {
     render(<SellerProfilePage />);
 
-    const priceElement = await screen.findByTestId("price");
-
-    expect(priceElement).toBeInTheDocument();
-
-    expect(priceElement.textContent).toContain("€");
+    const priceElements = await screen.findAllByTestId("price");
+    expect(priceElements[0].textContent).toContain("€");
   });
 
 
-  it('проверяем link "Редактировать"', async () => {
-    render(<SellerProfilePage />);
-    const editLink = await screen.findByRole("link", {
-      name: /Редактировать/i,
-    });
-    expect(editLink).toBeInTheDocument();
 
-    expect(editLink).toHaveAttribute("href", "/seller/edit/1");
+
+
+  it("вызывает removeVehicle при клике удалить", async () => {
+    render(<SellerProfilePage />);
+    const deleteButtons = await screen.findAllByTestId("deleteButton");
+    fireEvent.click(deleteButtons[0]);
+    expect(removeVehicleMock).toHaveBeenCalledWith("1");
   });
 
+  it("фильтрует карточки по поиску", async () => {
+    render(<SellerProfilePage />);
 
-  it('проверка кпопку удалить', async () => {
-    render(<SellerProfilePage />);
-    const delateButton = await screen.findByTestId("deleteButton");
-    expect(delateButton).toBeInTheDocument();
-  }); 
-   
-  it("проверка списка объявлений", async () => {
-    render(<SellerProfilePage />);
-    const vehicleList = await screen.findByTestId("vehicleList");
-    expect(vehicleList).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText("Поиск объявления...");
+    fireEvent.change(input, { target: { value: "Volvo" } });
+
+    expect(screen.getByText("Volvo FH")).toBeInTheDocument();
+    expect(screen.queryByText("BMW X5")).not.toBeInTheDocument();
   });
 
+  it("показывает состояние загрузки", () => {
+    mockStoreState.loading = true;
+    render(<SellerProfilePage />);
+    expect(screen.getByText("Загрузка...")).toBeInTheDocument();
+  });
+
+  it("показывает состояние ошибки", () => {
+    mockStoreState.error = "Не удалось загрузить данные";
+    render(<SellerProfilePage />);
+    expect(screen.getByText("Не удалось загрузить данные")).toBeInTheDocument();
+  });
 });
