@@ -80,7 +80,8 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto p-4 bg-gray-50 min-h-screen flex items-center justify-center">
-        <div className="text-center py-10">Загрузка...</div>
+        <div data-testid="loading-state"
+          className="text-center py-10">Загрузка...</div>
       </div>
     );
   }
@@ -193,7 +194,7 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
             <div className="text-[20px] font-bold text-[#009661] whitespace-nowrap">
               {currentData.price}
             </div>
-            <button
+            <button data-testid="contact-seller-button"
               onClick={openModal}
               className="bg-[#009661] hover:bg-green-700 text-white text-[14px] px-6 py-2 rounded-lg font-semibold"
             >
@@ -239,13 +240,13 @@ const VehicleCard = ({ params }: VehicleCardProps) => {
           Обзор транспортного средства
         </h2>
 
-        <div className="flex flex-col overflow-hidden rounded-lg">
+        <div data-testid="specs-table"
+          className="flex flex-col overflow-hidden rounded-lg">
           {specs.map((spec, index) => (
             <div
               key={index}
-              className={`grid grid-cols-2 py-4 px-6 ${
-                index % 2 === 0 ? "bg-gray-50" : "bg-white"
-              }`}
+              className={`grid grid-cols-2 py-4 px-6 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                }`}
             >
               <span className="text-gray-400 font-normal">{spec.label}</span>
               <span className="text-gray-800 font-medium">{spec.value}</span>
