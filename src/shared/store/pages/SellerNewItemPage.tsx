@@ -52,7 +52,8 @@ export const useSellerNewItemPageStore = create<SellerNewItemPageState>()(
           loading: false,
         });
 
-        console.error('Ошибка при загрузке полей:', error);
+        console.error('Ошибка при загрузке полей:', error); 
+        
       }
     },
   })
