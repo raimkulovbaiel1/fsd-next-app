@@ -60,10 +60,12 @@ export const Header = () => {
         <div className="flex items-center space-x-12">
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer">
-              <img
-                src={nova.src}
+              <Image
+                src={nova}
                 alt="NOVO logo"
-                className="w-10 h-10 object-contain rounded-xl"
+                width={40}
+                height={40}
+                className="object-contain rounded-xl"
               />
             </div>
 

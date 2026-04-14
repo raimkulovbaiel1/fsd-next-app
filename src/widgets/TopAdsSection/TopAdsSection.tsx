@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import carbon from '@/shared/assets/img/carbon.svg';
 import img2 from '@/shared/assets/img/addSections/img2.png';
 import img3 from '@/shared/assets/img/addSections/img3.png';
@@ -46,10 +47,13 @@ export const TopAdsSection = () => {
           className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition"
         >
           <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
-            <img
+            <Image
               src={imageMap[ad.image] || ad.image}
               alt={ad.title}
-              className="w-full h-full"
+              width={400}
+              height={176}
+              unoptimized
+              className="w-full h-full object-cover"
             />
           </div>
 
@@ -65,10 +69,12 @@ export const TopAdsSection = () => {
             </div>
 
             <div className="text-[12px] text-gray-500 mt-auto flex items-center gap-2">
-              <img
-                src={carbon.src}
+              <Image
+                src={carbon}
                 alt="carbon"
-                className="w-5 h-5 inline-block"
+                width={20}
+                height={20}
+                className="inline-block"
               />
 
               <span>

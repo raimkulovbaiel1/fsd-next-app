@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import carbon from "@/shared/assets/img/carbon.svg";
 import img from "@/shared/assets/img/searchResult/img1.png";
@@ -232,9 +233,12 @@ export const SearchResult = () => {
               className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition hover:shadow-lg"
             >
               <div className="w-full h-44 bg-gray-100 flex items-center justify-center">
-                <img
+                <Image
                   src={imageMap[vehicle.image] || vehicle.image}
                   alt={vehicle.name}
+                  width={400}
+                  height={176}
+                  unoptimized
                   className="object-cover w-full h-full"
                 />
               </div>
@@ -248,10 +252,12 @@ export const SearchResult = () => {
                   {vehicle.price}€
                 </div>
                 <div className="text-[14px] text-gray-500 mt-auto flex items-center gap-2">
-                  <img
-                    src={carbon.src}
+                  <Image
+                    src={carbon}
                     alt="carbon"
-                    className="w-5 h-5 inline-block"
+                    width={20}
+                    height={20}
+                    className="inline-block"
                   />
                   {vehicle.location}
                 </div>

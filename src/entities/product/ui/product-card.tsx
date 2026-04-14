@@ -1,5 +1,6 @@
 import { Product } from '../types/product';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ProductCardProps {
   product: Product;
@@ -11,9 +12,12 @@ export const ProductCard = ({ product, showSeller = false }: ProductCardProps) =
     <Link href={`/product/${product.id}`}>
       <div className="bg-white rounded-lg shadow flex flex-col overflow-hidden group relative transition hover:shadow-lg">
         <div className="w-full h-44 bg-gray-100">
-          <img
+          <Image
             src={product.image}
             alt={product.title}
+            width={400}
+            height={176}
+            unoptimized
             className="object-cover w-full h-full"
           />
         </div>
