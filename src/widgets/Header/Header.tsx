@@ -1,7 +1,8 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react' 
+import { useRouter } from 'next/navigation'
 import i18n from '@/i18n'
 import { useTranslation } from 'react-i18next'
 import nova from '@/shared/assets/icons/logoDrive.webp'
@@ -15,7 +16,8 @@ export const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLLIElement>(null)
   const { t } = useTranslation()
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); 
+  const router = useRouter()
 
 
   useEffect(() => {
@@ -121,7 +123,7 @@ export const Header = () => {
                       const value = (e.target as HTMLInputElement).value.trim();
                       if (!value) return;
 
-                      window.location.href = `/searchResult?search=${encodeURIComponent(value)}`;
+                      router.push(`/searchResult?search=${encodeURIComponent(value)}`);
                     }
                   }}
                   className="border border-gray-400 px-2 py-1 rounded-md outline-none text-black"
