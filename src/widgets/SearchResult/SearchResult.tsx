@@ -56,6 +56,8 @@ export const SearchResult = () => {
   }, [fetchAll]);
 
   const filteredVehicles = getFilteredVehicles(search);
+  const uniqueBrands = [...new Set(filters?.brands || [])];
+
 
   if (loading) {
     return <div className="text-center py-10">Загрузка...</div>;
@@ -136,7 +138,7 @@ export const SearchResult = () => {
             </select>
 
             <div className="space-y-2 text-[14px] max-h-40 overflow-y-auto pr-2 mb-4">
-              {filters.brands?.map((brand) => (
+              {uniqueBrands.map((brand) => (
                 <label key={brand} className="block">
                   <input
                     type="checkbox"
