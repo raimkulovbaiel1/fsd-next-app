@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "prepare": "husky install",
-    "test": "vitest"
+    "test": "vitest", 
+      "cypress": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
