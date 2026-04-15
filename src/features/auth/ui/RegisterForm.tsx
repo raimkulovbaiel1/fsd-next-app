@@ -3,7 +3,6 @@
 import { FC } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 

@@ -70,7 +70,7 @@ export const SearchResult = () => {
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 px-2 py-4 lg:py-8 max-w-7xl mx-auto">
-      <button
+      <button   data-testid="open-filter-button"
         onClick={() => setIsFilterOpen(true)}
         className="block lg:hidden w-full bg-[#0096611A] text-[#009661] py-2 rounded font-semibold"
       >
