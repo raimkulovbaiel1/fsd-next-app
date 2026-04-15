@@ -1,0 +1,58 @@
+ [
+    {
+      "id": 1,
+      "title": "Opel COMBO Airco Elct Ramen",
+      "price": "1 500€",
+      "location": "Gara van Nierop",
+       "image": "img2"
+    },
+    {
+      "id": 2,
+      "title": "Volkswagen Caddy Maxi",
+      "price": "2 000€",
+      "location": "Gara van Nierop",
+      "image": "img3"
+    },
+    {
+      "id": 3,
+      "title": "Fiat Doblo Cargo",
+      "price": "1 800€",
+      "location": "Gara van Nierop",
+      "image": "img4"
+    },
+    {
+      "id": 4,
+      "title": "Renault Kangoo Express",
+      "price": "2 200€",
+      "location": "Garage van Nierop",
+      "image": "img5"
+    },
+    {
+      "id": 5,
+      "title": "Ford Transit Connect",
+      "price": "1 950€",
+      "location": "Garage van Nierop",
+      "image": "img6"
+    },
+    {
+      "id": 6,
+      "title": "Mercedes-Benz Citan",
+      "price": "2 100€",
+      "location": "Garage van Nierop",
+      "image": "img7"
+    },
+    {
+      "id": 7,
+      "title": "Nissan NV200",
+      "price": "2 050€",
+      "location": "Garage van Nierop",
+      "image": "img8"
+    },
+    {
+      "id": 8,
+      "title": "Citroën Berlingo",
+      "price": "1 700€",
+      "location": "Garage van Nierop",
+      "image": "https://im.mashina.kg/tachka/images//1/3/8/138e2f571fc6e84a97f5c6b966b1bfa0_240x180.jpg"
+    }
+  ]
