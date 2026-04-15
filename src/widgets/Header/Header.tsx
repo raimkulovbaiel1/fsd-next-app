@@ -58,7 +58,9 @@ export const Header = () => {
 
         {/* Левая часть: Логотип + Навигация */}
         <div className="flex items-center space-x-12">
-          <Link href="/">
+          <Link 
+          data-testid = "link-img"
+           href="/">
             <div className="flex items-center gap-2 cursor-pointer">
               <Image
                 src={nova}
