@@ -92,12 +92,14 @@ export const Filter = () => {
 
   return (
     <section className="bg-[#F8F9FA] py-6 px-4">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-[1fr_320px] gap-6">
+      <div data-testid="filter-component" 
+       className="max-w-7xl mx-auto grid md:grid-cols-[1fr_320px] gap-6">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white p-6 rounded-lg shadow"
         >
-          <div className="grid grid-cols-2 gap-3">
+          <div data-testid="filter-inputs"
+           className="grid grid-cols-2 gap-3">
             {filterInputs.map(({ label, key, options }) => (
               <Controller
                 key={key}
@@ -122,7 +124,7 @@ export const Filter = () => {
             ))}
           </div>
 
-          <button
+          <button data-testid="filter-submit"
             type="submit"
             className="w-full mt-6 bg-[#00A669] text-white py-4 rounded font-bold"
           >

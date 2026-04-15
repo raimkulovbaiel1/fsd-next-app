@@ -1,0 +1,62 @@
+ [
+    {
+      "id": 1,
+      "title": "Opel COMBO Airco Elct Ramen",
+      "year": 2015,
+      "weight": "2 000 кг",
+      "mileage": "490 574 км",
+      "price": "1 500€",
+      "location": " Netherlands",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 2,
+      "title": "Ford Transit Custom",
+      "year": 2018,
+      "weight": "2 200 кг",
+      "mileage": "150 000 км",
+      "price": "2 100€",
+      "location": " Germany",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 3,
+      "title": "Mercedes-Benz Sprinter",
+      "year": 2017,
+      "weight": "2 500 кг",
+      "mileage": "200 000 км",
+      "price": "2 800€",
+      "location": "France",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 4,
+      "title": "Renault Kangoo",
+      "year": 2016,
+      "weight": "1 800 кг",
+      "mileage": "300 000 км",
+      "price": "1 200€",
+      "location": " Germany",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 5,
+      "title": "Volkswagen Caddy",
+      "year": 2019,
+      "weight": "2 100 кг",
+      "mileage": "120 000 км",
+      "price": "2 300€",
+      "location": " France",
+      "image": "https://via.placeholder.com/300x180"
+    },
+    {
+      "id": 6,
+      "title": "Fiat Ducato",
+      "year": 2015,
+      "weight": "2 400 кг",
+      "mileage": "400 000 км",
+      "price": "1 800€",
+      "location": " Italy",
+      "image": "https://via.placeholder.com/300x180"
+    }
+  ]
